@@ -129,6 +129,114 @@
                               </ul>
                           </li>
                       @endrole
+                      <li
+                          class="nav-item
+                        {{ Request::segment(2) == 'permission' ? 'menu-is-opening menu-open' : '' }}
+                        {{ Request::segment(2) == 'user' ? 'menu-is-opening menu-open' : '' }}
+                      {{ Request::segment(1) == 'desa' ? 'menu-is-opening menu-open' : '' }}
+
+                    ">
+                          <a href="#"
+                              class="nav-link
+                         {{ Request::segment(1) == 'desa' ? 'active' : '' }}
+
+                    ">
+                              <i class="nav-icon fa-solid fas fa-database"></i>
+                              <p>
+                                  Desa
+                                  <i class="fas fa-angle-left right"></i>
+                              </p>
+                          </a>
+                          <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                  <a href="{{ route('desa.desa-index') }}"
+                                      class="nav-link
+                            {{ Request::segment(2) == 'desa-index' ? 'active' : '' }}
+
+                          ">
+                                      @if (Request::segment(2) == 'desa-index')
+                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                      @else
+                                          <i class="ml-2 far fa-circle nav-icon"></i>
+                                      @endif
+                                      <p>List Desa</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="{{ route('desa.paket-pekerjaan-index') }}"
+                                      class="nav-link
+                            {{ Request::segment(2) == 'paket-pekerjaan-index' ? 'active' : '' }}
+
+                            ">
+                                      @if (Request::segment(2) == 'paket-pekerjaan-index')
+                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                      @else
+                                          <i class="ml-2 far fa-circle nav-icon"></i>
+                                      @endif
+                                      <p>Kegiatan Pengadaan</p>
+                                  </a>
+                              </li>
+
+                          </ul>
+                      </li>
+                      <li
+                          class="nav-item
+                        {{ Request::segment(2) == 'permission' ? 'menu-is-opening menu-open' : '' }}
+                        {{ Request::segment(2) == 'user' ? 'menu-is-opening menu-open' : '' }}
+                      {{ Request::segment(2) == 'role' ? 'menu-is-opening menu-open' : '' }}
+                      {{ Request::segment(2) == 'role-index' ? 'menu-is-opening menu-open' : '' }}
+                      {{ Request::segment(2) == 'user-index' ? 'menu-is-opening menu-open' : '' }}
+                    ">
+                          <a href="#"
+                              class="nav-link
+                         {{ Request::segment(2) == 'permission' ? 'active' : '' }}
+                          {{ Request::segment(2) == 'role' ? 'active' : '' }}
+                          {{ Request::segment(2) == 'role-index' ? 'active' : '' }}
+                          {{ Request::segment(2) == 'user-index' ? 'active' : '' }}
+                          {{ Request::segment(2) == 'user' ? 'active' : '' }}
+                    ">
+                              <i class="nav-icon fa-solid fas fa-database"></i>
+                              <p>
+                                  Penyedia
+                                  <i class="fas fa-angle-left right"></i>
+                              </p>
+                          </a>
+                          <ul class="nav nav-treeview">
+                              <li class="nav-item">
+                                  <a href="{{ route('master.user-index') }}"
+                                      class="nav-link
+                            {{ Request::segment(2) == 'user-index' ? 'active' : '' }}
+
+                          ">
+                                      @if (Request::segment(2) == 'user-index')
+                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                      @elseif(Request::segment(2) == 'user')
+                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                      @else
+                                          <i class="ml-2 far fa-circle nav-icon"></i>
+                                      @endif
+                                      <p>User</p>
+                                  </a>
+                              </li>
+                              <li class="nav-item">
+                                  <a href="{{ route('master.role.index') }}"
+                                      class="nav-link
+                            {{ Request::segment(2) == 'role-index' ? 'active' : '' }}
+                            {{ Request::segment(2) == 'role' ? 'active' : '' }}
+                            ">
+                                      @if (Request::segment(2) == 'role-index')
+                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                      @elseif(Request::segment(2) == 'role')
+                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                      @else
+                                          <i class="ml-2 far fa-circle nav-icon"></i>
+                                      @endif
+                                      <p>Role</p>
+                                  </a>
+                              </li>
+
+                          </ul>
+                      </li>
                   </ul>
 
               </nav>

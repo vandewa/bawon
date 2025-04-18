@@ -12,4 +12,9 @@ class ComCode extends Model
     protected $primaryKey = 'com_cd';
     public $incrementing = false;
     protected $keyType = 'string';
+
+    public static function paketTypes()
+    {
+        return self::where('code_group', 'PAKET_TYPE')->pluck('code_nm', 'com_cd');
+    }
 }

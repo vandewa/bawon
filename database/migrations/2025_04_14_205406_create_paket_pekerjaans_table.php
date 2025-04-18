@@ -16,6 +16,19 @@ return new class extends Migration
             $table->foreignId('desa_id')
             ->constrained('desas')
             ->onDelete('restrict'); // ini yang penting
+            $table->integer('tahun');
+            $table->string('kd_desa');
+            $table->string('kd_keg');
+            $table->string('sumberdana');
+            $table->string('nama_kegiatan');
+            $table->double('nilaipak');
+            $table->string('satuan');
+            $table->double('pagu_pak');
+            $table->string('nm_pptkd');
+            $table->string('jbt_pptkd');
+            $table->string('nama_bidang');
+            $table->string('nama_subbidang');
+            $table->string('kegiatan_st')->default('KEGIATAN_ST_01');
             $table->timestamps();
         });
     }

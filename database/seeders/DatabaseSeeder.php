@@ -22,5 +22,9 @@ class DatabaseSeeder extends Seeder
 
         $this->call(ComCodeSeeder::class);
         $this->call(LaratrustSeeder::class);
+        $this->call([
+            DesaSeeder::class,
+            PaketPekerjaanSeeder::class,
+        ]);
     }
 }

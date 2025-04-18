@@ -21,6 +21,15 @@ class ComCodeSeeder extends Seeder
             ['com_cd' => 'TPK_TYPE_01', 'code_nm' => 'Ketua', 'code_group' => 'TPK_TYPE'],
             ['com_cd' => 'TPK_TYPE_02', 'code_nm' => 'Sekretaris', 'code_group' => 'TPK_TYPE'],
             ['com_cd' => 'TPK_TYPE_03', 'code_nm' => 'Anggota', 'code_group' => 'TPK_TYPE'],
+            ['com_cd' => 'KEGIATAN_ST_01', 'code_nm' => 'Terbuka', 'code_group' => 'KEGIATAN_ST'],
+            ['com_cd' => 'KEGIATAN_ST_02', 'code_nm' => 'Tertutup', 'code_group' => 'KEGIATAN_ST'],
+            ['com_cd' => 'PAKET_KEGIATAN_ST_01', 'code_nm' => 'Pending', 'code_group' => 'PAKET_KEGIATAN_ST'],
+            ['com_cd' => 'PAKET_KEGIATAN_ST_02', 'code_nm' => 'Berjalan', 'code_group' => 'PAKET_KEGIATAN_ST'],
+            ['com_cd' => 'PAKET_KEGIATAN_ST_03', 'code_nm' => 'Selesai', 'code_group' => 'PAKET_KEGIATAN_ST'],
+            ['com_cd' => 'PAKET_KEGIATAN_ST_04', 'code_nm' => 'Batal', 'code_group' => 'PAKET_KEGIATAN_ST'],
+            ['com_cd' => 'PAKET_TYPE_01', 'code_nm' => 'Penyedia', 'code_group' => 'PAKET_TYPE'],
+            ['com_cd' => 'PAKET_TYPE_02', 'code_nm' => 'Swakelola', 'code_group' => 'PAKET_TYPE'],
+            ['com_cd' => 'PAKET_TYPE_03', 'code_nm' => 'Lelang', 'code_group' => 'PAKET_TYPE'],
 
 
         ];
