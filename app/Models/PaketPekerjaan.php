@@ -14,4 +14,8 @@ class PaketPekerjaan extends Model
 {
     return $this->belongsTo(\App\Models\Desa::class, 'desa_id');
 }
+public function paketKegiatans()
+{
+    return $this->hasMany(PaketKegiatan::class);
+}
 }

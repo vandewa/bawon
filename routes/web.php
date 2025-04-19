@@ -12,6 +12,8 @@ use App\Livewire\Desa\PaketKegiatanIndex;
 use App\Http\Controllers\HelperController;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
+use App\Livewire\Penyedia\VendorIndex;
+use App\Models\PaketKegiatan;
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -45,6 +47,11 @@ Route::middleware([
         Route::get('desa-index', DesaIndex::class)->name('desa-index');
         Route::get('paket-pekerjaan-index', PaketPekerjaanIndex::class)->name('paket-pekerjaan-index');
         Route::get('paket-kegiatan/{paketPekerjaanId}/persiapan', PaketKegiatanForm::class)->name('paket-kegiatan.persiapan');
+        Route::get('paket-pekerjaan-index/paket-kegiatan/{paketPekerjaanId}', PaketKegiatanIndex::class)->name('paket-kegiatan');
+    });
+    Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
+        Route::get('vendor-index', VendorIndex::class)->name('vendor-index');
+
     });
 });
 

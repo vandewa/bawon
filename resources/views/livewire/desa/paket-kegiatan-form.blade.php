@@ -16,7 +16,7 @@
             @endif
 
             {{-- Informasi Paket --}}
-            <livewire:component.paket.informasi-paket :paket-pekerjaan-id="$paketPekerjaan->id" />
+            <livewire:components.paket.informasi-paket :paket-pekerjaan-id="$paketPekerjaan->id" />
 
             <form wire:submit.prevent="save" class="mt-4">
                 <div class="border-0 shadow-sm card">

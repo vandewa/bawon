@@ -181,19 +181,13 @@
                       </li>
                       <li
                           class="nav-item
-                        {{ Request::segment(2) == 'permission' ? 'menu-is-opening menu-open' : '' }}
-                        {{ Request::segment(2) == 'user' ? 'menu-is-opening menu-open' : '' }}
-                      {{ Request::segment(2) == 'role' ? 'menu-is-opening menu-open' : '' }}
-                      {{ Request::segment(2) == 'role-index' ? 'menu-is-opening menu-open' : '' }}
-                      {{ Request::segment(2) == 'user-index' ? 'menu-is-opening menu-open' : '' }}
+                        {{ Request::segment(1) == 'penyedia' ? 'menu-is-opening menu-open' : '' }}
+
                     ">
                           <a href="#"
                               class="nav-link
-                         {{ Request::segment(2) == 'permission' ? 'active' : '' }}
-                          {{ Request::segment(2) == 'role' ? 'active' : '' }}
-                          {{ Request::segment(2) == 'role-index' ? 'active' : '' }}
-                          {{ Request::segment(2) == 'user-index' ? 'active' : '' }}
-                          {{ Request::segment(2) == 'user' ? 'active' : '' }}
+                         {{ Request::segment(2) == 'vendor-index' ? 'active' : '' }}
+
                     ">
                               <i class="nav-icon fa-solid fas fa-database"></i>
                               <p>
@@ -203,19 +197,17 @@
                           </a>
                           <ul class="nav nav-treeview">
                               <li class="nav-item">
-                                  <a href="{{ route('master.user-index') }}"
+                                  <a href="{{ route('penyedia.vendor-index') }}"
                                       class="nav-link
-                            {{ Request::segment(2) == 'user-index' ? 'active' : '' }}
+                            {{ Request::segment(2) == 'vendor-index' ? 'active' : '' }}
 
                           ">
-                                      @if (Request::segment(2) == 'user-index')
-                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
-                                      @elseif(Request::segment(2) == 'user')
+                                      @if (Request::segment(2) == 'vendor-index')
                                           <i class="ml-2 far fa-dot-circle nav-icon"></i>
                                       @else
                                           <i class="ml-2 far fa-circle nav-icon"></i>
                                       @endif
-                                      <p>User</p>
+                                      <p>Penyedia</p>
                                   </a>
                               </li>
                               <li class="nav-item">

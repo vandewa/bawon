@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Component\Paket;
+namespace App\Livewire\Components\Paket;
 
 use Livewire\Component;
 use App\Models\PaketPekerjaan;
@@ -16,6 +16,6 @@ class InformasiPaket extends Component
     }
     public function render()
     {
-        return view('livewire.component.paket.informasi-paket');
+        return view('livewire.components.paket.informasi-paket');
     }
 }
