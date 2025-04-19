@@ -51,6 +51,16 @@
                             {{ number_format($paket->pagu_pak, 0, ',', '.') }}</span>
                     </td>
                 </tr>
+
+                <tr>
+                    <th class="text-muted">Sisa Paket</th>
+                    <td>
+                        : <span class="font-weight-bold text-primary">
+                            Rp {{ number_format($sisaPagu, 0, ',', '.') }}
+                        </span>
+                    </td>
+                </tr>
+
             </tbody>
         </table>
     </div>

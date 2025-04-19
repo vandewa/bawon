@@ -18,41 +18,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <!-- Informasi Paket Pekerjaan -->
-                    <div class="mb-3 card card-info card-outline">
-                        <div class="card-header">
-                            <h5 class="mb-0">Detail Paket Pekerjaan</h5>
-                        </div>
-                        <div class="card-body">
-                            <table class="table table-sm table-borderless">
-                                <tr>
-                                    <th style="width: 200px;">Nama Kegiatan</th>
-                                    <td>: {{ $paketPekerjaan->nama_kegiatan }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Desa</th>
-                                    <td>: {{ $paketPekerjaan->desa->name ?? '-' }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Tahun</th>
-                                    <td>: {{ $paketPekerjaan->tahun }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Pagu PAK</th>
-                                    <td>: Rp {{ number_format($paketPekerjaan->pagu_pak, 0, ',', '.') }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Total Nilai Kesepakatan</th>
-                                    <td>: Rp {{ number_format($totalNilaiKesepakatan, 0, ',', '.') }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Sisa Pagu</th>
-                                    <td><strong>: Rp
-                                            {{ number_format($paketPekerjaan->pagu_pak - $totalNilaiKesepakatan, 0, ',', '.') }}</strong>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
+                    <livewire:components.paket.informasi-paket :paket-pekerjaan-id="$paketPekerjaan->id" />
 
                     <!-- List Paket Kegiatan -->
                     <div class="card card-info card-outline card-tabs">
@@ -66,7 +32,8 @@
                                                 wire:model.live='search'>
                                         </div>
                                         <div class="text-right col-md-10">
-                                            <a href="#" class="btn btn-info">
+                                            <a href="{{ route('desa.paket-kegiatan.persiapan.create', $paketPekerjaan->id) }}"
+                                                class="btn btn-info">
                                                 <i class="mr-2 fas fa-plus-square"></i>Tambah Paket Kegiatan
                                             </a>
                                         </div>

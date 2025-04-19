@@ -46,7 +46,7 @@ Route::middleware([
     Route::group(['prefix' => 'desa', 'as' => 'desa.'], function () {
         Route::get('desa-index', DesaIndex::class)->name('desa-index');
         Route::get('paket-pekerjaan-index', PaketPekerjaanIndex::class)->name('paket-pekerjaan-index');
-        Route::get('paket-kegiatan/{paketPekerjaanId}/persiapan', PaketKegiatanForm::class)->name('paket-kegiatan.persiapan');
+        Route::get('paket-pekerjaan-index/paket-kegiatan/{paketPekerjaanId}/persiapan/create', PaketKegiatanForm::class)->name('paket-kegiatan.persiapan.create');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{paketPekerjaanId}', PaketKegiatanIndex::class)->name('paket-kegiatan');
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
