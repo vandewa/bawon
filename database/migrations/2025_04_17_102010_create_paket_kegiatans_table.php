@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('jadwal_pelaksanaan')->nullable();
             $table->string('rencana_kerja')->nullable();
             $table->string('hps')->nullable();
+            $table->string('ba_evaluasi_penawaran')->nullable();
             $table->string('spk')->nullable();
             $table->string('surat_perjanjian')->nullable();
             $table->string('laporan_hasil_pemeriksaan')->nullable();
