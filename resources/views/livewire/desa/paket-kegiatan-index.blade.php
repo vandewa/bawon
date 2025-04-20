@@ -47,35 +47,91 @@
                                                     <th>Jenis Paket</th>
                                                     <th>Jumlah Anggaran</th>
                                                     <th>Nilai Kesepakatan</th>
-                                                    <th>Spek Teknis</th>
+                                                    <th>Status</th>
+                                                    <th>Kelengkapan Dokumen</th> <!-- Kolom baru -->
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @forelse ($paketKegiatans as $index => $item)
+                                                    @php
+                                                        $dokLengkap =
+                                                            $item->spek_teknis &&
+                                                            $item->kak &&
+                                                            $item->jadwal_pelaksanaan &&
+                                                            $item->rencana_kerja &&
+                                                            $item->hps;
+                                                    @endphp
                                                     <tr>
                                                         <td>{{ $index + 1 }}</td>
-                                                        <td>{{ $item->paket_type }}</td>
+                                                        <td>{{ $item->paketType->code_nm }}</td>
                                                         <td>Rp {{ number_format($item->jumlah_anggaran, 0, ',', '.') }}
                                                         </td>
                                                         <td>Rp
                                                             {{ number_format($item->nilai_kesepakatan ?? 0, 0, ',', '.') }}
                                                         </td>
-                                                        <td>{{ $item->spek_teknis ?? '-' }}</td>
                                                         <td>
-                                                            <a href="#"
+                                                            <span
+                                                                class="badge {{ $item->paketKegiatan->code_value ?? 'bg-danger' }}">
+                                                                {{ $item->paketKegiatan->code_nm ?? '-' }}
+                                                            </span>
+                                                        </td>
+
+                                                        {{-- Kelengkapan dokumen --}}
+                                                        <td>
+                                                            @php
+                                                                $dokumen = [
+                                                                    'Spek Teknis' => $item->spek_teknis,
+                                                                    'KAK' => $item->kak,
+                                                                    'Jadwal Pelaksanaan' => $item->jadwal_pelaksanaan,
+                                                                    'Rencana Kerja' => $item->rencana_kerja,
+                                                                    'HPS' => $item->hps,
+                                                                ];
+                                                            @endphp
+
+                                                            <ul class="pl-3 mb-0 small">
+                                                                @foreach ($dokumen as $nama => $isi)
+                                                                    <li>
+                                                                        {{ $nama }}
+                                                                        @if ($isi)
+                                                                            <a href="{{ Storage::url($isi) }}"
+                                                                                target="_blank" title="Preview dokumen"
+                                                                                data-toggle="tooltip">
+                                                                                ✅
+                                                                            </a>
+                                                                        @else
+                                                                            ❌
+                                                                        @endif
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </td>
+
+
+                                                        {{-- Aksi --}}
+                                                        <td>
+                                                            <a href="{{ route('desa.paket-kegiatan.persiapan.edit', $item->id) }}"
                                                                 class="mr-1 btn btn-sm btn-primary">Edit</a>
+
                                                             <button class="btn btn-sm btn-danger"
                                                                 wire:click="delete('{{ $item->id }}')">Hapus</button>
+
+                                                            @if ($dokLengkap && $item->status != 'PAKET_KEGIATAN_ST_02')
+                                                                <button class="mt-1 btn btn-sm btn-success"
+                                                                    wire:click="confirmChangeStatus('{{ $item->id }}')">
+                                                                    <i class="fas fa-check"></i> Selanjutnya
+                                                                </button>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="6" class="text-center">Belum ada data paket
+                                                        <td colspan="7" class="text-center">Belum ada data paket
                                                             kegiatan.</td>
                                                     </tr>
                                                 @endforelse
                                             </tbody>
+
                                         </table>
                                     </div>
 
