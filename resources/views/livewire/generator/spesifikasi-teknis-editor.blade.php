@@ -8,9 +8,12 @@
 
                 <!-- Petunjuk Pengisian dalam Card -->
                 <div class="card mb-3">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Petunjuk Pengisian</h5>
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-book mr-2"></i> Petunjuk Pengisian
+                        </h5>
                     </div>
+
                     <div class="card-body">
                         <ol>
                             <li>Kolom a diisi dengan nomor urut.</li>

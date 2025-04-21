@@ -32,7 +32,7 @@ class PaketKegiatanForm extends Component
     {
         $this->validate([
             'jumlah_anggaran' => 'required|numeric|max:' . $this->paketPekerjaan->pagu_pak,
-            'paket_type' => 'required|in:' . implode(',', array_keys($this->paketTypes)),
+            'paket_type' => 'required',
             'spek_teknis' => 'nullable|file|mimes:pdf,doc,docx',
             'kak' => 'nullable|file|mimes:pdf,doc,docx',
             'jadwal_pelaksanaan' => 'nullable|file|mimes:pdf,doc,docx',
