@@ -58,7 +58,7 @@ class SpesifikasiTeknisEditor extends Component
         
         <br><br>
         
-        <table style="width: 100%; font-family: Arial, sans-serif; font-size: 10pt; font-weight: bold;">
+        <table class="no-border" style="width: 100%; font-family: Arial, sans-serif; font-size: 10pt; font-weight: bold; border: none; border-collapse: collapse;">
             <tr>
                 <td style="width: 60%;"></td>
                 <td style="text-align: center;">
