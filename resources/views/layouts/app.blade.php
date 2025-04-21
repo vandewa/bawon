@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="{{ asset('AdminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
     <style>
         .loading-state {
             position: fixed;
@@ -148,6 +149,10 @@
     <script src="{{ asset('AdminLTE/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
     <!-- Summernote -->
     <script src="{{ asset('AdminLTE/plugins/summernote/summernote-bs4.min.js') }}"></script>
+
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+
+
     <script src="{{ asset('AdminLTE/plugins/toastr/toastr.min.js') }}"></script>
     {{-- <script src="{{ asset('AdminLTE/plugins/sweetalert2/sweetalert2.min.js') }}"></script> --}}
     <!-- overlayScrollbars -->
@@ -194,6 +199,8 @@
             });
         })
     </script>
+
+
 </body>
 
 </html>

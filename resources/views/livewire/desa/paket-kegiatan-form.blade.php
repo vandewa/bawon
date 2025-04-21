@@ -82,8 +82,8 @@
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                             @endif
-                                            <a href="https://google.com" target="_blank"
-                                                class="ml-1 btn btn-outline-success">
+                                            <a href="" target="_blank" class="ml-1 btn btn-outline-success"
+                                                target="_blank">
                                                 <i class="fas fa-magic"></i> Generate
                                             </a>
                                         </div>

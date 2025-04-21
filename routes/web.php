@@ -12,6 +12,7 @@ use App\Livewire\Desa\PaketKegiatanIndex;
 use App\Http\Controllers\HelperController;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
+use App\Livewire\Generator\SpesifikasiTeknisEditor;
 use App\Livewire\Penyedia\VendorIndex;
 use App\Models\PaketKegiatan;
 
@@ -33,6 +34,14 @@ Route::middleware([
 ])->group(function () {
     Route::get('/', Dashboard::class)->name('index');
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
+
+    Route::group(['prefix' => 'generator', 'as' => 'generator.'], function () {
+        Route::get('/spesifikasi-teknis/{id?}', SpesifikasiTeknisEditor::class)->name('spesifikasi-teknis');
+        Route::get('/kak/{id?}', SpesifikasiTeknisEditor::class)->name('kak');
+        Route::get('/jadwal-pelaksanaan/{id?}', SpesifikasiTeknisEditor::class)->name('jadwal-pelaksanaan');
+        Route::get('/rencana-kerja/{id?}', SpesifikasiTeknisEditor::class)->name('rencana-kerja');
+        Route::get('/hps/{id?}', SpesifikasiTeknisEditor::class)->name('hps');
+    });
 
     Route::group(['prefix' => 'master', 'as' => 'master.'], function () {
         Route::get('user-index', UserIndex::class)->name('user-index');

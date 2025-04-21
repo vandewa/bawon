@@ -32,7 +32,7 @@ class ComCodeSeeder extends Seeder
             ['com_cd' => 'PAKET_TYPE_03', 'code_nm' => 'Lelang', 'code_group' => 'PAKET_TYPE'],
             ['com_cd' => 'PENAWARAN_ST_01', 'code_nm' => 'Review', 'code_group' => 'PENAWARAN_ST'],
             ['com_cd' => 'PENAWARAN_ST_02', 'code_nm' => 'Diterima', 'code_group' => 'PENAWARAN_ST'],
-            ['com_cd' => 'PENAWARAN_ST_02', 'code_nm' => 'Ditolak', 'code_group' => 'PENAWARAN_ST'],
+            ['com_cd' => 'PENAWARAN_ST_03', 'code_nm' => 'Ditolak', 'code_group' => 'PENAWARAN_ST'],
             ['com_cd' => 'NEGOSIASI_ST_01', 'code_nm' => 'Berlangsung', 'code_group' => 'NEGOSIASI_ST'],
             ['com_cd' => 'NEGOSIASI_ST_02', 'code_nm' => 'Selesai', 'code_group' => 'NEGOSIASI_ST'],
 
