@@ -25,7 +25,8 @@
     <script>
         $(function() {
             $('#summernote').summernote({
-                height: 400,
+                minHeight: 100, // Tinggi minimum
+                maxHeight: null, // Tidak dibatasi
                 fontNames: ['Arial', 'Arial Black', 'Times New Roman', 'Courier New', 'Tahoma'],
                 fontNamesIgnoreCheck: ['Arial'], // pastikan Arial tetap muncul
                 toolbar: [
