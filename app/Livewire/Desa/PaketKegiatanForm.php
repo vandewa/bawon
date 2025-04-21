@@ -16,15 +16,16 @@ class PaketKegiatanForm extends Component
     public $jumlah_anggaran;
     public $spek_teknis, $kak, $jadwal_pelaksanaan, $rencana_kerja, $hps;
     public $paket_type;
-public $paketTypes = [];
+    public $paketTypes = [];
 
     public function mount($paketPekerjaanId)
     {
         $this->paketPekerjaan = PaketPekerjaan::findOrFail($paketPekerjaanId);
         $this->paketTypes = ComCode::paketTypes();
 
-    // Set default paket_type jika belum ada
-    $this->paket_type = $this->paketKegiatan->paket_type ?? null;
+        // Set default paket_type jika belum ada
+        $this->paket_type = $this->paketKegiatan->paket_type ?? null;
+
     }
 
     public function save()
