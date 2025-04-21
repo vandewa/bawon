@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
         <h3 class="m-0 text-dark">
-            <i class="mr-2 fas fa-file-alt text-info"></i> Dokumen Persiapan - {{ $paketPekerjaan->nama_kegiatan }}
+            <i class="mr-2 fas fa-edit text-warning"></i> Edit Dokumen Persiapan - {{ $paketPekerjaan->nama_kegiatan }}
         </h3>
     </x-slot>
 
@@ -18,12 +18,13 @@
             {{-- Informasi Paket --}}
             <livewire:components.paket.informasi-paket :paket-pekerjaan-id="$paketPekerjaan->id" />
 
-            <form wire:submit.prevent="save" class="mt-4">
+            <form wire:submit.prevent="update" class="mt-4">
                 <div class="border-0 shadow-sm card">
-                    <div class="text-white card-header bg-info">
-                        <h5 class="mb-0"><i class="mr-2 fas fa-upload"></i> Upload Dokumen Persiapan</h5>
+                    <div class="text-white card-header bg-warning">
+                        <h5 class="mb-0"><i class="mr-2 fas fa-file-upload"></i> Edit Dokumen Persiapan</h5>
                     </div>
                     <div class="card-body">
+
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label><strong>Jenis Paket</strong></label>
@@ -37,6 +38,7 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
                             <div class="form-group col-md-6">
                                 <label><strong>Jumlah Anggaran</strong></label>
                                 <input type="number" class="form-control" wire:model.live="jumlah_anggaran"
@@ -74,37 +76,34 @@
                                                 file...</label>
                                         </div>
                                         <div class="input-group-append">
-
-                                            @if ($existingFile)
-                                                <a href="{{ Storage::url($existingFile) }}" target="_blank"
-                                                    class="btn btn-outline-primary">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            @endif
-                                            <a href="" target="_blank" class="ml-1 btn btn-outline-success"
-                                                target="_blank">
+                                            <a href="https://google.com" target="_blank"
+                                                class="ml-1 btn btn-outline-success">
                                                 <i class="fas fa-magic"></i> Generate
                                             </a>
                                         </div>
                                     </div>
 
-                                    {{-- Preview --}}
+                                    {{-- Preview baru jika ada file ter-upload --}}
                                     @if ($$field)
                                         <div class="mt-2">
                                             @if (in_array($$field->getClientOriginalExtension(), ['pdf']))
-                                                <iframe
-                                                    src="https://docs.google.com/gview?url={{ urlencode($$field->temporaryUrl()) }}&embedded=true"
-                                                    style="width:100%; height:300px;" frameborder="0">
-                                                </iframe>
+                                                <embed src="{{ $$field->temporaryUrl() }}" type="application/pdf"
+                                                    width="100%" height="300px">
                                             @elseif (in_array($$field->getClientOriginalExtension(), ['doc', 'docx']))
-                                                <div class="text-muted">
-                                                    File <strong>{{ $$field->getClientOriginalName() }}</strong> siap
+                                                <p class="text-muted">File
+                                                    <strong>{{ $$field->getClientOriginalName() }}</strong> siap
                                                     diunggah.
-                                                </div>
+                                                </p>
                                             @else
-                                                <div class="text-warning">Format file tidak didukung untuk preview.
-                                                </div>
+                                                <p class="text-warning">Preview tidak tersedia untuk format ini.</p>
                                             @endif
+                                        </div>
+                                    @elseif ($paketKegiatan->{$field})
+                                        <div class="mt-2">
+                                            <a href="{{ Storage::url($paketKegiatan->{$field}) }}" target="_blank"
+                                                class="btn btn-sm btn-outline-primary">
+                                                <i class="mr-1 fas fa-eye"></i> Lihat Dokumen Lama
+                                            </a>
                                         </div>
                                     @endif
 
@@ -117,20 +116,21 @@
                     </div>
 
                     <div class="card-footer bg-light d-flex justify-content-end">
-                        <a href="#" class="mr-2 btn btn-secondary">
+                        <a href="{{ url()->previous() }}" class="mr-2 btn btn-secondary">
                             <i class="mr-1 fas fa-arrow-left"></i> Kembali
                         </a>
-                        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
-                            <span wire:loading.remove wire:target="save">
-                                <i class="mr-1 fas fa-save"></i> Simpan Dokumen
+                        <button type="submit" class="text-white btn btn-warning" wire:loading.attr="disabled">
+                            <span wire:loading.remove wire:target="update">
+                                <i class="mr-1 fas fa-save"></i> Perbarui Dokumen
                             </span>
-                            <span wire:loading wire:target="save">
-                                <i class="mr-1 fas fa-spinner fa-spin"></i> Menyimpan...
+                            <span wire:loading wire:target="update">
+                                <i class="mr-1 fas fa-spinner fa-spin"></i> Memproses...
                             </span>
                         </button>
                     </div>
                 </div>
             </form>
+
         </div>
     </section>
 </div>

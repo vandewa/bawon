@@ -18,4 +18,5 @@ class PaketPekerjaan extends Model
     {
         return $this->hasMany(PaketKegiatan::class);
     }
+
 }

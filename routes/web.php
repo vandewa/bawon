@@ -13,8 +13,8 @@ use App\Http\Controllers\HelperController;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
 use App\Livewire\Generator\SpesifikasiTeknisEditor;
+use App\Livewire\Desa\PaketKegiatanEdit;
 use App\Livewire\Penyedia\VendorIndex;
-use App\Models\PaketKegiatan;
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -56,6 +56,7 @@ Route::middleware([
         Route::get('desa-index', DesaIndex::class)->name('desa-index');
         Route::get('paket-pekerjaan-index', PaketPekerjaanIndex::class)->name('paket-pekerjaan-index');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{paketPekerjaanId}/persiapan/create', PaketKegiatanForm::class)->name('paket-kegiatan.persiapan.create');
+        Route::get('paket-pekerjaan-index/paket-kegiatan/{id}/persiapan/edit', PaketKegiatanEdit::class)->name('paket-kegiatan.persiapan.edit');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{paketPekerjaanId}', PaketKegiatanIndex::class)->name('paket-kegiatan');
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
