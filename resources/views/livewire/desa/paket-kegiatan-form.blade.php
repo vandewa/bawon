@@ -75,15 +75,8 @@
                                                 file...</label>
                                         </div>
                                         <div class="input-group-append">
-
-                                            @if ($existingFile)
-                                                <a href="{{ Storage::url($existingFile) }}" target="_blank"
-                                                    class="btn btn-outline-primary">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
-                                            @endif
-                                            <a href="" target="_blank" class="ml-1 btn btn-outline-success"
-                                                target="_blank">
+                                            <a href="https://google.com" target="_blank"
+                                                class="ml-1 btn btn-outline-success">
                                                 <i class="fas fa-magic"></i> Generate
                                             </a>
                                         </div>

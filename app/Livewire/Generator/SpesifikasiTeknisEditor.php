@@ -15,11 +15,13 @@ class SpesifikasiTeknisEditor extends Component
             Spesifikasi Teknis
         </h4>
         
-        <p style="font-family: Arial, sans-serif; font-size: 10pt; text-align: center;">
+        <p style="font-family: Arial, sans-serif; font-size: 10pt; text-align: center; line-height: 18pt;">
             <strong>Paket Pengadaan:</strong> \${paket_pengadaan}<br> 
             <strong>Desa:</strong> \${desa}<br>
             <strong>Tahun:</strong> \${tahun}
         </p>
+
+
         
         <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 10pt; text-align: center;">
             <thead style="font-weight: bold;">
