@@ -57,12 +57,19 @@
                             ];
 
                             $generateRoutes = [
-                                'spek_teknis' => 'generator.spesifikasi-teknis',
-                                'kak' => 'generator.kak',
-                                'jadwal_pelaksanaan' => 'generator.jadwal-pelaksanaan',
-                                'rencana_kerja' => 'generator.rencana-kerja',
-                                'hps' => 'generator.hps',
+                                'spek_teknis' => 'spesifikasi-teknis',
+                                'kak' => 'kak',
+                                'jadwal_pelaksanaan' => 'jadwal-pelaksanaan',
+                                'rencana_kerja' => 'rencana-kerja',
+                                'hps' => 'hps',
                             ];
+
+                            $prefix = match ($paket_type) {
+                                'PAKET_TYPE_01' => 'generator.penyedia.',
+                                'PAKET_TYPE_02' => 'generator.swakelola.',
+                                'PAKET_TYPE_03' => 'generator.lelang.',
+                                default => '',
+                            };
                         @endphp
 
                         <div class="row">
@@ -83,9 +90,13 @@
                                         </div>
 
                                         <div class="input-group-append">
-                                            @if (isset($generateRoutes[$field]))
-                                                <a href="{{ route($generateRoutes[$field], ['id' => $paketPekerjaan->id]) }}"
+                                            @if (isset($generateRoutes[$field]) && $prefix)
+                                                <a href="{{ route($prefix . $generateRoutes[$field], ['id' => $paketPekerjaan->id]) }}"
                                                     target="_blank" class="ml-1 btn btn-outline-success">
+                                                    <i class="fas fa-magic"></i> Generate
+                                                </a>
+                                            @else
+                                                <a href="#" target="_blank" class="ml-1 btn btn-outline-success">
                                                     <i class="fas fa-magic"></i> Generate
                                                 </a>
                                             @endif
