@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Livewire\Generator;
+namespace App\Livewire\Generator\Penyedia;
 
 use Livewire\Component;
 use App\Models\PaketPekerjaan;
 
-class SpesifikasiTeknisEditor extends Component
+class SpesifikasiTeknis extends Component
 {
     public string $isiSurat;
     public bool $sudahDisimpan = false;
@@ -108,6 +108,6 @@ class SpesifikasiTeknisEditor extends Component
 
     public function render()
     {
-        return view('livewire.generator.spesifikasi-teknis-editor');
+        return view('livewire.generator.penyedia.spesifikasi-teknis');
     }
 }

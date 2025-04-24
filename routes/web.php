@@ -1,6 +1,8 @@
 <?php
 
 use App\Livewire\Dashboard;
+use App\Livewire\Generator\Penyedia\SpesifikasiTeknis as PenyediaSpesifikasiTeknis;
+use App\Livewire\Generator\Swakelola\SpesifikasiTeknis as SwakelolaSpesifikasiTeknis;
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
 use App\Livewire\Desa\DesaIndex;
@@ -18,6 +20,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Livewire\Desa\PenawaranIndex;
 use App\Livewire\Desa\PenawaranPreview;
 use App\Livewire\Generator\SpesifikasiTeknisEditor;
+
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -39,11 +42,25 @@ Route::middleware([
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
     Route::group(['prefix' => 'generator', 'as' => 'generator.'], function () {
-        Route::get('/spesifikasi-teknis/{id?}', SpesifikasiTeknisEditor::class)->name('spesifikasi-teknis');
-        Route::get('/kak/{id?}', SpesifikasiTeknisEditor::class)->name('kak');
-        Route::get('/jadwal-pelaksanaan/{id?}', SpesifikasiTeknisEditor::class)->name('jadwal-pelaksanaan');
-        Route::get('/rencana-kerja/{id?}', SpesifikasiTeknisEditor::class)->name('rencana-kerja');
-        Route::get('/hps/{id?}', SpesifikasiTeknisEditor::class)->name('hps');
+        Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
+            Route::get('/spesifikasi-teknis/{id?}', PenyediaSpesifikasiTeknis::class)->name('spesifikasi-teknis');
+            Route::get('/kak/{id?}', PenyediaSpesifikasiTeknis::class)->name('kak');
+            Route::get('/jadwal-pelaksanaan/{id?}', PenyediaSpesifikasiTeknis::class)->name('jadwal-pelaksanaan');
+            Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja');
+            Route::get('/hps/{id?}', PenyediaSpesifikasiTeknis::class)->name('hps');
+        });
+
+        Route::group(['prefix' => 'swakelola', 'as' => 'swakelola.'], function () {
+            Route::get('/spesifikasi-teknis/{id?}', SwakelolaSpesifikasiTeknis::class)->name('spesifikasi-teknis');
+            Route::get('/kak/{id?}', PenyediaSpesifikasiTeknis::class)->name('kak');
+            Route::get('/jadwal-pelaksanaan/{id?}', PenyediaSpesifikasiTeknis::class)->name('jadwal-pelaksanaan');
+            Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja');
+            Route::get('/hps/{id?}', PenyediaSpesifikasiTeknis::class)->name('hps');
+        });
+
+        Route::group(['prefix' => 'lelang', 'as' => 'lelang.'], function () {
+            Route::get('/spesifikasi-teknis/{id?}', SpesifikasiTeknisEditor::class)->name('spesifikasi-teknis');
+        });
     });
 
     Route::group(['prefix' => 'master', 'as' => 'master.'], function () {

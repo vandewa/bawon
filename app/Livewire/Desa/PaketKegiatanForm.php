@@ -16,22 +16,23 @@ class PaketKegiatanForm extends Component
     public $jumlah_anggaran;
     public $spek_teknis, $kak, $jadwal_pelaksanaan, $rencana_kerja, $hps;
     public $paket_type;
-public $paketTypes = [];
+    public $paketTypes = [];
 
     public function mount($paketPekerjaanId)
     {
         $this->paketPekerjaan = PaketPekerjaan::findOrFail($paketPekerjaanId);
         $this->paketTypes = ComCode::paketTypes();
 
-    // Set default paket_type jika belum ada
-    $this->paket_type = $this->paketKegiatan->paket_type ?? null;
+        // Set default paket_type jika belum ada
+        $this->paket_type = $this->paketKegiatan->paket_type ?? null;
+
     }
 
     public function save()
     {
         $this->validate([
             'jumlah_anggaran' => 'required|numeric|max:' . $this->paketPekerjaan->pagu_pak,
-            'paket_type' => 'required|in:' . implode(',', array_keys($this->paketTypes)),
+            'paket_type' => 'required',
             'spek_teknis' => 'nullable|file|mimes:pdf,doc,docx',
             'kak' => 'nullable|file|mimes:pdf,doc,docx',
             'jadwal_pelaksanaan' => 'nullable|file|mimes:pdf,doc,docx',

@@ -49,12 +49,27 @@
 
                         @php
                             $labelDokumen = [
-                                'spek_teknis' => 'Spek Teknis',
-                                'kak' => 'KAK',
+                                'spek_teknis' => 'Spesifikasi Teknis',
+                                'kak' => 'Kerangka Acuan Kerja (KAK)',
                                 'jadwal_pelaksanaan' => 'Jadwal Pelaksanaan',
                                 'rencana_kerja' => 'Rencana Kerja',
-                                'hps' => 'HPS',
+                                'hps' => 'Harga Perkiraan Sendiri (HPS)',
                             ];
+
+                            $generateRoutes = [
+                                'spek_teknis' => 'spesifikasi-teknis',
+                                'kak' => 'kak',
+                                'jadwal_pelaksanaan' => 'jadwal-pelaksanaan',
+                                'rencana_kerja' => 'rencana-kerja',
+                                'hps' => 'hps',
+                            ];
+
+                            $prefix = match ($paket_type) {
+                                'PAKET_TYPE_01' => 'generator.penyedia.',
+                                'PAKET_TYPE_02' => 'generator.swakelola.',
+                                'PAKET_TYPE_03' => 'generator.lelang.',
+                                default => '',
+                            };
                         @endphp
 
                         <div class="row">
@@ -66,7 +81,6 @@
                                         <i class="fas fa-spinner fa-spin"></i> Mengunggah {{ $label }}...
                                     </div>
 
-
                                     <div class="input-group">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="{{ $field }}"
@@ -74,15 +88,22 @@
                                             <label class="custom-file-label" for="{{ $field }}">Pilih
                                                 file...</label>
                                         </div>
+
                                         <div class="input-group-append">
-                                            <a href="https://google.com" target="_blank"
-                                                class="ml-1 btn btn-outline-success">
-                                                <i class="fas fa-magic"></i> Generate
-                                            </a>
+                                            @if (isset($generateRoutes[$field]) && $prefix)
+                                                <a href="{{ route($prefix . $generateRoutes[$field], ['id' => $paketPekerjaan->id]) }}"
+                                                    target="_blank" class="ml-1 btn btn-outline-success">
+                                                    <i class="fas fa-magic"></i> Generate
+                                                </a>
+                                            @else
+                                                <a href="#" target="_blank" class="ml-1 btn btn-outline-success">
+                                                    <i class="fas fa-magic"></i> Generate
+                                                </a>
+                                            @endif
                                         </div>
                                     </div>
 
-                                    {{-- Preview --}}
+                                    {{-- Preview & Error --}}
                                     @if ($$field)
                                         <div class="mt-2">
                                             @if (in_array($$field->getClientOriginalExtension(), ['pdf']))
@@ -108,6 +129,8 @@
                                 </div>
                             @endforeach
                         </div>
+
+
                     </div>
 
                     <div class="card-footer bg-light d-flex justify-content-end">

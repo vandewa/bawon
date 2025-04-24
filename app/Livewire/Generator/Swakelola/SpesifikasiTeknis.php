@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Livewire\Generator;
+namespace App\Livewire\Generator\Swakelola;
 
 use Livewire\Component;
 use App\Models\PaketPekerjaan;
 
-class SpesifikasiTeknisEditor extends Component
+class SpesifikasiTeknis extends Component
 {
     public string $isiSurat;
     public bool $sudahDisimpan = false;
@@ -21,7 +21,7 @@ class SpesifikasiTeknisEditor extends Component
         </h4>
         
         <p style="font-family: Arial, sans-serif; font-size: 10pt; text-align: center; line-height: 18pt;">
-            <strong>Paket Pengadaan</strong> {$this->paketPekerjaan->nama_kegiatan}<br> 
+            <strong>Pekerjaan</strong> {$this->paketPekerjaan->nama_kegiatan}<br> 
             <strong>Desa</strong> {$this->paketPekerjaan->desa->name}<br>
             <strong>Tahun</strong> {$this->paketPekerjaan->tahun}
         </p>
@@ -30,10 +30,8 @@ class SpesifikasiTeknisEditor extends Component
             <thead style="font-weight: bold;">
                 <tr>
                     <td style="width: 5%; text-align: center;">No</td>
-                    <td style="width: 35%; text-align: center;">Deskripsi Barang/Jasa</td>
-                    <td style="width: 10%; text-align: center;">Volume</td>
-                    <td style="width: 10%; text-align: center;">Satuan</td>
-                    <td style="width: 40%; text-align: center;">Spesifikasi</td>
+                    <td style="width: 46%; text-align: center;">Uraian</td>
+                    <td style="width: 46%; text-align: center;">Spesifikasi</td>
                 </tr>
             </thead>
             <tbody>
@@ -41,13 +39,9 @@ class SpesifikasiTeknisEditor extends Component
                     <td style="text-align: center;">a</td>
                     <td style="text-align: center;">b</td>
                     <td style="text-align: center;">c</td>
-                    <td style="text-align: center;">d</td>
-                    <td style="text-align: center;">e</td>
                 </tr>
                 <tr>
                     <td style="text-align: center;">1.</td>
-                    <td></td>
-                    <td></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -55,20 +49,14 @@ class SpesifikasiTeknisEditor extends Component
                     <td style="text-align: center;">2.</td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
                     <td style="text-align: center;">3.</td>
                     <td></td>
                     <td></td>
-                    <td></td>
-                    <td></td>
                 </tr>
                 <tr>
                     <td style="text-align: center;">dst.</td>
-                    <td></td>
-                    <td></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -108,6 +96,6 @@ class SpesifikasiTeknisEditor extends Component
 
     public function render()
     {
-        return view('livewire.generator.spesifikasi-teknis-editor');
+        return view('livewire.generator.swakelola.spesifikasi-teknis');
     }
 }
