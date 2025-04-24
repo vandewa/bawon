@@ -7,14 +7,17 @@ use App\Livewire\Desa\DesaIndex;
 use App\Livewire\Master\RoleIndex;
 use App\Livewire\Master\UserIndex;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Penyedia\VendorIndex;
+use App\Livewire\Desa\PaketKegiatanEdit;
 use App\Livewire\Desa\PaketKegiatanForm;
 use App\Livewire\Desa\PaketKegiatanIndex;
 use App\Http\Controllers\HelperController;
+use App\Livewire\Desa\PenawaranPaket;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
+use App\Livewire\Desa\PenawaranIndex;
+use App\Livewire\Desa\PenawaranPreview;
 use App\Livewire\Generator\SpesifikasiTeknisEditor;
-use App\Livewire\Desa\PaketKegiatanEdit;
-use App\Livewire\Penyedia\VendorIndex;
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -58,6 +61,9 @@ Route::middleware([
         Route::get('paket-pekerjaan-index/paket-kegiatan/{paketPekerjaanId}/persiapan/create', PaketKegiatanForm::class)->name('paket-kegiatan.persiapan.create');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{id}/persiapan/edit', PaketKegiatanEdit::class)->name('paket-kegiatan.persiapan.edit');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{paketPekerjaanId}', PaketKegiatanIndex::class)->name('paket-kegiatan');
+        Route::get('paket-kegiatan/penawaran/{paketKegiatanId}', PenawaranPaket::class)->name('penawaran.paket');
+        Route::get('pelaksanaan-index/', PenawaranIndex::class)->name('penawaran.pelaksanaan.index');
+        Route::get('pelaksanaan-index/{penawaranId}/penawaran-preview', PenawaranPreview::class)->name('penawaran.pelaksanaan.preview');
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
         Route::get('vendor-index', VendorIndex::class)->name('vendor-index');

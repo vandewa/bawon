@@ -177,12 +177,12 @@
                                   </a>
                               </li>
                               <li class="nav-item">
-                                  <a href="{{ route('desa.paket-pekerjaan-index') }}"
+                                  <a href="{{ route('desa.penawaran.pelaksanaan.index') }}"
                                       class="nav-link
-                            {{ Request::segment(2) == 'paket-pekerjaan-index' ? 'active' : '' }}
+                            {{ Request::segment(2) == 'pelaksanaan-index' ? 'active' : '' }}
 
                             ">
-                                      @if (Request::segment(2) == 'paket-pekerjaan-index')
+                                      @if (Request::segment(2) == 'pelaksanaan-index')
                                           <i class="ml-2 far fa-dot-circle nav-icon"></i>
                                       @else
                                           <i class="ml-2 far fa-circle nav-icon"></i>

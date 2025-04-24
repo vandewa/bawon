@@ -22,6 +22,7 @@ return new class extends Migration
             $table->double('nilai')->nullable();
             $table->date('batas_akhir');
             $table->string('penawaran_st')->default('PENAWARAN_ST_01')->nullable();
+            $table->string('surat_undangan')->nullable();
             $table->string('bukti_setor_pajak')->nullable();
             $table->string('dok_penawaran')->nullable();
             $table->date('tanggal_upload_dok')->nullable();
