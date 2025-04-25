@@ -6,6 +6,7 @@
                     <div class="alert alert-success">{{ session('message') }}</div>
                 @endif
 
+
                 <!-- Petunjuk Pengisian dalam Card -->
                 <div class="card mb-3">
                     <div class="card-header bg-danger text-white">
@@ -13,24 +14,19 @@
                             <i class="fas fa-book mr-2"></i> Petunjuk Pengisian
                         </h5>
                     </div>
-
                     <div class="card-body">
                         <ol>
                             <li>Kolom a diisi dengan nomor urut.</li>
-                            <li>Kolom b diisi dengan uraian kegiatan/pekerjaan yang dibutuhkan. Misal:
-                                <ul>
-                                    <li>Pekerjaan konstruksi: Pondasi, Atap, Dinding, kualifikasi sumber daya manusia
-                                        dan lain-lain</li>
-                                    <li>Narasumber: Pelatih menjahit</li>
-                                </ul>
+                            <li>Kolom b diisi dengan nama kegiatan pengadaan.</li>
+                            <li>Kolom c diisi dengan nilai pengadaan di setiap kegiatan dalam rupiah.</li>
+                            <li>Kolom d diisi dengan memilih salah satu cara pengadaan, yaitu Swakelola atau Penyedia.
                             </li>
-                            <li>Kolom c diisi dengan spesifikasi atau informasi kriteria yang dibutuhkan dari
-                                uraian/material/sumber daya manusia. Misal:
-                                <ul>
-                                    <li>Pekerjaan konstruksi: Batu kali, Kayu 5/7 kelas II, Batu Belah 15/20</li>
-                                    <li>Narasumber: memiliki sertifikat menjahit, pengalaman 2 tahun, dsb</li>
-                                </ul>
-                            </li>
+                            <li>Kolom e diisi dengan keluaran jumlah volume.</li>
+                            <li>Kolom f diisi dengan satuan volume. Misal: unit, orang, dokumen.</li>
+                            <li>Kolom g diisi dengan nama TPK yang ditetapkan berdasarkan hasil Musrenbangdes atau SK
+                                Kepala Desa tentang penetapan TPK.</li>
+                            <li>Kolom h diisi dengan lokasi tempat pengadaan dilaksanakan.</li>
+                            <li>Kolom i diisi dengan rencana rentang waktu dilaksanakannya pengadaan.</li>
                         </ol>
                     </div>
                 </div>
@@ -97,12 +93,12 @@
             const fullHtml = docHeader + content + docFooter;
 
             const blob = window.htmlDocx.asBlob(fullHtml, {
-                orientation: 'portrait'
+                orientation: 'landscape'
             });
 
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'Spesifikasi Teknis.docx';
+            link.download = 'Pengumuman Perencanaan Pengadaan.docx';
             link.click();
         }
     </script>

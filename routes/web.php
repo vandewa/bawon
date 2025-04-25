@@ -1,8 +1,39 @@
 <?php
 
 use App\Livewire\Dashboard;
+use App\Livewire\Generator\Lelang\PengumumanLelang as LelangPengumumanLelang;
+use App\Livewire\Generator\Lelang\SuratPenawaranPenyedia as LelangSuratPenawaranPenyedia;
+
+use App\Livewire\Generator\Penyedia\BastDariKasiKepadaKepalaDesa as PenyediaBastDariKasiKepadaKepalaDesa;
+use App\Livewire\Generator\Penyedia\BastDariPenyediaKepadaKasi as PenyediaBastDariPenyediaKepadaKasi;
+use App\Livewire\Generator\Penyedia\BeritaAcaraHasilEvaluasi as PenyediaBeritaAcaraHasilEvaluasi;
+use App\Livewire\Generator\Penyedia\BeritaAcaraHasilNegosiasi as PenyediaBeritaAcaraHasilNegosiasi;
+use App\Livewire\Generator\Penyedia\Hps as PenyediaHps;
+use App\Livewire\Generator\Penyedia\JadwalPelaksanaanPekerjaan as PenyediaJadwalPelaksaaanPekerjaan;
+use App\Livewire\Generator\Penyedia\Kak as PenyediaKak;
+use App\Livewire\Generator\Penyedia\LaporanHasilPemeriksaanOlehKasiKaur as PenyediaLaporanHasilPemeriksaanOlehKasiKaur;
+use App\Livewire\Generator\Penyedia\PenetapanPemenang as PenyediaPenetapanPemenang;
+use App\Livewire\Generator\Penyedia\PengumumanPerencanaanPengadaan as PenyediaPengumumanPerencanaanPengadaan;
+use App\Livewire\Generator\Penyedia\SkKepalaDesaTpk as PenyediaSkKepalaDesaTpk;
+use App\Livewire\Generator\Penyedia\Spk as PenyediaSpk;
+use App\Livewire\Generator\Penyedia\SuratPerjanjian as PenyediaSuratPerjanjian;
+use App\Livewire\Generator\Penyedia\SuratPermintaanPenawaran as PenyediaSuratPenawaran;
 use App\Livewire\Generator\Penyedia\SpesifikasiTeknis as PenyediaSpesifikasiTeknis;
+use App\Livewire\Generator\Penyedia\SuratPernyataanKebenaranUsaha as PenyediaSuratPernyataanKebenaranUsaha;
+
+use App\Livewire\Generator\Swakelola\BeritaAcaraPenyerahanHasil as SwakelolaBeritaAcaraPenyerahanHasil;
+use App\Livewire\Generator\Swakelola\BeritaAcaraSerahTerima as SwakelolaBeritaAcaraSerahTerima;
+use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan as SwakelolaHasilPembahasanKegiatanPersiapanPengadaan;
+use App\Livewire\Generator\Swakelola\Kak as SwakelolaKak;
+use App\Livewire\Generator\Swakelola\LaporanEvaluasiKegiatan as SwakelolaLaporanEvaluasiKegiatan;
+use App\Livewire\Generator\Swakelola\LaporanPenggunaanSumberdaya as SwakelolaLaporanPenggunaanSumberdaya;
+use App\Livewire\Generator\Swakelola\PengumumanHasilKegiatanPengadaan as SwakelolaPengumumanHasilKegiatanPengadaan;
+use App\Livewire\Generator\Swakelola\PengumumanPerencanaanPengadaan as SwakelolaPengumumanPerencanaanPengadaan;
+use App\Livewire\Generator\Swakelola\RencanaAnggaranBiaya as SwakelolaRencanaAnggaranBiaya;
+use App\Livewire\Generator\Swakelola\SkKepalaDesaTpk as SwakelolaSkKepalaDesaTpk;
 use App\Livewire\Generator\Swakelola\SpesifikasiTeknis as SwakelolaSpesifikasiTeknis;
+use App\Livewire\Generator\Swakelola\SuratPenyampaianDokumenPersiapan as SwakelolaSuratPenyampaianDokumenPersiapan;
+
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
 use App\Livewire\Desa\DesaIndex;
@@ -40,23 +71,53 @@ Route::middleware([
 
     Route::group(['prefix' => 'generator', 'as' => 'generator.'], function () {
         Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
+            Route::get('/sk-kades-tpk/{id?}', PenyediaSkKepalaDesaTpk::class)->name('sk-kades-tpk');
+            Route::get('/pengumuman-perencanaan-pengadaan/{id?}', PenyediaPengumumanPerencanaanPengadaan::class)->name('pengumuman-perencanaan-pengadaan');
             Route::get('/spesifikasi-teknis/{id?}', PenyediaSpesifikasiTeknis::class)->name('spesifikasi-teknis');
-            Route::get('/kak/{id?}', PenyediaSpesifikasiTeknis::class)->name('kak');
-            Route::get('/jadwal-pelaksanaan/{id?}', PenyediaSpesifikasiTeknis::class)->name('jadwal-pelaksanaan');
-            Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja');
-            Route::get('/hps/{id?}', PenyediaSpesifikasiTeknis::class)->name('hps');
+            Route::get('/kak/{id?}', PenyediaKak::class)->name('kak');
+            Route::get('/jadwal-pelaksanaan/{id?}', PenyediaSpesifikasiTeknis::class)->name('jadwal-pelaksanaan'); //belum
+            Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja'); //belum
+            Route::get('/hps/{id?}', PenyediaHps::class)->name('hps');
+            Route::get('/spk/{id?}', PenyediaSpk::class)->name('spk');
+            Route::get('/surat-perjanjian/{id?}', PenyediaSuratPerjanjian::class)->name('surat-perjanjian');
+            Route::get('/surat-penawaran/{id?}', PenyediaSuratPenawaran::class)->name('surat-penawaran');
+            Route::get('/jadwal-pelaksanaan-pekerjaan/{id?}', PenyediaJadwalPelaksaaanPekerjaan::class)->name('jadwal-pelaksanaan-pekerjaan');
+            Route::get('/surat-pernyataan-kebenaran-usaha/{id?}', PenyediaSuratPernyataanKebenaranUsaha::class)->name('surat-pernyataan-kebenaran-usaha');
+            Route::get('/berita-acara-hasil-evaluasi/{id?}', PenyediaBeritaAcaraHasilEvaluasi::class)->name('berita-acara-hasil-evaluasi');
+            Route::get('/berita-acara-hasil-negosiasi/{id?}', PenyediaBeritaAcaraHasilNegosiasi::class)->name('berita-acara-hasil-negosiasi');
+            Route::get('/penetapan-pemenang/{id?}', PenyediaPenetapanPemenang::class)->name('penetapan-pemenang');
+            Route::get('/laporan-hasil-pemeriksaan/{id?}', PenyediaLaporanHasilPemeriksaanOlehKasiKaur::class)->name('laporan-hasil-pemeriksaan');
+            Route::get('/bast-dari-penyedia-kepada-kasi/{id?}', PenyediaBastDariPenyediaKepadaKasi::class)->name('bast-dari-penyedia-kepada-kasi');
+            Route::get('/bast-dari-kasi-kepada-kades/{id?}', PenyediaBastDariKasiKepadaKepalaDesa::class)->name('bast-dari-kasi-kepada-kades');
+
         });
 
         Route::group(['prefix' => 'swakelola', 'as' => 'swakelola.'], function () {
             Route::get('/spesifikasi-teknis/{id?}', SwakelolaSpesifikasiTeknis::class)->name('spesifikasi-teknis');
-            Route::get('/kak/{id?}', PenyediaSpesifikasiTeknis::class)->name('kak');
-            Route::get('/jadwal-pelaksanaan/{id?}', PenyediaSpesifikasiTeknis::class)->name('jadwal-pelaksanaan');
-            Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja');
+            Route::get('/kak/{id?}', SwakelolaKak::class)->name('kak');
+            Route::get('/jadwal-pelaksanaan/{id?}', PenyediaSpesifikasiTeknis::class)->name('jadwal-pelaksanaan'); //belum
+            Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja'); //belum
             Route::get('/hps/{id?}', PenyediaSpesifikasiTeknis::class)->name('hps');
+            Route::get('/sk-kades-tpk/{id?}', SwakelolaSkKepalaDesaTpk::class)->name('sk-kades-tpk');
+            Route::get('/pengumuman-perencanaan-pengadaan/{id?}', SwakelolaPengumumanPerencanaanPengadaan::class)->name('pengumuman-perencanaan-pengadaan');
+            Route::get('/rab/{id?}', SwakelolaRencanaAnggaranBiaya::class)->name('rab'); //be;um fix
+            Route::get('/surat-penyampaian-dokumen-persiapan/{id?}', SwakelolaSuratPenyampaianDokumenPersiapan::class)->name('surat-penyampaian-dokumen-persiapan');
+            Route::get('/hasil-pembahasan/{id?}', SwakelolaHasilPembahasanKegiatanPersiapanPengadaan::class)->name('hasil-pembahasan');
+            Route::get('/laporan-penggunaan-sumber-daya/{id?}', SwakelolaLaporanPenggunaanSumberdaya::class)->name('laporan-penggunaan-sumber-daya');
+            Route::get('/laporan-evaluasi-kegiatan/{id?}', SwakelolaLaporanEvaluasiKegiatan::class)->name('laporan-evaluasi-kegiatan');
+            Route::get('/pengumuman-hasil-kegiatan/{id?}', SwakelolaPengumumanHasilKegiatanPengadaan::class)->name('pengumuman-hasil-kegiatan');
+            Route::get('/bast/{id?}', SwakelolaBeritaAcaraSerahTerima::class)->name('bast');
+            Route::get('/berita-acara-penyerahan-hasil/{id?}', SwakelolaBeritaAcaraPenyerahanHasil::class)->name('berita-acara-penyerahan-hasil');
+
         });
 
         Route::group(['prefix' => 'lelang', 'as' => 'lelang.'], function () {
             Route::get('/spesifikasi-teknis/{id?}', SpesifikasiTeknisEditor::class)->name('spesifikasi-teknis');
+            Route::get('/pengumuman-lelang/{id?}', LelangPengumumanLelang::class)->name('pengumuman-lelang');
+            Route::get('/surat-penawaran-penyedia/{id?}', LelangSuratPenawaranPenyedia::class)->name('surat-penawaran-penyedia');
+            Route::get('/berita-acara-hasil-evaluasi/{id?}', PenyediaBeritaAcaraHasilEvaluasi::class)->name('berita-acara-hasil-evaluasi');
+            Route::get('/berita-acara-hasil-negosiasi/{id?}', PenyediaBeritaAcaraHasilNegosiasi::class)->name('berita-acara-hasil-negosiasi');
+            Route::get('/penetapan-pemenang/{id?}', PenyediaPenetapanPemenang::class)->name('penetapan-pemenang');
         });
     });
 

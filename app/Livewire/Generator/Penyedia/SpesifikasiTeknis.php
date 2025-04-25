@@ -21,9 +21,9 @@ class SpesifikasiTeknis extends Component
         </h4>
         
         <p style="font-family: Arial, sans-serif; font-size: 10pt; text-align: center; line-height: 18pt;">
-            <strong>Paket Pengadaan</strong> {$this->paketPekerjaan->nama_kegiatan}<br> 
-            <strong>Desa</strong> {$this->paketPekerjaan->desa->name}<br>
-            <strong>Tahun</strong> {$this->paketPekerjaan->tahun}
+           Paket Pengadaan {$this->paketPekerjaan->nama_kegiatan}<br> 
+           Desa {$this->paketPekerjaan->desa->name}<br>
+           Tahun {$this->paketPekerjaan->tahun}
         </p>
         
         <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 10pt;">
@@ -77,18 +77,31 @@ class SpesifikasiTeknis extends Component
         
         <br><br>
         
-        <table class="no-border" style="width: 100%; font-family: Arial, sans-serif; font-size: 10pt; font-weight: bold; border: none; border-collapse: collapse;">
+        <table class="no-border" style="width: 100%; font-family: Arial, sans-serif; font-size: 10pt;border: none; border-collapse: collapse;">
             <tr>
                 <td style="width: 60%;"></td>
-                <td style="text-align: center;">
-                    Kepala Seksi/Kepala Urusan*<br>
-                    Bidang {$this->paketPekerjaan->nama_bidang}<br><br><br><br>
+                <td>
+                    <span style="font-weight:bold;">
+                        Kepala Seksi/Kepala Urusan*
+                    </span> <br>
+                    <span style="font-weight:bold;">
+                        Bidang {$this->paketPekerjaan->nama_bidang}
+                    </span> <br>
+                    <span>
+                       <i>*) pilih salah satu </i>
+                    </span> <br><br>
+
+                    ttd
+
+                    <br><br>
+
+                    <span style="font-weight:bold;">
                     ({$this->paketPekerjaan->nm_pptkd})
-            </td>
+                    </span>
+                </td>
             </tr>
         </table>
         
-        <p style="font-family: Arial, sans-serif; font-size: 8pt; font-style: italic;">*) pilih salah satu</p>
         HTML;
     }
 
