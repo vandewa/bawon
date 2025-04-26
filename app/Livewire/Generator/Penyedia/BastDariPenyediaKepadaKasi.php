@@ -15,7 +15,7 @@ class BastDariPenyediaKepadaKasi extends Component
     {
         $this->isiSurat = <<<HTML
         <div style="font-family:Arial; font-size:10pt;">
-            <p style="text-align:center; font-weight:bold; margin:0;">BERITA ACARA SERAH TERIMA</p>
+            <p style="text-align:center; font-weight:bold; margin:0;"><u>BERITA ACARA SERAH TERIMA</u></p>
             <p style="text-align:center; margin:0;">Nomor: _________________</p>
             <br>
         
@@ -75,15 +75,16 @@ class BastDariPenyediaKepadaKasi extends Component
                         Desa __________________<br><br>
                         [ttd]<br><br>
                         Nama Lengkap<br>
-                        <span style="font-size:8pt;">Stempel (bila ada)</span>
                     </td>
                     <td style="width:50%; text-align:center;">
                         __________, __________________ 20____<br><br>
                         <strong>Pihak Pertama,</strong><br>
                         Penyedia<br>
-                        Perusahaan/Toko/CV/BUMDes/BUMDesma/lainnya* ________________<br><br>
+                        Perusahaan/Toko/CV/BUMDes/ <br> BUMDesma/lainnya* ________________<br><br>
                         [ttd]<br><br>
-                        Nama Lengkap
+                        Nama Lengkap <br>
+                        <span style="font-size:8pt;">Stempel (bila ada)</span>
+
                     </td>
                 </tr>
             </table>

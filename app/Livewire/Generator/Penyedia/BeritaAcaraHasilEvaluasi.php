@@ -15,10 +15,10 @@ class BeritaAcaraHasilEvaluasi extends Component
     {
         $this->isiSurat = <<<HTML
         <div style="font-family:Arial; font-size:10pt;">
-            <p style="text-align:center; font-weight:bold;">BERITA ACARA HASIL EVALUASI PENAWARAN</p>
-            <p style="text-align:center;">Nomor: _________________</p>
+            <p style="text-align:center; font-weight:bold;margin:0;padding:0;"><u>BERITA ACARA HASIL EVALUASI PENAWARAN</u></p>
+            <p style="text-align:center;margin:0;padding:0;">Nomor: _________________</p>
         
-            <p style="text-align:justify; ">Pada hari ini _________________ tanggal ___ bulan _________________ tahun ______, kami selaku Tim Pelaksana Kegiatan (TPK) Desa _________________ yang ditetapkan dengan Surat Keputusan Kepala Desa _________________ Nomor: _________________ tanggal _________________, telah melaksanakan evaluasi penawaran untuk:</p>
+            <p style="text-align:justify; ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pada hari ini _________________ tanggal ___ bulan _________________ tahun ______, kami selaku Tim Pelaksana Kegiatan (TPK) Desa _________________ yang ditetapkan dengan Surat Keputusan Kepala Desa _________________ Nomor: _________________ tanggal _________________, telah melaksanakan evaluasi penawaran untuk:</p>
         
             <table class="no-border" style="width:100%; border-collapse:collapse;font-family:Arial; font-size:10pt;">
                 <tr style="margin:0; padding:0;">
@@ -235,14 +235,13 @@ class BeritaAcaraHasilEvaluasi extends Component
             <p>Demikian Berita Acara Hasil Evaluasi Penawaran ini dibuat untuk diketahui dan dipergunakan sebagaimana mestinya.</p>
         
             <p style="text-align:right;">__________, __________________ 20____</p>
-        
-            <br>
 
-            <table class="no-border" style="width:100%; border-collapse:collapse; font-family:Arial; font-size:10pt; margin:0; padding:0;">
-                <tr style="margin:0; padding:0;">
+            <table class="no-border" style="width:100%; border-collapse:collapse; font-family:Arial; font-size:10pt; margin:0;">
+                <tr>
                     <td></td>
                     <td>Tim Pelaksana Kegiatan (TPK)</td>
                 </tr>
+                <br><br>
                 <tr style="margin:0; padding:0;">
                     <td style="text-align:right;">________________[nama Ketua]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
                     <td>1. __________________: </td> <br>

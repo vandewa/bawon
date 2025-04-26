@@ -15,37 +15,37 @@ class BastDariKasiKepadaKepalaDesa extends Component
     {
         $this->isiSurat = <<<HTML
             <div style="font-family:Arial; font-size:10pt;">
-                <p style="text-align:center; font-weight:bold; margin:0;">BERITA ACARA SERAH TERIMA</p>
-                <p style="text-align:center; margin:0;">Nomor: _________________</p>
+                <p style="text-align:center; font-weight:bold; margin:0;padding:0;"><u>BERITA ACARA SERAH TERIMA</u></p>
+                <p style="text-align:center; margin:0;padding:0;">Nomor: _________________</p>
                 <br>
 
                 <p style="text-align:justify; margin:0;">
                     Pada hari ini ________ tanggal ______________ bulan _________ tahun ________ bertempat di _________, Kami yang bertandatangan di bawah ini:
-                </p>
+                </p><br>
                 
-                <table class="no-border" style="width:100%; font-size:10pt; font-family:Arial; border-collapse:collapse; margin:0; padding:0;">
+                <table class="no-border" style="width:100%; font-size:10pt; font-family:Arial;">
                     <tr>
-                        <td style="width:25%;">Nama</td>
-                        <td style="width:2%;">:</td>
-                        <td style="width:73%;">________________________</td>
+                        <td style="width:25%;margin:0; padding:0;">Nama</td>
+                        <td style="width:2%;margin:0; padding:0;">:</td>
+                        <td style="width:73%;margin:0; padding:0;">________________________</td>
                     </tr>
                     <tr>
-                        <td>NIK</td>
-                        <td>:</td>
-                        <td>________________________</td>
+                        <td style="margin:0; padding:0;">NIK</td>
+                        <td style="margin:0; padding:0;">:</td>
+                        <td style="margin:0; padding:0;">________________________</td>
                     </tr>
                     <tr>
-                        <td>Kasi/Kaur Bidang</td>
-                        <td>:</td>
-                        <td>________________________</td>
+                        <td style="margin:0; padding:0;">Kasi/Kaur Bidang</td>
+                        <td style="margin:0; padding:0;">:</td>
+                        <td style="margin:0; padding:0;">________________________</td>
                     </tr>
                 </table>
 
                 <p style="margin:0; text-align:justify;">
-                    Selaku Pelaksana Kegiatan Anggaran (PKA) Desa __________ yang selanjutnya disebut sebagai <strong>Pihak Pertama</strong>, dan
-                </p>
+                    Selaku Pelaksana Kegiatan Anggaran (PKA) Desa __________ yang selanjutnya disebut sebagai <span style="font-weight:bold;">Pihak Pertama</span>, dan
+                </p><br>
 
-                <table class="no-border" style="width:100%; font-size:10pt; font-family:Arial; border-collapse:collapse; margin:0; padding:0;">
+                <table class="no-border" style="width:100%; font-size:10pt; font-family:Arial; margin:0; padding:0;">
                     <tr>
                         <td style="width:25%;margin:0; padding:0;">Nama</td>
                         <td style="width:2%;margin:0; padding:0;">:</td>
@@ -64,7 +64,7 @@ class BastDariKasiKepadaKepalaDesa extends Component
                 </table>
 
                 <p style="margin:0; text-align:justify;">
-                    Selaku Pemegang Kekuasaan Pengelolaan Keuangan Desa (PKPKD) ________ yang selanjutnya disebut sebagai <strong>Pihak Kedua</strong>.
+                    Selaku Pemegang Kekuasaan Pengelolaan Keuangan Desa (PKPKD) ________ yang selanjutnya disebut sebagai <span style="font-weight:bold;">Pihak Kedua.</span>
                 </p>
 
                 <br>
@@ -76,7 +76,7 @@ class BastDariKasiKepadaKepalaDesa extends Component
                 <br>
 
                 <p style="text-align:justify; margin:0;">
-                    Demikian Berita Acara Serah Terima pekerjaan ini dibuat untuk diketahui dan dipergunakan sebagaimana mestinya.
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Demikian Berita Acara Serah Terima pekerjaan ini dibuat untuk diketahui dan dipergunakan sebagaimana mestinya.
                 </p>
 
                 <br>

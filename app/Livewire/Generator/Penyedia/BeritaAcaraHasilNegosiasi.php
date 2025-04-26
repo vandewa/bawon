@@ -73,7 +73,7 @@ class BeritaAcaraHasilNegosiasi extends Component
                     Demikian Berita Acara Hasil Negosiasi ini dibuat untuk diketahui dan dipergunakan sebagaimana mestinya.
                 </p>
 
-                <table class="no-border" style="width:100%; font-size:10pt; font-family:Arial; margin-top:20px;">
+                <table class="no-border" style="width:80%; font-size:10pt; font-family:Arial; margin-top:20px;">
                     <tr>
                         <td style="width:50%;"></td>
                         <td style="text-align:center;">__________, __________________ 20____</td>
@@ -82,28 +82,61 @@ class BeritaAcaraHasilNegosiasi extends Component
 
                 <br><br>
 
-                <table class="no-border" style="width:100%; font-size:10pt; font-family:Arial;">
+                <table class="no-border" style="width:50%;font-size:10pt;font-family:Arial;text-align:center; margin: 0 auto;">
                     <tr>
-                        <td style="width:50%; text-align:center;">
-                            Tim Pelaksana Kegiatan (TPK)
+                        <td style="width:50%;text-align:center;">
+                            Tim Pelaksana Kegiatan (TPK) <br><br>
+                            <table class="no-border" style="width:50%;font-size:10pt;font-family:Arial;text-align:center;">
+                                <tr>
+                                    <td style="text-align:center;width:2%;line-height:15pt">1.</td>
+                                    <td style="text-align:center;">__________________</td>
+                                    <td style="text-align:center;">:</td>
+                                    <td style="text-align:center;">__________________</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;">Ketua</td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;">2.</td>
+                                    <td style="text-align:center;">__________________</td>
+                                    <td style="text-align:center;">:</td>
+                                    <td style="text-align:center;">__________________</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;">Sekretaris</td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;">3.</td>
+                                    <td style="text-align:center;">__________________</td>
+                                    <td style="text-align:center;">:</td>
+                                    <td style="text-align:center;">__________________</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;">Anggota</td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:center;"></td>
+                                </tr>
+
+                            </table>
                         </td>
-                        <td style="text-align:center;">
-                            Perusahaan/Toko/Pemasok*
+                        <td style="width:50%;vertical-align:top;">
+                            Perusahaan/Toko/Pemasok* <br><br><br>
+
+                            ttd <br><br>
+
+                            Nama Lengkap <br>
+                            Stempel (bila ada)
                         </td>
                     </tr>
-                    <tr><td colspan="2"><br><br></td></tr>
-                    <tr>
-                        <td style="text-align:center;">1. Ketua</td>
-                        <td style="text-align:center;">Nama Lengkap<br>Stempel (bila ada)</td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:center;">2. Sekretaris</td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td style="text-align:center;">3. Anggota</td>
-                        <td></td>
-                    </tr>
+                  
+                  
                 </table>
 
             </div>

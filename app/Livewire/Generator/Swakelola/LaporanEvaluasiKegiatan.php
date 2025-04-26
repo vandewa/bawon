@@ -15,9 +15,8 @@ class LaporanEvaluasiKegiatan extends Component
     {
         $this->isiSurat = <<<HTML
         <div style="font-family: Arial; font-size: 10pt;">
-            <p style="text-align: center; font-weight: bold;">LAPORAN EVALUASI KEGIATAN</p>
-        
-            <p style="text-align: center;">Pada pengadaan ___________________</p>
+            <p style="text-align: center; font-weight: bold; margin:0; padding:0;">LAPORAN EVALUASI KEGIATAN</p>
+            <p style="text-align: center; margin:0; padding:0;">Pada pengadaan ___________________</p>
             <p style="text-align: right;">__________[tempat], ___[tanggal] _________[bulan]_____[tahun]</p>
             
             <table class="no-border" style="width: 100%; font-size: 10pt; font-family: Arial; border-collapse: collapse; margin: 0; padding: 0;">
@@ -68,7 +67,7 @@ class LaporanEvaluasiKegiatan extends Component
             <table class="no-border" style="width:100%; font-family:Arial; font-size:10pt;">
                 <tr>
                     <td style="width:60%;"></td>
-                    <td style="text-align:center;">
+                    <td >
                         <span style="font-weight:bold;">
                         Kepala Seksi/Kepala Urusan*
                         </span><br>

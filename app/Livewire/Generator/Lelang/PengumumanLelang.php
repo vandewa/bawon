@@ -16,7 +16,7 @@ class PengumumanLelang extends Component
         $this->isiSurat = <<<HTML
             <div style="font-family:Arial; font-size:10pt;">
                 <p style="text-align:center; font-weight:bold; margin:0;">[Kop Surat TPK/Desa]</p>
-                <p style="text-align:center; font-weight:bold; margin:0;">PENGUMUMAN LELANG</p>
+                <p style="text-align:center; font-weight:bold; margin:0;"><u>PENGUMUMAN LELANG</u></p>
                 <p style="text-align:center; margin-bottom:6pt;">Nomor: _________________</p>
 
                 <p style="text-align:justify; margin:0;">
@@ -69,12 +69,12 @@ class PengumumanLelang extends Component
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>Pengumuman</td><td></td><td></td><td></td><td></td></tr>
-                        <tr><td>Pendaftaran dan Pengambilan Dokumen Lelang</td><td></td><td></td><td></td><td></td></tr>
-                        <tr><td>Pemasukan Dokumen Penawaran</td><td></td><td></td><td></td><td></td></tr>
-                        <tr><td>Evaluasi Penawaran</td><td></td><td></td><td></td><td></td></tr>
-                        <tr><td>Negosiasi</td><td></td><td></td><td></td><td></td></tr>
-                        <tr><td>Penetapan Pemenang</td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td>&nbsp;&nbsp;&nbsp;Pengumuman</td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td>&nbsp;&nbsp;&nbsp;Pendaftaran dan Pengambilan Dokumen Lelang</td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td>&nbsp;&nbsp;&nbsp;Pemasukan Dokumen Penawaran</td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td>&nbsp;&nbsp;&nbsp;Evaluasi Penawaran</td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td>&nbsp;&nbsp;&nbsp;Negosiasi</td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td>&nbsp;&nbsp;&nbsp;Penetapan Pemenang</td><td></td><td></td><td></td><td></td></tr>
                     </tbody>
                 </table>
 
@@ -93,9 +93,9 @@ class PengumumanLelang extends Component
                             ________, __________________ 20____<br><br>
                             An. Tim Pelaksana Kegiatan<br>
                             Desa ____________________<br>
-                            Tahun Anggaran _______<br><br>
-                            Ketua:<br><br>
-                            tanda tangan,<br><br>
+                            Tahun Anggaran _______<br>
+                            Ketua:<br><br><br>
+                            tanda tangan,<br>
                             nama lengkap
                         </td>
                     </tr>

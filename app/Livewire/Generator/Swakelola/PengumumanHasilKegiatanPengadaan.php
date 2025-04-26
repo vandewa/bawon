@@ -16,8 +16,7 @@ class PengumumanHasilKegiatanPengadaan extends Component
         $this->isiSurat = <<<HTML
             <div style="font-family:Arial; font-size:10pt;">
                 <p style="text-align:center;"><i>[Kop Surat TPK]  </i></p>
-                <p style="text-align:center; font-weight:bold;">PENGUMUMAN HASIL KEGIATAN PENGADAAN SECARA SWAKELOLA</p>
-
+                <p style="text-align:center; font-weight:bold;margin:0;padding:0;"><u>PENGUMUMAN HASIL KEGIATAN PENGADAAN SECARA SWAKELOLA</u></p>
                 <p style="text-align:center;">Nomor: ______________________</p>
 
                 <p>Tim Pelaksana Kegiatan (TPK) Desa ________________ dengan ini menyampaikan hasil pelaksanaan kegiatan Pengadaan secara Swakelola Tahun Anggaran ______, sebagai berikut:</p>

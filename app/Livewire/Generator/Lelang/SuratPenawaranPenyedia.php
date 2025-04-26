@@ -33,7 +33,7 @@ class SuratPenawaranPenyedia extends Component
                     <tr>
                         <td style="margin:0; padding:0;">Perihal</td>
                         <td style="margin:0; padding:0;">:</td>
-                        <td style="margin:0; padding:0;">Penawaran Pengadaan</td>
+                        <td style="margin:0; padding:0;">Penawaran Pengadaan _________</td>
                     </tr>
                 </table>
 
@@ -67,19 +67,14 @@ class SuratPenawaranPenyedia extends Component
                     <tr>
                         <td style="width:60%;"></td>
                         <td style="text-align:center;">
-                            Penyedia<br><br><br><br>
+                            Penyedia,<br><br><br><br>
                             tanda tangan, <br>
                             nama lengkap
                         </td>
                     </tr>
                 </table>
-
             </div>
             HTML;
-
-
-
-
     }
 
 

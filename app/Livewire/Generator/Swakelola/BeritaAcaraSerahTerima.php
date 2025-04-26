@@ -89,7 +89,12 @@ class BeritaAcaraSerahTerima extends Component
                         <span style="font-weight:bold;">
                             Desa _______________ 
                         </span>
-                        <br><br><br><br><br>
+                        <br><br><br>
+
+                        ttd
+                       
+                        <br><br><br>
+                        (nama lengkap)
                        
                     </td>
                     <td style="width:50%;text-align:center;">

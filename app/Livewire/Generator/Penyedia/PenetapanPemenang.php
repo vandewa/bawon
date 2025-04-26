@@ -32,7 +32,7 @@ class PenetapanPemenang extends Component
                 <tr style="margin:0; padding:0;">
                     <td style="padding:0; margin:0;">Perihal</td>
                     <td style="padding:0; margin:0;">:</td>
-                    <td style="padding:0; margin:0;">Penetapan Pemenang Paket Pekerjaan</td>
+                    <td style="padding:0; margin:0;">Penetapan Pemenang Paket Pekerjaan _________</td>
                 </tr>
             </table>
         
@@ -102,9 +102,9 @@ class PenetapanPemenang extends Component
                         ________, __________________ 20____<br><br><br>
                         An. Tim Pelaksana Kegiatan<br>
                         Desa ____________________<br>
-                        Tahun Anggaran _______<br><br>
-                        Ketua:<br><br>
-                        tanda tangan,<br><br>
+                        Tahun Anggaran _______<br>
+                        Ketua:<br><br><br><br>
+                        tanda tangan,<br>
                         nama lengkap
                     </td>
                 </tr>

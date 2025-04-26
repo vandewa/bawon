@@ -19,7 +19,7 @@ class LaporanHasilPemeriksaanOlehKasiKaur extends Component
 
                 <br>
 
-                <p style="margin:0;">
+                <p style="margin:0;padding:0;">
                     Kepada Yth. <br>
                     Kepala Seksi/Kepala Urusan _______________<br>
                     Desa _______________<br>
@@ -29,8 +29,8 @@ class LaporanHasilPemeriksaanOlehKasiKaur extends Component
 
                 <br>
 
-                <p style="text-align:justify; margin:0;">
-                    Sehubungan dengan telah dilaksanakannya kegiatan pengadaan _______________ 
+                <p style="text-align:justify; margin:0;padding:0;line-height:15pt;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sehubungan dengan telah dilaksanakannya kegiatan pengadaan _______________ 
                     [diisi dengan nama kegiatan], oleh _______________ 
                     [diisi dengan nama Perusahaan/Toko/CV/BUMDes/BUMDesma/lainnya] yang beralamat di 
                     _______________ pada tanggal __ bulan _______________ tahun _____ yang telah 
@@ -40,8 +40,8 @@ class LaporanHasilPemeriksaanOlehKasiKaur extends Component
 
                 <br>
 
-                <p style="text-align:justify; margin:0;">
-                    Demikian surat ini kami buat, atas perhatian dan kerjasamanya diucapkan terima kasih.
+                <p style="text-align:justify; margin:0;padding:0;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Demikian surat ini kami buat, atas perhatian dan kerjasamanya diucapkan terima kasih.
                 </p>
 
                 <br><br>
@@ -51,8 +51,8 @@ class LaporanHasilPemeriksaanOlehKasiKaur extends Component
                         <td style="width:60%;"></td>
                         <td style="text-align:center;">
                             ________, __________________ 20____<br><br>
-                            Penyedia __________________<br><br>
-                            tanda tangan,<br><br>
+                            Penyedia __________________<br><br><br>
+                            tanda tangan,<br>
                             nama lengkap
                         </td>
                     </tr>

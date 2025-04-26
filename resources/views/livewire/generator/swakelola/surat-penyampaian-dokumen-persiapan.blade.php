@@ -73,7 +73,7 @@
 
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'Surat Penyampaian Dokumen Persiapan Swakelola.docx';
+            link.download = 'SK Kepala Desa.docx';
             link.click();
         }
     </script>
