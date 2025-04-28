@@ -13,23 +13,22 @@
                             <i class="fas fa-book mr-2"></i> Petunjuk Pengisian
                         </h5>
                     </div>
-
                     <div class="card-body">
                         <ol>
-                            <li>Kolom a diisi dengan nomor urut.</li>
-                            <li>Kolom b diisi dengan uraian kegiatan/pekerjaan yang dibutuhkan. Misal:
-                                <ul>
-                                    <li>Pekerjaan konstruksi: Pondasi, Atap, Dinding, kualifikasi sumber daya manusia
-                                        dan lain-lain</li>
-                                    <li>Narasumber: Pelatih menjahit</li>
-                                </ul>
+                            <li>
+                                <strong>Latar Belakang:</strong><br>
+                                Bagian latar belakang memuat penjelasan singkat mengenai perlunya dilakukan kegiatan
+                                pengadaan barang/jasa dan menjelaskan kegiatan yang akan dilakukan.
                             </li>
-                            <li>Kolom c diisi dengan spesifikasi atau informasi kriteria yang dibutuhkan dari
-                                uraian/material/sumber daya manusia. Misal:
-                                <ul>
-                                    <li>Pekerjaan konstruksi: Batu kali, Kayu 5/7 kelas II, Batu Belah 15/20</li>
-                                    <li>Narasumber: memiliki sertifikat menjahit, pengalaman 2 tahun, dsb</li>
-                                </ul>
+                            <li>
+                                <strong>Pembahasan:</strong><br>
+                                Bagian pembahasan memuat ringkasan hal yang menjadi topik diskusi kegiatan serta
+                                mencantumkan hasil kesepakatan dari diskusi yang telah dilakukan.
+                            </li>
+                            <li>
+                                <strong>Tindak Lanjut:</strong><br>
+                                Bagian tindak lanjut memuat hasil keputusan atau kesimpulan diskusi serta tindak
+                                lanjut yang akan dilakukan.
                             </li>
                         </ol>
                     </div>
@@ -102,7 +101,7 @@
 
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'Spesifikasi Teknis.docx';
+            link.download = 'Catatan Hasil Pembahasan Kegiatan Persiapan Pengadaan.docx';
             link.click();
         }
     </script>

@@ -13,23 +13,39 @@
                             <i class="fas fa-book mr-2"></i> Petunjuk Pengisian
                         </h5>
                     </div>
-
                     <div class="card-body">
                         <ol>
+                            <li>
+                                Tahapan kegiatan dalam suatu pekerjaan diisi dengan urutan pada baris No 1, 2 dst.<br>
+                                Contoh: 1. Persiapan; 2. Pekerjaan Pengukuran; 3. Pembangunan Pondasi; 4. dst.
+                            </li>
                             <li>Kolom a diisi dengan nomor urut.</li>
-                            <li>Kolom b diisi dengan uraian kegiatan/pekerjaan yang dibutuhkan. Misal:
+                            <li>
+                                Kolom b diisi dengan uraian kegiatan/pekerjaan yang dibutuhkan.<br>
+                                Misal: tukang, tukang pipa, mandor, pipa PVC, sewa tripod.
+                            </li>
+                            <li>
+                                Kolom c diisi dengan volume penggunaan tenaga kerja, bahan, dan peralatan pada setiap
+                                tahapan pekerjaan.
+                            </li>
+                            <li>
+                                Kolom d diisi dengan satuan seperti:
                                 <ul>
-                                    <li>Pekerjaan konstruksi: Pondasi, Atap, Dinding, kualifikasi sumber daya manusia
-                                        dan lain-lain</li>
-                                    <li>Narasumber: Pelatih menjahit</li>
+                                    <li>Tenaga kerja: Orang Bulan (OB), Orang Harian (OH), Orang Jam (OJ)</li>
+                                    <li>Bahan: meter, kg, sak, kubik (m³)</li>
+                                    <li>Peralatan: unit</li>
                                 </ul>
                             </li>
-                            <li>Kolom c diisi dengan spesifikasi atau informasi kriteria yang dibutuhkan dari
-                                uraian/material/sumber daya manusia. Misal:
-                                <ul>
-                                    <li>Pekerjaan konstruksi: Batu kali, Kayu 5/7 kelas II, Batu Belah 15/20</li>
-                                    <li>Narasumber: memiliki sertifikat menjahit, pengalaman 2 tahun, dsb</li>
-                                </ul>
+                            <li>Kolom e diisi dengan harga satuan sesuai dengan standar yang berlaku.</li>
+                            <li>
+                                Kolom f diisi dengan jumlah biaya yang merupakan hasil perkalian kolom c dan kolom e.
+                            </li>
+                            <li>
+                                Kolom g diisi dengan rencana jadwal pekerjaan dalam hitungan hari/minggu/bulan yang
+                                diisi dengan checklist.
+                            </li>
+                            <li>
+                                Kolom h diisi dengan keterangan lain-lain jika diperlukan.
                             </li>
                         </ol>
                     </div>
@@ -97,12 +113,12 @@
             const fullHtml = docHeader + content + docFooter;
 
             const blob = window.htmlDocx.asBlob(fullHtml, {
-                orientation: 'portrait'
+                orientation: 'landscape'
             });
 
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'Spesifikasi Teknis.docx';
+            link.download = 'Rencana Anggaran Biaya.docx';
             link.click();
         }
     </script>

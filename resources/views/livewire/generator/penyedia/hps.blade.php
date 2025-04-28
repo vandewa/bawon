@@ -13,24 +13,25 @@
                             <i class="fas fa-book mr-2"></i> Petunjuk Pengisian
                         </h5>
                     </div>
-
                     <div class="card-body">
                         <ol>
                             <li>Kolom a diisi dengan nomor urut.</li>
-                            <li>Kolom b diisi dengan uraian kegiatan/pekerjaan yang dibutuhkan. Misal:
-                                <ul>
-                                    <li>Pekerjaan konstruksi: Pondasi, Atap, Dinding, kualifikasi sumber daya manusia
-                                        dan lain-lain</li>
-                                    <li>Narasumber: Pelatih menjahit</li>
-                                </ul>
+                            <li>
+                                Kolom b diisi dengan uraian kegiatan/pekerjaan yang dibutuhkan.<br>
+                                Misal: Pekerjaan Persiapan, Pekerjaan Galian Tanah, Pekerjaan Urug Tanah, Pekerjaan
+                                Finishing<br>
+                                Barang: Nama barang, biaya tidak langsung seperti biaya angkut, biaya instalasi, biaya
+                                pengemasan (bila ada)
                             </li>
-                            <li>Kolom c diisi dengan spesifikasi atau informasi kriteria yang dibutuhkan dari
-                                uraian/material/sumber daya manusia. Misal:
-                                <ul>
-                                    <li>Pekerjaan konstruksi: Batu kali, Kayu 5/7 kelas II, Batu Belah 15/20</li>
-                                    <li>Narasumber: memiliki sertifikat menjahit, pengalaman 2 tahun, dsb</li>
-                                </ul>
+                            <li>
+                                Kolom c diisi dengan detail spesifikasi atau informasi kriteria yang dibutuhkan dari
+                                pekerjaan kegiatan.<br>
+                                Misal: Kayu 5/7 kelas II, Batu Belah 15/20, Windows OS 256Gb
                             </li>
+                            <li>Kolom d diisi dengan volume uraian kegiatan yang dibutuhkan.</li>
+                            <li>Kolom e diisi dengan satuan unit volume kegiatan.</li>
+                            <li>Kolom f diisi dengan perkiraan harga satuan (rupiah) termasuk keuntungan penyedia.</li>
+                            <li>Kolom g diisi dengan hasil dari perhitungan volume × harga satuan dalam rupiah.</li>
                         </ol>
                     </div>
                 </div>
@@ -102,7 +103,7 @@
 
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'Spesifikasi Teknis.docx';
+            link.download = 'Harga Perkiraan Sendiri.docx';
             link.click();
         }
     </script>

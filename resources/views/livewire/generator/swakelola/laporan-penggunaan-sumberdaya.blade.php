@@ -13,23 +13,39 @@
                             <i class="fas fa-book mr-2"></i> Petunjuk Pengisian
                         </h5>
                     </div>
-
                     <div class="card-body">
                         <ol>
                             <li>Kolom a diisi dengan nomor urut.</li>
-                            <li>Kolom b diisi dengan uraian kegiatan/pekerjaan yang dibutuhkan. Misal:
+                            <li>
+                                Kolom b diisi dengan jenis sumber daya. Misal: tenaga kerja, material, peralatan.
+                            </li>
+                            <li>
+                                Kolom c diisi dengan rencana penggunaan volume sumber daya yang diambil dari dokumen RAB
+                                dengan satuan. Misal:
                                 <ul>
-                                    <li>Pekerjaan konstruksi: Pondasi, Atap, Dinding, kualifikasi sumber daya manusia
-                                        dan lain-lain</li>
-                                    <li>Narasumber: Pelatih menjahit</li>
+                                    <li>Tenaga kerja: 10 Orang Bulan (OB)/Orang Harian (OH)/Orang Jam (OJ)</li>
+                                    <li>Bahan: 10 meter, 10 kg, 1 sak, kubik (m³)</li>
+                                    <li>Peralatan: 1 unit</li>
                                 </ul>
                             </li>
-                            <li>Kolom c diisi dengan spesifikasi atau informasi kriteria yang dibutuhkan dari
-                                uraian/material/sumber daya manusia. Misal:
+                            <li>
+                                Kolom d diisi dengan rencana penggunaan anggaran/biaya sumber daya yang diambil dari
+                                dokumen RAB (dalam rupiah).
+                            </li>
+                            <li>
+                                Kolom e diisi dengan realisasi penggunaan volume sumber daya dengan satuan. Misal:
                                 <ul>
-                                    <li>Pekerjaan konstruksi: Batu kali, Kayu 5/7 kelas II, Batu Belah 15/20</li>
-                                    <li>Narasumber: memiliki sertifikat menjahit, pengalaman 2 tahun, dsb</li>
+                                    <li>Tenaga kerja: 10 Orang Bulan (OB)/Orang Harian (OH)/Orang Jam (OJ)</li>
+                                    <li>Bahan: 10 meter, 10 kg, 1 sak, kubik (m³)</li>
+                                    <li>Peralatan: 1 unit</li>
                                 </ul>
+                            </li>
+                            <li>
+                                Kolom f diisi dengan realisasi penggunaan anggaran/biaya (dalam rupiah).
+                            </li>
+                            <li>
+                                Kolom g diisi dengan informasi, alasan, justifikasi, kendala, dan lain-lain jika ada
+                                perbedaan antara rencana dengan realisasi.
                             </li>
                         </ol>
                     </div>
@@ -102,7 +118,7 @@
 
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'Spesifikasi Teknis.docx';
+            link.download = 'Laporan Penggunaan Sumberdaya.docx';
             link.click();
         }
     </script>
