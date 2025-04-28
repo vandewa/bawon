@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             DesaSeeder::class,
             PaketPekerjaanSeeder::class,
+            VendorSeeder::class
         ]);
     }
 }
