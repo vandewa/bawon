@@ -36,25 +36,22 @@ use App\Livewire\Generator\Swakelola\SuratPenyampaianDokumenPersiapan as Swakelo
 
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
-use App\Livewire\NegosiasiPage;
 use App\Livewire\Desa\DesaIndex;
 use App\Livewire\Master\RoleIndex;
 use App\Livewire\Master\UserIndex;
-use App\Livewire\Desa\PenawaranIndex;
-use App\Livewire\Desa\PenawaranPaket;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Penyedia\VendorIndex;
-use App\Livewire\Desa\PenawaranPreview;
 use App\Livewire\Desa\PaketKegiatanEdit;
 use App\Livewire\Desa\PaketKegiatanForm;
 use App\Livewire\Desa\PaketKegiatanIndex;
 use App\Http\Controllers\HelperController;
+use App\Livewire\Desa\PenawaranPaket;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
-use App\Livewire\Generator\SpesifikasiTeknisEditor;
-use App\Livewire\Generator\Penyedia\SpesifikasiTeknis as PenyediaSpesifikasiTeknis;
-use App\Livewire\Generator\Swakelola\SpesifikasiTeknis as SwakelolaSpesifikasiTeknis;
-use App\Livewire\Penyedia\PaketPekerjaanPenyediaIndex;
+use App\Livewire\Desa\PenawaranIndex;
+use App\Livewire\Desa\PenawaranPreview;
+// use App\Livewire\Generator\SpesifikasiTeknisEditor;
+
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -116,7 +113,7 @@ Route::middleware([
         });
 
         Route::group(['prefix' => 'lelang', 'as' => 'lelang.'], function () {
-            Route::get('/spesifikasi-teknis/{id?}', SpesifikasiTeknisEditor::class)->name('spesifikasi-teknis');
+            Route::get('/spesifikasi-teknis/{id?}', PenyediaSpesifikasiTeknis::class)->name('spesifikasi-teknis');
             Route::get('/pengumuman-lelang/{id?}', LelangPengumumanLelang::class)->name('pengumuman-lelang');
             Route::get('/surat-penawaran-penyedia/{id?}', LelangSuratPenawaranPenyedia::class)->name('surat-penawaran-penyedia');
             Route::get('/berita-acara-hasil-evaluasi/{id?}', PenyediaBeritaAcaraHasilEvaluasi::class)->name('berita-acara-hasil-evaluasi');
