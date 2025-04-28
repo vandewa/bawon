@@ -62,7 +62,7 @@ class PaketKegiatanForm extends Component
           })
         JS);
 
-        return redirect()->route('desa.paket-kegiatan', $kegiatan->paket_pekerjaan_id);
+        // return redirect()->route('desa.paket-kegiatan', $kegiatan->paket_pekerjaan_id);
 
         session()->flash('message', 'Dokumen berhasil disimpan.');
         // return redirect()->route('desa.paket-pekerjaan');
