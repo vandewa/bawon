@@ -1,55 +1,57 @@
 <?php
 
 use App\Livewire\Dashboard;
-use App\Livewire\Generator\Lelang\PengumumanLelang as LelangPengumumanLelang;
-use App\Livewire\Generator\Lelang\SuratPenawaranPenyedia as LelangSuratPenawaranPenyedia;
-
-use App\Livewire\Generator\Penyedia\BastDariKasiKepadaKepalaDesa as PenyediaBastDariKasiKepadaKepalaDesa;
-use App\Livewire\Generator\Penyedia\BastDariPenyediaKepadaKasi as PenyediaBastDariPenyediaKepadaKasi;
-use App\Livewire\Generator\Penyedia\BeritaAcaraHasilEvaluasi as PenyediaBeritaAcaraHasilEvaluasi;
-use App\Livewire\Generator\Penyedia\BeritaAcaraHasilNegosiasi as PenyediaBeritaAcaraHasilNegosiasi;
-use App\Livewire\Generator\Penyedia\Hps as PenyediaHps;
-use App\Livewire\Generator\Penyedia\JadwalPelaksanaanPekerjaan as PenyediaJadwalPelaksaaanPekerjaan;
-use App\Livewire\Generator\Penyedia\Kak as PenyediaKak;
-use App\Livewire\Generator\Penyedia\LaporanHasilPemeriksaanOlehKasiKaur as PenyediaLaporanHasilPemeriksaanOlehKasiKaur;
-use App\Livewire\Generator\Penyedia\PenetapanPemenang as PenyediaPenetapanPemenang;
-use App\Livewire\Generator\Penyedia\PengumumanPerencanaanPengadaan as PenyediaPengumumanPerencanaanPengadaan;
-use App\Livewire\Generator\Penyedia\SkKepalaDesaTpk as PenyediaSkKepalaDesaTpk;
-use App\Livewire\Generator\Penyedia\Spk as PenyediaSpk;
-use App\Livewire\Generator\Penyedia\SuratPerjanjian as PenyediaSuratPerjanjian;
-use App\Livewire\Generator\Penyedia\SuratPermintaanPenawaran as PenyediaSuratPenawaran;
-use App\Livewire\Generator\Penyedia\SpesifikasiTeknis as PenyediaSpesifikasiTeknis;
-use App\Livewire\Generator\Penyedia\SuratPernyataanKebenaranUsaha as PenyediaSuratPernyataanKebenaranUsaha;
-
-use App\Livewire\Generator\Swakelola\BeritaAcaraPenyerahanHasil as SwakelolaBeritaAcaraPenyerahanHasil;
-use App\Livewire\Generator\Swakelola\BeritaAcaraSerahTerima as SwakelolaBeritaAcaraSerahTerima;
-use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan as SwakelolaHasilPembahasanKegiatanPersiapanPengadaan;
-use App\Livewire\Generator\Swakelola\Kak as SwakelolaKak;
-use App\Livewire\Generator\Swakelola\LaporanEvaluasiKegiatan as SwakelolaLaporanEvaluasiKegiatan;
-use App\Livewire\Generator\Swakelola\LaporanPenggunaanSumberdaya as SwakelolaLaporanPenggunaanSumberdaya;
-use App\Livewire\Generator\Swakelola\PengumumanHasilKegiatanPengadaan as SwakelolaPengumumanHasilKegiatanPengadaan;
-use App\Livewire\Generator\Swakelola\PengumumanPerencanaanPengadaan as SwakelolaPengumumanPerencanaanPengadaan;
-use App\Livewire\Generator\Swakelola\RencanaAnggaranBiaya as SwakelolaRencanaAnggaranBiaya;
-use App\Livewire\Generator\Swakelola\SkKepalaDesaTpk as SwakelolaSkKepalaDesaTpk;
-use App\Livewire\Generator\Swakelola\SpesifikasiTeknis as SwakelolaSpesifikasiTeknis;
-use App\Livewire\Generator\Swakelola\SuratPenyampaianDokumenPersiapan as SwakelolaSuratPenyampaianDokumenPersiapan;
-
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
+
+use App\Livewire\NegosiasiPage;
 use App\Livewire\Desa\DesaIndex;
 use App\Livewire\Master\RoleIndex;
 use App\Livewire\Master\UserIndex;
+use App\Livewire\Desa\PenawaranIndex;
+use App\Livewire\Desa\PenawaranPaket;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Penyedia\VendorIndex;
+use App\Livewire\Desa\PenawaranPreview;
 use App\Livewire\Desa\PaketKegiatanEdit;
 use App\Livewire\Desa\PaketKegiatanForm;
 use App\Livewire\Desa\PaketKegiatanIndex;
 use App\Http\Controllers\HelperController;
-use App\Livewire\Desa\PenawaranPaket;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
-use App\Livewire\Desa\PenawaranIndex;
-use App\Livewire\Desa\PenawaranPreview;
+use App\Livewire\Penyedia\PaketPekerjaanPenyediaIndex;
+
+use App\Livewire\Generator\Penyedia\Hps as PenyediaHps;
+use App\Livewire\Generator\Penyedia\Kak as PenyediaKak;
+use App\Livewire\Generator\Penyedia\Spk as PenyediaSpk;
+use App\Livewire\Generator\Swakelola\Kak as SwakelolaKak;
+use App\Livewire\Generator\Lelang\PengumumanLelang as LelangPengumumanLelang;
+use App\Livewire\Generator\Penyedia\SkKepalaDesaTpk as PenyediaSkKepalaDesaTpk;
+use App\Livewire\Generator\Penyedia\SuratPerjanjian as PenyediaSuratPerjanjian;
+use App\Livewire\Generator\Swakelola\SkKepalaDesaTpk as SwakelolaSkKepalaDesaTpk;
+use App\Livewire\Generator\Penyedia\PenetapanPemenang as PenyediaPenetapanPemenang;
+use App\Livewire\Generator\Penyedia\SpesifikasiTeknis as PenyediaSpesifikasiTeknis;
+use App\Livewire\Generator\Swakelola\SpesifikasiTeknis as SwakelolaSpesifikasiTeknis;
+use App\Livewire\Generator\Penyedia\SuratPermintaanPenawaran as PenyediaSuratPenawaran;
+
+use App\Livewire\Generator\Lelang\SuratPenawaranPenyedia as LelangSuratPenawaranPenyedia;
+use App\Livewire\Generator\Swakelola\RencanaAnggaranBiaya as SwakelolaRencanaAnggaranBiaya;
+use App\Livewire\Generator\Swakelola\BeritaAcaraSerahTerima as SwakelolaBeritaAcaraSerahTerima;
+use App\Livewire\Generator\Penyedia\BeritaAcaraHasilEvaluasi as PenyediaBeritaAcaraHasilEvaluasi;
+use App\Livewire\Generator\Swakelola\LaporanEvaluasiKegiatan as SwakelolaLaporanEvaluasiKegiatan;
+use App\Livewire\Generator\Penyedia\BeritaAcaraHasilNegosiasi as PenyediaBeritaAcaraHasilNegosiasi;
+use App\Livewire\Generator\Penyedia\JadwalPelaksanaanPekerjaan as PenyediaJadwalPelaksaaanPekerjaan;
+use App\Livewire\Generator\Penyedia\BastDariPenyediaKepadaKasi as PenyediaBastDariPenyediaKepadaKasi;
+use App\Livewire\Generator\Swakelola\BeritaAcaraPenyerahanHasil as SwakelolaBeritaAcaraPenyerahanHasil;
+use App\Livewire\Generator\Penyedia\BastDariKasiKepadaKepalaDesa as PenyediaBastDariKasiKepadaKepalaDesa;
+use App\Livewire\Generator\Swakelola\LaporanPenggunaanSumberdaya as SwakelolaLaporanPenggunaanSumberdaya;
+use App\Livewire\Generator\Penyedia\SuratPernyataanKebenaranUsaha as PenyediaSuratPernyataanKebenaranUsaha;
+use App\Livewire\Generator\Penyedia\PengumumanPerencanaanPengadaan as PenyediaPengumumanPerencanaanPengadaan;
+use App\Livewire\Generator\Swakelola\PengumumanPerencanaanPengadaan as SwakelolaPengumumanPerencanaanPengadaan;
+use App\Livewire\Generator\Swakelola\PengumumanHasilKegiatanPengadaan as SwakelolaPengumumanHasilKegiatanPengadaan;
+use App\Livewire\Generator\Swakelola\SuratPenyampaianDokumenPersiapan as SwakelolaSuratPenyampaianDokumenPersiapan;
+use App\Livewire\Generator\Penyedia\LaporanHasilPemeriksaanOlehKasiKaur as PenyediaLaporanHasilPemeriksaanOlehKasiKaur;
+use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan as SwakelolaHasilPembahasanKegiatanPersiapanPengadaan;
 // use App\Livewire\Generator\SpesifikasiTeknisEditor;
 
 
