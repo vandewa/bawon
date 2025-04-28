@@ -54,6 +54,16 @@ class PaketKegiatanForm extends Component
 
         $kegiatan->save();
 
+        $this->js(<<<'JS'
+        Swal.fire({
+            title: 'Berhasil!',
+            text: 'Dokumen berhasil di simpan',
+            icon: 'success',
+          })
+        JS);
+
+        return redirect()->route('desa.paket-kegiatan', $kegiatan->paket_pekerjaan_id);
+
         session()->flash('message', 'Dokumen berhasil disimpan.');
         // return redirect()->route('desa.paket-pekerjaan');
     }

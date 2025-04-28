@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="card-footer bg-light d-flex justify-content-end">
-                        <a href="#" class="mr-2 btn btn-secondary">
+                        <a href="{{ route('desa.paket-kegiatan', $paketPekerjaan) }}" class="mr-2 btn btn-secondary">
                             <i class="mr-1 fas fa-arrow-left"></i> Kembali
                         </a>
                         <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
