@@ -115,6 +115,12 @@ Route::middleware([
         });
 
         Route::group(['prefix' => 'lelang', 'as' => 'lelang.'], function () {
+            Route::get('/kak/{id?}', PenyediaKak::class)->name('kak');
+            Route::get('/jadwal-pelaksanaan/{id?}', PenyediaSpesifikasiTeknis::class)->name('jadwal-pelaksanaan'); //belum
+            Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja'); //belum
+            Route::get('/hps/{id?}', PenyediaHps::class)->name('hps');
+
+
             Route::get('/spesifikasi-teknis/{id?}', PenyediaSpesifikasiTeknis::class)->name('spesifikasi-teknis');
             Route::get('/pengumuman-lelang/{id?}', LelangPengumumanLelang::class)->name('pengumuman-lelang');
             Route::get('/surat-penawaran-penyedia/{id?}', LelangSuratPenawaranPenyedia::class)->name('surat-penawaran-penyedia');
