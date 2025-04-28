@@ -64,6 +64,8 @@
                                                                                     class="btn btn-sm btn-primary">
                                                                                     Kelola Penawaran
                                                                                 </a>
+                                                                                <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $paket->id) }}"
+                                                                                    class="btn btn-sm btn-info">Negosiasi</a>
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach

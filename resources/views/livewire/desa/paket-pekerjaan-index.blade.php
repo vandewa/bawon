@@ -71,9 +71,7 @@
                                                                                     class="btn btn-sm btn-primary"
                                                                                     wire:click="delete({{ $item->id }})">Buat
                                                                                     Paket</a>
-                                                                                <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $item->id) }}"
-                                                                                    class="btn btn-sm btn-info"
-                                                                                    wire:click="delete({{ $item->id }})">Negosiasi</a>
+
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
