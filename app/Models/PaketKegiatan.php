@@ -25,4 +25,10 @@ class PaketKegiatan extends Model
     {
         return $this->hasMany(Penawaran::class);
     }
+
+    public function negosiasi() {
+        return $this->hasOne(Negoisasi::class);
+    }
+
+
 }

@@ -13,16 +13,19 @@
                         <ul class="list-unstyled">
                             <li><strong>Status Penawaran:</strong> {{ $penawaran->penawaran_st }}</li>
                             <li><strong>Evaluasi Administrasi:</strong>
-                                {{ $penawaran->evaluasi->surat_kebenaran_hasil ?? 'Belum Dievaluasi' }}</li>
+                                {{ $penawaran->evaluasi->surat_kebenaran_hasil ?? 'Belum Dievaluasi' }}
+                            </li>
                             <li><strong>Evaluasi Teknis:</strong>
-                                {{ $penawaran->evaluasi->spesifikasi_hasil ?? 'Belum Dievaluasi' }}</li>
+                                {{ $penawaran->evaluasi->spesifikasi_hasil ?? 'Belum Dievaluasi' }}
+                            </li>
                             <li><strong>Evaluasi Harga:</strong>
-                                {{ $penawaran->evaluasi->harga_hasil ?? 'Belum Dievaluasi' }}</li>
+                                {{ $penawaran->evaluasi->harga_hasil ?? 'Belum Dievaluasi' }}
+                            </li>
                         </ul>
                     </div>
                     <div class="card-footer text-center">
                         @if ($penawaran->penawaran_st == 'PENAWARAN_ST_01')
-                            <button wire:click="setujui({{ $penawaran->id }})" class="btn btn-success btn-sm">
+                            <button wire:click="openModal({{ $penawaran->id }})" class="btn btn-success btn-sm">
                                 <i class="fas fa-check"></i> Setujui
                             </button>
                         @elseif ($penawaran->penawaran_st == 'PENAWARAN_ST_02')
@@ -53,7 +56,19 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form wire:submit.prevent="simpanEvaluasi">
+                        @if (session()->has('message'))
+                            <div class="alert alert-success">
+                                {{ session('message') }}
+                            </div>
+                        @endif
+
+                        <!-- Menampilkan pesan flash error -->
+                        @if (session()->has('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        <form wire:submit="simpanEvaluasi">
                             <div class="form-group">
                                 <label for="baEvaluasi">Pilih File PDF</label>
                                 <input type="file" wire:model="baEvaluasi" class="form-control">

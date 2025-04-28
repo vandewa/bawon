@@ -225,21 +225,20 @@
                                   </a>
                               </li>
                               <li class="nav-item">
-                                  <a href="{{ route('master.role.index') }}"
+                                  <a href="{{ route('penyedia.penawaran-index') }}"
                                       class="nav-link
-                            {{ Request::segment(2) == 'role-index' ? 'active' : '' }}
-                            {{ Request::segment(2) == 'role' ? 'active' : '' }}
-                            ">
-                                      @if (Request::segment(2) == 'role-index')
-                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
-                                      @elseif(Request::segment(2) == 'role')
+                            {{ Request::segment(2) == 'penawaran-index' ? 'active' : '' }}
+
+                          ">
+                                      @if (Request::segment(2) == 'penawaran-index')
                                           <i class="ml-2 far fa-dot-circle nav-icon"></i>
                                       @else
                                           <i class="ml-2 far fa-circle nav-icon"></i>
                                       @endif
-                                      <p>Role</p>
+                                      <p>Penawaran</p>
                                   </a>
                               </li>
+
 
                           </ul>
                       </li>

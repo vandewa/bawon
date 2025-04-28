@@ -71,15 +71,6 @@
                     </div>
                 </div>
 
-                <div class="card card-info card-outline">
-                    <div class="card-header">
-                        <h5 class="card-title">Penawaran Penyedia</h5>
-                    </div>
-
-                    <div class="card-body">
-                        <livewire:components.penawaran-list :paket-kegiatan-id="$paketKegiatan->id" />
-                    </div>
-                </div>
 
                 @if ($vendorId)
                     <div class="card mt-3">
@@ -125,6 +116,17 @@
                         </div>
                     </div>
                 @endif
+
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h5 class="card-title">Penawaran Penyedia</h5>
+                    </div>
+
+                    <div class="card-body">
+                        <livewire:components.penawaran-list :paketKegiatanId="$paketKegiatan->id" />
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
