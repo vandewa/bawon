@@ -44,16 +44,19 @@
                                                 <tbody>
                                                     @foreach ($posts as $item)
                                                         <tr>
-                                                            <td>{{ $item->desa->name ?? '-' }}</td>
-                                                            <td>{{ $item->tahun }}</td>
-                                                            <td>{{ $item->nama_kegiatan }}</td>
-                                                            <td>{{ $item->sumberdana }}</td>
+                                                            <td>{{ $item->paketKegiatan->paketPekerjaan->desa->name ?? '-' }}
+                                                            </td>
+                                                            <td>{{ $item->paketKegiatan->paketPekerjaan->tahun ?? '-' }}
+                                                            </td>
+                                                            <td>{{ $item->paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}
+                                                            </td>
                                                             <td class="text-right">
-                                                                {{ number_format($item->pagu_pak, 0, ',', '.') }}
+                                                                {{ number_format($item->paketKegiatan->jumlah_anggaran ?? 0, 0, ',', '.') }}
                                                             </td>
                                                             <td>
-                                                                <a href="" class="btn btn-sm btn-success">
-                                                                    Pengajuan Penawaran
+                                                                <a href="{{ route('penyedia.penawaran.create', $item->id) }}"
+                                                                    class="btn btn-sm btn-success">
+                                                                    Upload Penawaran
                                                                 </a>
                                                             </td>
                                                         </tr>

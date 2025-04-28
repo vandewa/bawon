@@ -19,8 +19,9 @@ use App\Livewire\Desa\PaketKegiatanIndex;
 use App\Http\Controllers\HelperController;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
-use App\Livewire\Penyedia\PaketPekerjaanPenyediaIndex;
+use App\Livewire\Penyedia\PengajuanPenawaranCreate;
 
+use App\Livewire\Penyedia\PaketPekerjaanPenyediaIndex;
 use App\Livewire\Generator\Penyedia\Hps as PenyediaHps;
 use App\Livewire\Generator\Penyedia\Kak as PenyediaKak;
 use App\Livewire\Generator\Penyedia\Spk as PenyediaSpk;
@@ -32,8 +33,8 @@ use App\Livewire\Generator\Swakelola\SkKepalaDesaTpk as SwakelolaSkKepalaDesaTpk
 use App\Livewire\Generator\Penyedia\PenetapanPemenang as PenyediaPenetapanPemenang;
 use App\Livewire\Generator\Penyedia\SpesifikasiTeknis as PenyediaSpesifikasiTeknis;
 use App\Livewire\Generator\Swakelola\SpesifikasiTeknis as SwakelolaSpesifikasiTeknis;
-use App\Livewire\Generator\Penyedia\SuratPermintaanPenawaran as PenyediaSuratPenawaran;
 
+use App\Livewire\Generator\Penyedia\SuratPermintaanPenawaran as PenyediaSuratPenawaran;
 use App\Livewire\Generator\Lelang\SuratPenawaranPenyedia as LelangSuratPenawaranPenyedia;
 use App\Livewire\Generator\Swakelola\RencanaAnggaranBiaya as SwakelolaRencanaAnggaranBiaya;
 use App\Livewire\Generator\Swakelola\BeritaAcaraSerahTerima as SwakelolaBeritaAcaraSerahTerima;
@@ -153,6 +154,8 @@ Route::middleware([
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
         Route::get('vendor-index', VendorIndex::class)->name('vendor-index');
         Route::get('penawaran-index', PaketPekerjaanPenyediaIndex::class)->name('penawaran-index');
+        Route::get('penawaran-index/{penawaranId}/create', PengajuanPenawaranCreate::class)->name('penawaran.create');
+
 
     });
 });

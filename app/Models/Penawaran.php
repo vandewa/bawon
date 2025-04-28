@@ -19,4 +19,8 @@ class Penawaran extends Model
     {
         return $this->hasOne(EvaluasiPenawaran::class);  // Pastikan relasi benar
     }
+    public function paketKegiatan()
+    {
+        return $this->belongsTo(PaketKegiatan::class);
+    }
 }
