@@ -112,11 +112,12 @@
                                                         <td>
                                                             <a href="{{ route('desa.paket-kegiatan.persiapan.edit', $item->id) }}"
                                                                 class="mr-1 btn btn-sm btn-primary">Edit</a>
+                                                            @if ($item->paket_kegiatan != 'PAKET_KEGIATAN_ST_02')
+                                                                <button class="btn btn-sm btn-danger"
+                                                                    wire:click="delete('{{ $item->id }}')">Hapus</button>
+                                                            @endif
 
-                                                            <button class="btn btn-sm btn-danger"
-                                                                wire:click="delete('{{ $item->id }}')">Hapus</button>
-
-                                                            @if ($dokLengkap && $item->status != 'PAKET_KEGIATAN_ST_02')
+                                                            @if ($dokLengkap && $item->paket_kegiatan != 'PAKET_KEGIATAN_ST_02')
                                                                 <button class="mt-1 btn btn-sm btn-success"
                                                                     wire:click="confirmChangeStatus('{{ $item->id }}')">
                                                                     <i class="fas fa-check"></i> Selanjutnya

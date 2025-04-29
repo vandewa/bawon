@@ -21,10 +21,14 @@ class PaketPekerjaanIndex extends Component
 
     public function render()
     {
-        $posts = PaketPekerjaan::with('desa')
-        ->where('nama_kegiatan', 'like', '%' . $this->cari . '%')
-        ->latest()
-        ->paginate(10);
+        $posts = PaketPekerjaan::with('desa');
+        if(auth()->user()->desa_id){
+            $posts->where('desa_id', auth()->user()->desa_id);
+        }
+
+        $posts->where('nama_kegiatan', 'like', '%' . $this->cari . '%')
+        ->latest();
+        $posts=  $posts->paginate(10);
 
         $desas = Desa::all();
 

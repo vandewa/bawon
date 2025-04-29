@@ -113,7 +113,7 @@ public function changeStatusToSt02()
         Swal.fire({
             icon: 'success',
             title: 'Berhasil!',
-            text: 'Status berhasil diubah ke ST_02.'
+            text: 'Kegaitan berada di proses pelaksanaan.'
         });
     JS);
 }

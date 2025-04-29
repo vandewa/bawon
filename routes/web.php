@@ -55,6 +55,7 @@ use App\Livewire\Generator\Penyedia\LaporanHasilPemeriksaanOlehKasiKaur as Penye
 use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan as SwakelolaHasilPembahasanKegiatanPersiapanPengadaan;
 use App\Livewire\Penyedia\VendorCreate;
 use App\Livewire\Penyedia\VendorEdit;
+use App\Livewire\Penyedia\VendorProfile;
 
 // use App\Livewire\Generator\SpesifikasiTeknisEditor;
 
@@ -141,10 +142,10 @@ Route::middleware([
         Route::get('role-index', RoleIndex::class)->name('role.index');
 
 
-    });
+});
 
     Route::group(['prefix' => 'desa', 'as' => 'desa.'], function () {
-        Route::get('desa-index', DesaIndex::class)->name('desa-index');
+        Route::get('desa-index', DesaIndex::class)->name('desa-index')->middleware('role:superadministrator|dinsos') ;
         Route::get('paket-pekerjaan-index', PaketPekerjaanIndex::class)->name('paket-pekerjaan-index');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{paketPekerjaanId}/persiapan/create', PaketKegiatanForm::class)->name('paket-kegiatan.persiapan.create');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{id}/persiapan/edit', PaketKegiatanEdit::class)->name('paket-kegiatan.persiapan.edit');
@@ -155,7 +156,8 @@ Route::middleware([
         Route::get('pelaksanaan-index/negoisasi/{paket_kegiatan_id}', NegosiasiPage::class)->name('penawaran.pelaksanaan.negosiasi');
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
-        Route::get('vendor-index', VendorIndex::class)->name('vendor-index');
+        Route::get('vendor-index', VendorIndex::class)->name('vendor-index')->middleware('role:superadministrator|dinsos') ;
+        Route::get('vendor-profile/{id}', VendorProfile::class)->name('vendor-profile') ;
         Route::get('vendor-index/vendor-create', VendorCreate::class)->name('vendor-create');
         Route::get('vendor-index/vendor-edit/{id}', VendorEdit::class)->name('vendor-edit');
         Route::get('penawaran-index', PaketPekerjaanPenyediaIndex::class)->name('penawaran-index');

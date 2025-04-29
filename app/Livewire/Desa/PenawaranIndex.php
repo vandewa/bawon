@@ -15,7 +15,8 @@ class PenawaranIndex extends Component
             ->whereHas('paketPekerjaan', function($q) {
                 $q->where('nama_kegiatan', 'like', '%' . $this->search . '%');
             })
-            ->orWhere('paket_kegiatan', 'like', '%' . $this->search . '%')
+
+            ->where('paket_kegiatan', 'PAKET_KEGIATAN_ST_02')
             ->latest()
             ->paginate(10);
 
