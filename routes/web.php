@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Dashboard;
+use App\Livewire\Generator\Penyedia\JadwalPelaksanaanPekerjaan;
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
 
@@ -84,7 +85,7 @@ Route::middleware([
             Route::get('/pengumuman-perencanaan-pengadaan/{id?}', PenyediaPengumumanPerencanaanPengadaan::class)->name('pengumuman-perencanaan-pengadaan');
             Route::get('/spesifikasi-teknis/{id?}', PenyediaSpesifikasiTeknis::class)->name('spesifikasi-teknis');
             Route::get('/kak/{id?}', PenyediaKak::class)->name('kak');
-            Route::get('/jadwal-pelaksanaan-pekerjaan/{id?}', PenyediaJadwalPelaksaaanPekerjaan::class)->name('jadwal-pelaksanaan-pekerjaan')->name('jadwal-pelaksanaan');
+            Route::get('/jadwal-pelaksanaan-pekerjaan/{id?}', PenyediaJadwalPelaksaaanPekerjaan::class)->name('jadwal-pelaksanaan');
             Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja'); //belum
             Route::get('/hps/{id?}', PenyediaHps::class)->name('hps');
             Route::get('/spk/{id?}', PenyediaSpk::class)->name('spk');
@@ -102,7 +103,7 @@ Route::middleware([
         Route::group(['prefix' => 'swakelola', 'as' => 'swakelola.'], function () {
             Route::get('/spesifikasi-teknis/{id?}', SwakelolaSpesifikasiTeknis::class)->name('spesifikasi-teknis');
             Route::get('/kak/{id?}', SwakelolaKak::class)->name('kak');
-            Route::get('/jadwal-pelaksanaan/{id?}', PenyediaSpesifikasiTeknis::class)->name('jadwal-pelaksanaan'); //belum
+            Route::get('/jadwal-pelaksanaan-pekerjaan/{id?}', JadwalPelaksanaanPekerjaan::class)->name('jadwal-pelaksanaan');
             Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja'); //belum
             Route::get('/hps/{id?}', PenyediaSpesifikasiTeknis::class)->name('hps');
             Route::get('/sk-kades-tpk/{id?}', SwakelolaSkKepalaDesaTpk::class)->name('sk-kades-tpk');
@@ -119,7 +120,7 @@ Route::middleware([
 
         Route::group(['prefix' => 'lelang', 'as' => 'lelang.'], function () {
             Route::get('/kak/{id?}', PenyediaKak::class)->name('kak');
-            Route::get('/jadwal-pelaksanaan/{id?}', PenyediaSpesifikasiTeknis::class)->name('jadwal-pelaksanaan'); //belum
+            Route::get('/jadwal-pelaksanaan-pekerjaan/{id?}', JadwalPelaksanaanPekerjaan::class)->name('jadwal-pelaksanaan');
             Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja'); //belum
             Route::get('/hps/{id?}', PenyediaHps::class)->name('hps');
 
