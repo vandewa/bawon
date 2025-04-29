@@ -1,40 +1,46 @@
 <?php
 
 use App\Livewire\Dashboard;
-use App\Livewire\Generator\Penyedia\JadwalPelaksanaanPekerjaan;
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
+use App\Livewire\Desa\DesaEdit;
 
 use App\Livewire\NegosiasiPage;
 use App\Livewire\Desa\DesaIndex;
+use App\Livewire\Desa\DesaCreate;
 use App\Livewire\Master\RoleIndex;
 use App\Livewire\Master\UserIndex;
 use App\Livewire\Desa\PenawaranIndex;
 use App\Livewire\Desa\PenawaranPaket;
+use App\Livewire\Penyedia\VendorEdit;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Penyedia\VendorIndex;
 use App\Livewire\Desa\PenawaranPreview;
+use App\Livewire\Penyedia\VendorCreate;
 use App\Livewire\Desa\PaketKegiatanEdit;
 use App\Livewire\Desa\PaketKegiatanForm;
+use App\Livewire\Penyedia\VendorProfile;
 use App\Livewire\Desa\PaketKegiatanIndex;
+
 use App\Http\Controllers\HelperController;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
+use App\Livewire\Desa\PelaporanIndex;
 use App\Livewire\Penyedia\PengajuanPenawaranCreate;
-
 use App\Livewire\Penyedia\PaketPekerjaanPenyediaIndex;
 use App\Livewire\Generator\Penyedia\Hps as PenyediaHps;
 use App\Livewire\Generator\Penyedia\Kak as PenyediaKak;
 use App\Livewire\Generator\Penyedia\Spk as PenyediaSpk;
 use App\Livewire\Generator\Swakelola\Kak as SwakelolaKak;
+use App\Livewire\Generator\Penyedia\JadwalPelaksanaanPekerjaan;
 use App\Livewire\Generator\Lelang\PengumumanLelang as LelangPengumumanLelang;
 use App\Livewire\Generator\Penyedia\SkKepalaDesaTpk as PenyediaSkKepalaDesaTpk;
+
 use App\Livewire\Generator\Penyedia\SuratPerjanjian as PenyediaSuratPerjanjian;
 use App\Livewire\Generator\Swakelola\SkKepalaDesaTpk as SwakelolaSkKepalaDesaTpk;
 use App\Livewire\Generator\Penyedia\PenetapanPemenang as PenyediaPenetapanPemenang;
 use App\Livewire\Generator\Penyedia\SpesifikasiTeknis as PenyediaSpesifikasiTeknis;
 use App\Livewire\Generator\Swakelola\SpesifikasiTeknis as SwakelolaSpesifikasiTeknis;
-
 use App\Livewire\Generator\Penyedia\SuratPermintaanPenawaran as PenyediaSuratPenawaran;
 use App\Livewire\Generator\Lelang\SuratPenawaranPenyedia as LelangSuratPenawaranPenyedia;
 use App\Livewire\Generator\Swakelola\RencanaAnggaranBiaya as SwakelolaRencanaAnggaranBiaya;
@@ -54,8 +60,6 @@ use App\Livewire\Generator\Swakelola\PengumumanHasilKegiatanPengadaan as Swakelo
 use App\Livewire\Generator\Swakelola\SuratPenyampaianDokumenPersiapan as SwakelolaSuratPenyampaianDokumenPersiapan;
 use App\Livewire\Generator\Penyedia\LaporanHasilPemeriksaanOlehKasiKaur as PenyediaLaporanHasilPemeriksaanOlehKasiKaur;
 use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan as SwakelolaHasilPembahasanKegiatanPersiapanPengadaan;
-use App\Livewire\Penyedia\VendorCreate;
-use App\Livewire\Penyedia\VendorEdit;
 
 // use App\Livewire\Generator\SpesifikasiTeknisEditor;
 
@@ -141,10 +145,18 @@ Route::middleware([
         Route::get('role-index', RoleIndex::class)->name('role.index');
 
 
-    });
+});
 
     Route::group(['prefix' => 'desa', 'as' => 'desa.'], function () {
-        Route::get('desa-index', DesaIndex::class)->name('desa-index');
+        Route::get('desa-create', DesaCreate::class)
+    ->middleware(['auth', 'role:superadministrator|dinsos']) // hanya admin/dinsos
+    ->name('desa-create');
+        Route::get('desa-edit/{id}', DesaEdit::class)->name('desa-edit');
+        Route::get('desa-index', DesaCreate::class)
+    ->middleware(['auth', 'role:superadministrator|dinsos']) // hanya admin/dinsos
+    ->name('desa-create');
+
+        Route::get('desa-index', DesaIndex::class)->name('desa-index')->middleware('role:superadministrator|dinsos') ;
         Route::get('paket-pekerjaan-index', PaketPekerjaanIndex::class)->name('paket-pekerjaan-index');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{paketPekerjaanId}/persiapan/create', PaketKegiatanForm::class)->name('paket-kegiatan.persiapan.create');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{id}/persiapan/edit', PaketKegiatanEdit::class)->name('paket-kegiatan.persiapan.edit');
@@ -153,9 +165,12 @@ Route::middleware([
         Route::get('pelaksanaan-index/', PenawaranIndex::class)->name('penawaran.pelaksanaan.index');
         Route::get('pelaksanaan-index/{penawaranId}/penawaran-preview', PenawaranPreview::class)->name('penawaran.pelaksanaan.preview');
         Route::get('pelaksanaan-index/negoisasi/{paket_kegiatan_id}', NegosiasiPage::class)->name('penawaran.pelaksanaan.negosiasi');
+        Route::get('pelaporan-index', PelaporanIndex::class)->name('pelaporan.index');
+
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
-        Route::get('vendor-index', VendorIndex::class)->name('vendor-index');
+        Route::get('vendor-index', VendorIndex::class)->name('vendor-index')->middleware('role:superadministrator|dinsos') ;
+        Route::get('vendor-profile/{id}', VendorProfile::class)->name('vendor-profile') ;
         Route::get('vendor-index/vendor-create', VendorCreate::class)->name('vendor-create');
         Route::get('vendor-index/vendor-edit/{id}', VendorEdit::class)->name('vendor-edit');
         Route::get('penawaran-index', PaketPekerjaanPenyediaIndex::class)->name('penawaran-index');

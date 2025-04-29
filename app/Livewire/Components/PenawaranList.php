@@ -101,7 +101,8 @@ class PenawaranList extends Component
 
     public function render()
     {
-        $penawarans = Penawaran::with('vendor')->where('paket_kegiatan_id', $this->paketKegiatanId)->get(); // Ambil penawaran beserta vendor
+        $penawarans = Penawaran::with('vendor')->where('paket_kegiatan_id', $this->paketKegiatanId)
+        ->where('dok_penawaran', '!=', '')->get(); // Ambil penawaran beserta vendor
         return view('livewire.components.penawaran-list', compact('penawarans'));
     }
 }

@@ -63,12 +63,13 @@ class VendorCreate extends Component
 
         $vendor->save();
 
-        User::create([
+        $user = User::create([
             'name' => $this->user['name'],
             'email' => $this->user['email'],
             'password' => Hash::make($this->user['password']),
             'vendor_id' => $vendor->id,
         ]);
+        $user->syncRoles(['vendor']);
 
         session()->flash('message', 'Vendor dan User berhasil dibuat.');
         return redirect()->route('penyedia.vendor-index');

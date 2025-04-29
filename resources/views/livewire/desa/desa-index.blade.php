@@ -24,9 +24,10 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <button class="btn btn-info" wire:click="create">
+                                            <a href="{{ route('desa.desa-create') }}" class="btn btn-info"
+                                                wire:click="create">
                                                 <i class="mr-2 fas fa-plus-square"></i>Tambah Data
-                                            </button>
+                                            </a>
                                         </div>
                                         <div class="card card-info card-outline card-tabs">
                                             <div class="tab-content" id="custom-tabs-six-tabContent">
@@ -59,10 +60,10 @@
                                                                             <td>{{ $item->kecamatan_id }}</td>
                                                                             <td>{{ $item->alamat }}</td>
                                                                             <td>
-                                                                                <button type="button"
+                                                                                <a href="{{ route('desa.desa-edit', $item->id) }}"
                                                                                     class="btn btn-sm btn-warning"
                                                                                     wire:click="edit({{ $item->id }})">Edit
-                                                                                </button>
+                                                                                </a>
                                                                                 <button type="button"
                                                                                     class="btn btn-sm btn-danger"
                                                                                     wire:click="delete({{ $item->id }})">Hapus

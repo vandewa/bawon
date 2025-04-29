@@ -136,68 +136,84 @@
                       {{ Request::segment(1) == 'desa' ? 'menu-is-opening menu-open' : '' }}
 
                     ">
-                          <a href="#"
-                              class="nav-link
+                          @role(['superadministrator', 'desa', 'dinsos'])
+                              <a href="#"
+                                  class="nav-link
                          {{ Request::segment(1) == 'desa' ? 'active' : '' }}
 
                     ">
-                              <i class="nav-icon fa-solid fas fa-database"></i>
-                              <p>
-                                  Desa
-                                  <i class="fas fa-angle-left right"></i>
-                              </p>
-                          </a>
-                          <ul class="nav nav-treeview">
-                              <li class="nav-item">
-                                  <a href="{{ route('desa.desa-index') }}"
-                                      class="nav-link
+                                  <i class="nav-icon fa-solid fas fa-database"></i>
+                                  <p>
+                                      Desa
+                                      <i class="fas fa-angle-left right"></i>
+                                  </p>
+                              </a>
+                              <ul class="nav nav-treeview">
+                                  <li class="nav-item">
+                                      <a href="{{ route('desa.desa-index') }}"
+                                          class="nav-link
                             {{ Request::segment(2) == 'desa-index' ? 'active' : '' }}
 
                           ">
-                                      @if (Request::segment(2) == 'desa-index')
-                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
-                                      @else
-                                          <i class="ml-2 far fa-circle nav-icon"></i>
-                                      @endif
-                                      <p>List Desa</p>
-                                  </a>
-                              </li>
-                              <li class="nav-item">
-                                  <a href="{{ route('desa.paket-pekerjaan-index') }}"
-                                      class="nav-link
+                                          @if (Request::segment(2) == 'desa-index')
+                                              <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                          @else
+                                              <i class="ml-2 far fa-circle nav-icon"></i>
+                                          @endif
+                                          <p>List Desa</p>
+                                      </a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a href="{{ route('desa.paket-pekerjaan-index') }}"
+                                          class="nav-link
                             {{ Request::segment(2) == 'paket-pekerjaan-index' ? 'active' : '' }}
 
                             ">
-                                      @if (Request::segment(2) == 'paket-pekerjaan-index')
-                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
-                                      @else
-                                          <i class="ml-2 far fa-circle nav-icon"></i>
-                                      @endif
-                                      <p>Perencanaan</p>
-                                  </a>
-                              </li>
-                              <li class="nav-item">
-                                  <a href="{{ route('desa.penawaran.pelaksanaan.index') }}"
-                                      class="nav-link
+                                          @if (Request::segment(2) == 'paket-pekerjaan-index')
+                                              <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                          @else
+                                              <i class="ml-2 far fa-circle nav-icon"></i>
+                                          @endif
+                                          <p>Perencanaan</p>
+                                      </a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a href="{{ route('desa.penawaran.pelaksanaan.index') }}"
+                                          class="nav-link
                             {{ Request::segment(2) == 'pelaksanaan-index' ? 'active' : '' }}
 
                             ">
-                                      @if (Request::segment(2) == 'pelaksanaan-index')
-                                          <i class="ml-2 far fa-dot-circle nav-icon"></i>
-                                      @else
-                                          <i class="ml-2 far fa-circle nav-icon"></i>
-                                      @endif
-                                      <p>Pelaksanaan</p>
-                                  </a>
-                              </li>
+                                          @if (Request::segment(2) == 'pelaksanaan-index')
+                                              <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                          @else
+                                              <i class="ml-2 far fa-circle nav-icon"></i>
+                                          @endif
+                                          <p>Pelaksanaan</p>
+                                      </a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a href="{{ route('desa.pelaporan.index') }}"
+                                          class="nav-link
+                          {{ Request::segment(2) == 'pealporan-index' ? 'active' : '' }}
 
-                          </ul>
-                      </li>
-                      <li
-                          class="nav-item
+                          ">
+                                          @if (Request::segment(2) == 'pelaporan-index')
+                                              <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                          @else
+                                              <i class="ml-2 far fa-circle nav-icon"></i>
+                                          @endif
+                                          <p>Pelaporan</p>
+                                      </a>
+                                  </li>
+
+                              </ul>
+                          </li>
+                          <li
+                              class="nav-item
                         {{ Request::segment(1) == 'penyedia' ? 'menu-is-opening menu-open' : '' }}
 
                     ">
+                          @endrole
                           <a href="#"
                               class="nav-link
                          {{ Request::segment(2) == 'vendor-index' ? 'active' : '' }}

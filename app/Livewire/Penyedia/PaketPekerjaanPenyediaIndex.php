@@ -5,8 +5,7 @@ namespace App\Livewire\Penyedia;
 use Livewire\Component;
 use App\Models\Penawaran;
 use Livewire\WithPagination;
-use App\Models\PaketKegiatan;
-use App\Models\PaketPekerjaan;
+use Auth;
 
 class PaketPekerjaanPenyediaIndex extends Component
 {
@@ -14,15 +13,21 @@ class PaketPekerjaanPenyediaIndex extends Component
 
     public $cari = '';
 
+    protected $paginationTheme = 'bootstrap';
+
     public function render()
     {
-        $posts = Penawaran::with('paketKegiatan.paketPekerjaan.desa')
-        // ->where('vendor_id', Auth::id())
-        ->whereHas('paketKegiatan.paketPekerjaan', function ($query) {
-            $query->where('nama_kegiatan', 'like', '%' . $this->cari . '%');
-        })
-        ->latest()
-        ->paginate(10);
+        $posts = Penawaran::with('paketKegiatan.paketPekerjaan.desa', 'statusPenawaran')
+            ->where('kirim_st', true)
+            ->whereHas('paketKegiatan.paketPekerjaan', function ($query) {
+                $query->where('nama_kegiatan', 'like', '%' . $this->cari . '%');
+            });
+
+        if (Auth::user()->vendor_id) {
+            $posts->where('vendor_id', Auth::user()->vendor_id);
+        }
+
+        $posts = $posts->latest()->paginate(10);
 
         return view('livewire.penyedia.paket-pekerjaan-penyedia-index', compact('posts'));
     }

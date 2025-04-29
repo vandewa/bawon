@@ -56,7 +56,7 @@ class PengajuanPenawaranCreate extends Component
         $this->penawaran->save();
 
         session()->flash('message', 'Penawaran berhasil diperbarui.');
-        return redirect()->route('penyedia.list-paket');
+        // return redirect()->route('penyedia.list-paket');
     }
 
     public function render()
