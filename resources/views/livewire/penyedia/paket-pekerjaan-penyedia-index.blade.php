@@ -53,9 +53,11 @@
                                                 onmouseover="this.style.background='#f0f9ff'"
                                                 onmouseout="this.style.background='white'">
                                                 <td class="px-3 py-2 align-middle">
-                                                    {{ $item->paketKegiatan->paketPekerjaan->desa->name ?? '-' }}</td>
+                                                    {{ $item->paketKegiatan->paketPekerjaan->desa->name ?? '-' }}
+                                                </td>
                                                 <td class="px-3 py-2 align-middle">
-                                                    {{ $item->paketKegiatan->paketPekerjaan->tahun ?? '-' }}</td>
+                                                    {{ $item->paketKegiatan->paketPekerjaan->tahun ?? '-' }}
+                                                </td>
                                                 <td class="px-3 py-2 align-middle">
                                                     {{ $item->paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}
                                                 </td>

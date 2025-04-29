@@ -3,16 +3,16 @@
         <div class="mb-1 row">
             <div class="col-sm-6 d-flex align-items-center">
                 <h3 class="m-0">
-                    <i class="fa fa-file-alt mr-2"></i> Pelaporan Paket Kegiatan
+                    <i class="fas fa-file-alt mr-2"></i> Pelaporan Paket Kegiatan
                 </h3>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                        <a href="#"><i class="fa fa-folder-open"></i> Pelaporan</a>
+                        <a href="#"><i class="fas fa-folder-open"></i> Pelaporan</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        <i class="fa fa-list"></i> Index
+                        <i class="fas fa-list"></i> Index
                     </li>
                 </ol>
             </div>
@@ -24,7 +24,7 @@
 
             @if (session()->has('message'))
                 <div class="alert alert-success">
-                    <i class="fa fa-check-circle"></i> {{ session('message') }}
+                    <i class="fas fa-check-circle"></i> {{ session('message') }}
                 </div>
             @endif
 
@@ -38,6 +38,7 @@
                                         <div class="tab-content">
                                             <div class="tab-pane fade show active">
                                                 <div class="card-body">
+
                                                     <div class="mb-3 row">
                                                         <div class="col-md-3">
                                                             <input type="text" class="form-control"
@@ -84,15 +85,15 @@
                                                                                 @if (!empty($paket->paketKegiatan->ba_evaluasi_penawaran))
                                                                                     <a href="{{ Storage::url($paket->paketKegiatan->ba_evaluasi_penawaran) }}"
                                                                                         target="_blank"
-                                                                                        class="btn btn-sm btn-outline-primary">
-                                                                                        <i class="fa fa-file-alt"></i>
-                                                                                        Lihat BA Evaluasi
+                                                                                        class="btn btn-sm btn-success mb-1">
+                                                                                        <i class="fas fa-file-alt"></i>
+                                                                                        BA Evaluasi
                                                                                     </a>
                                                                                 @else
                                                                                     <span
                                                                                         class="badge bg-warning text-dark">
                                                                                         <i
-                                                                                            class="fa fa-exclamation-circle"></i>
+                                                                                            class="fas fa-exclamation-circle"></i>
                                                                                         Belum Upload
                                                                                     </span>
                                                                                 @endif
@@ -102,10 +103,11 @@
                                                                                 </span>
                                                                             @endif
                                                                         </td>
-                                                                        <td class="px-3 py-2 text-center align-middle">
+                                                                        <td
+                                                                            class="px-3 py-2 text-center align-middle text-nowrap">
                                                                             <a href="#"
-                                                                                class="btn btn-sm btn-info">
-                                                                                <i class="fa fa-eye"></i> Lihat Detail
+                                                                                class="btn btn-sm btn-info mb-1">
+                                                                                <i class="fas fa-eye"></i> Lihat Detail
                                                                             </a>
                                                                         </td>
                                                                     </tr>
@@ -113,7 +115,7 @@
                                                                     <tr>
                                                                         <td colspan="7"
                                                                             class="text-center text-muted py-4">
-                                                                            <i class="fa fa-folder-open"></i> Tidak ada
+                                                                            <i class="fas fa-folder-open"></i> Tidak ada
                                                                             data pelaporan yang tersedia.
                                                                         </td>
                                                                     </tr>
@@ -129,8 +131,7 @@
                                                 </div> <!-- /.card-body -->
                                             </div> <!-- /.tab-pane -->
                                         </div> <!-- /.tab-content -->
-                                    </div> <!-- /.card card-tabs -->
-
+                                    </div> <!-- /.card -->
                                 </div>
                             </div>
                         </div>

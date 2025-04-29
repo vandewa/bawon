@@ -5,20 +5,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Ruang Desa</title>
+    <!-- Description -->
+    <meta name="description"
+        content="Masuk ke Ruang Desa, platform digital terpercaya untuk layanan desa. Login untuk mengelola data dan layanan Anda.">
+    <!-- Keywords -->
+    <meta name="keywords" content="Login Ruang Desa, Portal Desa, Digitalisasi Desa, Sistem Informasi Desa, Admin Desa">
+    <!-- Author -->
+    <meta name="author" content="" />
+    <!-- Preconnect untuk Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Robots -->
+    <meta name="robots" content="index, follow">
+    <link rel="icon" href="{{ asset('logo.ico') }}">
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-light: #e0f7fa;
+            --primary-mid: #b2ebf2;
+            --primary-dark: #007b8a;
+            --accent: #17a2b8;
+            --dark-bg: #0a192f;
+            --dark-card: #112240;
+            --dark-text: #ccd6f6;
+        }
+
         body {
             margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #e3f2fd, #ede7f6);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-mid));
             min-height: 100vh;
             overflow-x: hidden;
-            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background 0.5s ease;
         }
 
         .container {
@@ -27,41 +50,16 @@
             display: flex;
             gap: 40px;
             flex-wrap: wrap;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(20px);
             border-radius: 25px;
             box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
             padding: 50px;
             max-width: 960px;
             margin: 50px 20px;
-            animation: popIn 0.8s ease forwards;
             overflow: hidden;
-        }
-
-        .reflection {
-            position: absolute;
-            top: 0;
-            left: -75%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(120deg, rgba(255, 255, 255, 0.4) 0%, transparent 100%);
-            transform: skewX(-20deg);
-            animation: reflectionAnim 4s infinite;
-            pointer-events: none;
-        }
-
-        @keyframes reflectionAnim {
-            0% {
-                left: -75%;
-            }
-
-            50% {
-                left: 125%;
-            }
-
-            100% {
-                left: 125%;
-            }
+            animation: popIn 0.8s ease forwards;
+            transition: background 0.5s ease;
         }
 
         @keyframes popIn {
@@ -105,7 +103,7 @@
         .fade-in-text {
             font-size: 28px;
             font-weight: 700;
-            color: #4a148c;
+            color: var(--primary-dark);
             margin-bottom: 30px;
             text-align: center;
             opacity: 0;
@@ -115,7 +113,6 @@
         @keyframes fadeInText {
             to {
                 opacity: 1;
-                transform: translateY(0);
             }
         }
 
@@ -127,7 +124,7 @@
         .form-group input {
             width: 100%;
             padding: 14px;
-            border: none;
+            border: 1px solid var(--accent);
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.9);
             font-size: 16px;
@@ -137,7 +134,7 @@
 
         .form-group input:focus {
             outline: none;
-            box-shadow: 0 0 0 3px #b388ff;
+            box-shadow: 0 0 0 3px var(--accent);
         }
 
         .form-group label {
@@ -154,37 +151,57 @@
         }
 
         .form-group input:focus+label,
-        .form-group input:not(:placeholder-shown)+label,
-        .form-group input:-webkit-autofill+label {
+        .form-group input:not(:placeholder-shown)+label {
             top: -10px;
             left: 10px;
             background: white;
             font-size: 12px;
-            color: #6a1b9a;
-        }
-
-        input:-webkit-autofill {
-            box-shadow: 0 0 0 30px white inset !important;
-            -webkit-text-fill-color: #333 !important;
+            color: var(--primary-dark);
         }
 
         button {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(90deg, #8e24aa, #6a1b9a);
+            background: linear-gradient(90deg, var(--accent), #0097a7);
             color: white;
             font-weight: 600;
             font-size: 16px;
             border: none;
             border-radius: 14px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(138, 43, 226, 0.3);
+            box-shadow: 0 8px 20px rgba(0, 151, 167, 0.3);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         button:hover {
             transform: scale(1.04);
-            box-shadow: 0 10px 30px rgba(123, 31, 162, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 151, 167, 0.5);
+        }
+
+        .loading-spinner {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            border-top: 3px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
         }
 
         .wave-wrapper {
@@ -193,61 +210,20 @@
             left: 0;
             width: 100%;
             height: 60px;
-            /* dipendekkan dari 120px */
             overflow: hidden;
             z-index: 0;
-            pointer-events: none;
         }
 
-
-        /* wave-back (slower, lighter color) */
-        .wave-back {
-            display: flex;
-            width: 200%;
-            height: 100%;
-            animation: waveMoveBack 20s linear infinite;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            z-index: 0;
+        .wave-wrapper svg path {
+            fill: var(--accent);
         }
 
-        /* wave-front (faster, higher opacity) */
-        .wave-front {
-            display: flex;
-            width: 200%;
-            height: 100%;
-            animation: waveMoveFront 10s linear infinite;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            z-index: 1;
+        .wave-back path {
+            fill-opacity: 0.1;
         }
 
-        .wave-wrapper svg {
-            width: 100%;
-            height: 100%;
-            flex-shrink: 0;
-        }
-
-        @keyframes waveMoveBack {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        @keyframes waveMoveFront {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
+        .wave-front path {
+            fill-opacity: 0.25;
         }
 
         @media (max-width: 768px) {
@@ -255,6 +231,26 @@
                 flex-direction: column;
                 padding: 30px;
             }
+        }
+
+        /* DARK MODE */
+        body.dark {
+            background: linear-gradient(135deg, var(--dark-bg), var(--dark-card));
+        }
+
+        body.dark .container {
+            background: rgba(17, 34, 64, 0.8);
+        }
+
+        body.dark .fade-in-text,
+        body.dark .form-group label {
+            color: var(--dark-text);
+        }
+
+        body.dark .form-group input {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--dark-text);
+            border: 1px solid var(--accent);
         }
     </style>
 </head>
@@ -272,12 +268,11 @@
 
         <div class="form-wrapper">
             <div class="fade-in-text">
-                <img src="logo.png" alt="Logo Ruang Desa" class="logo" width="80">
-                <div class="text">
-                    Selamat Datang<br>di Ruang Desa
-                </div>
+                <img src="logo.png" alt="Logo Ruang Desa" width="80"><br>
+                Selamat Datang<br>di Ruang Desa
             </div>
-            <form action="{{ route('login') }}" method="POST">
+
+            <form id="loginForm" action="{{ route('login') }}" method="POST">
                 @csrf
                 <x-validation-errors class="mb-4" />
 
@@ -291,34 +286,52 @@
                     <label>Password</label>
                 </div>
 
-                <button type="submit">Login</button>
+                <button type="submit" id="loginButton">
+                    <span class="btn-text">Login</span>
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                </button>
             </form>
         </div>
     </div>
 
-    <!-- WAVE PARALLAX BACKGROUND -->
+    <!-- WAVE BACKGROUND -->
     <div class="wave-wrapper">
-        <!-- Wave belakang -->
         <div class="wave-back">
             <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
-                <path d="M0,20 C300,60 900,-20 1200,40 L1200,60 L0,60 Z" fill="#9c27b0" fill-opacity="0.15"></path>
+                <path d="M0,20 C300,60 900,-20 1200,40 L1200,60 L0,60 Z"></path>
             </svg>
             <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
-                <path d="M0,20 C300,60 900,-20 1200,40 L1200,60 L0,60 Z" fill="#9c27b0" fill-opacity="0.15"></path>
+                <path d="M0,20 C300,60 900,-20 1200,40 L1200,60 L0,60 Z"></path>
             </svg>
         </div>
-
-        <!-- Wave depan -->
         <div class="wave-front">
             <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
-                <path d="M0,15 C300,45 900,-15 1200,35 L1200,60 L0,60 Z" fill="#7b1fa2" fill-opacity="0.3"></path>
+                <path d="M0,15 C300,45 900,-15 1200,35 L1200,60 L0,60 Z"></path>
             </svg>
             <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
-                <path d="M0,15 C300,45 900,-15 1200,35 L1200,60 L0,60 Z" fill="#7b1fa2" fill-opacity="0.3"></path>
+                <path d="M0,15 C300,45 900,-15 1200,35 L1200,60 L0,60 Z"></path>
             </svg>
         </div>
     </div>
 
+    <script>
+        // Aktifkan Dark Mode otomatis
+        const hour = new Date().getHours();
+        if (hour >= 18 || hour <= 6) {
+            document.body.classList.add('dark');
+        }
+
+        // Loading Spinner saat klik tombol login
+        const loginForm = document.getElementById('loginForm');
+        const loginButton = document.getElementById('loginButton');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        loginForm.addEventListener('submit', function() {
+            loginButton.disabled = true;
+            loginButton.querySelector('.btn-text').style.display = 'none';
+            loadingSpinner.style.display = 'block';
+        });
+    </script>
 
 </body>
 

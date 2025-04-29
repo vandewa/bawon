@@ -32,12 +32,12 @@
             "type": "library",
             "extra": {
                 "laravel": {
-                    "providers": [
-                        "Asantibanez\\LivewireCharts\\LivewireChartsServiceProvider"
-                    ],
                     "aliases": {
                         "LivewireCharts": "Asantibanez\\LivewireCharts\\LivewireChartsFacade"
-                    }
+                    },
+                    "providers": [
+                        "Asantibanez\\LivewireCharts\\LivewireChartsServiceProvider"
+                    ]
                 }
             },
             "autoload": {

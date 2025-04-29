@@ -38,6 +38,7 @@
                                         <div class="tab-content">
                                             <div class="tab-pane fade show active">
                                                 <div class="card-body">
+
                                                     <div class="mb-3 row">
                                                         <div class="col-md-3">
                                                             <input type="text" class="form-control"
@@ -83,45 +84,43 @@
                                                                             @if ($paket->surat_perjanjian)
                                                                                 <a href="{{ Storage::url($paket->surat_perjanjian) }}"
                                                                                     target="_blank"
-                                                                                    class="inline-flex items-center gap-1 text-sm bg-green-100 text-green-800 border border-green-300 px-2 py-1 rounded hover:bg-green-200 transition">
+                                                                                    class="btn btn-sm btn-success">
                                                                                     <i class="fa fa-file-contract"></i>
                                                                                     Surat Perjanjian
                                                                                 </a>
                                                                             @else
                                                                                 <span
-                                                                                    class="inline-flex items-center gap-1 text-sm bg-yellow-100 text-yellow-800 border border-yellow-300 px-2 py-1 rounded">
+                                                                                    class="badge bg-warning text-dark">
                                                                                     <i
                                                                                         class="fa fa-exclamation-circle"></i>
                                                                                     Belum Upload
                                                                                 </span>
                                                                             @endif
                                                                         </td>
-                                                                        <td class="px-3 py-2 text-center align-middle">
-                                                                            <div
-                                                                                class="flex flex-wrap justify-center gap-2">
-                                                                                <a href="{{ route('desa.penawaran.paket', $paket->id) }}"
-                                                                                    class="inline-flex items-center gap-1 px-3 py-1.5 text-sm bg-blue-100 text-blue-800 border border-blue-300 rounded hover:bg-blue-200 transition">
-                                                                                    <i class="fa fa-edit"></i> Kelola
-                                                                                    Penawaran
+                                                                        <td
+                                                                            class="px-3 py-2 text-center align-middle text-nowrap">
+                                                                            <a href="{{ route('desa.penawaran.paket', $paket->id) }}"
+                                                                                class="btn btn-sm btn-primary mb-1">
+                                                                                <i class="fa fa-edit"></i> Kelola
+                                                                                Penawaran
+                                                                            </a>
+
+                                                                            @if ($paket->negosiasi && $paket->paket_type !== 'PAKET_TYPE_02')
+                                                                                <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $paket->id) }}"
+                                                                                    class="btn btn-sm btn-info mb-1">
+                                                                                    <i class="fa fa-handshake"></i>
+                                                                                    Negosiasi
                                                                                 </a>
+                                                                            @endif
 
-                                                                                @if ($paket->negosiasi && $paket->paket_type !== 'PAKET_TYPE_02')
-                                                                                    <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $paket->id) }}"
-                                                                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-sm bg-cyan-100 text-cyan-800 border border-cyan-300 rounded hover:bg-cyan-200 transition">
-                                                                                        <i class="fa fa-handshake"></i>
-                                                                                        Negosiasi
-                                                                                    </a>
-                                                                                @endif
-
-                                                                                @if (($paket->negosiasi_st ?? '') === 'NEGOSIASI_ST_02')
-                                                                                    <button
-                                                                                        wire:click="openUploadModal({{ $paket->id }})"
-                                                                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-sm bg-green-100 text-green-800 border border-green-300 rounded hover:bg-green-200 transition">
-                                                                                        <i class="fa fa-upload"></i>
-                                                                                        Upload Kontrak
-                                                                                    </button>
-                                                                                @endif
-                                                                            </div>
+                                                                            @if (($paket->negosiasi_st ?? '') === 'NEGOSIASI_ST_02')
+                                                                                <button
+                                                                                    wire:click="openUploadModal({{ $paket->id }})"
+                                                                                    class="btn btn-sm btn-success mb-1">
+                                                                                    <i class="fa fa-upload"></i> Upload
+                                                                                    Kontrak
+                                                                                </button>
+                                                                            @endif
                                                                         </td>
                                                                     </tr>
                                                                 @empty
@@ -137,71 +136,66 @@
                                                         </table>
                                                     </div>
 
-
                                                     <div class="mt-3">
                                                         {{ $paketKegiatans->links() }}
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                                                </div> <!-- /.card-body -->
+                                            </div> <!-- /.tab-pane -->
+                                        </div> <!-- /.tab-content -->
+                                    </div> <!-- /.card -->
                                 </div>
-
-                                {{-- Modal Upload Surat Perjanjian --}}
-                                @if ($showUploadModal)
-                                    <div class="modal fade show d-block" tabindex="-1" role="dialog"
-                                        style="background: rgba(0,0,0,0.5); z-index:1050;">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="border-0 shadow modal-content">
-                                                <div class="text-white modal-header bg-success">
-                                                    <h5 class="modal-title">
-                                                        <i class="fa fa-upload mr-2"></i> Upload Surat Perjanjian
-                                                    </h5>
-                                                    <button type="button" class="text-white btn-close"
-                                                        wire:click="$set('showUploadModal', false)">
-                                                        <span>&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form wire:submit.prevent="uploadSuratPerjanjian">
-                                                        <div class="form-group">
-                                                            <label for="fileSuratPerjanjian">
-                                                                <i class="fa fa-file-upload"></i> Pilih File Surat
-                                                                Perjanjian
-                                                            </label>
-                                                            <input type="file" id="fileSuratPerjanjian"
-                                                                wire:model="fileSuratPerjanjian"
-                                                                class="form-control @error('fileSuratPerjanjian') is-invalid @enderror">
-                                                            @error('fileSuratPerjanjian')
-                                                                <span class="text-danger">{{ $message }}</span>
-                                                            @enderror
-                                                        </div>
-
-                                                        <div wire:loading wire:target="fileSuratPerjanjian"
-                                                            class="mt-2 text-warning">
-                                                            <i class="fa fa-spinner fa-spin"></i> Uploading...
-                                                        </div>
-
-                                                        <div class="mt-4 d-flex justify-content-end">
-                                                            <button type="submit" class="btn btn-success">
-                                                                <i class="fa fa-save"></i> Simpan
-                                                            </button>
-                                                            <button type="button"
-                                                                wire:click="$set('showUploadModal', false)"
-                                                                class="btn btn-secondary ms-2">
-                                                                <i class="fa fa-times"></i> Batal
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
                         </div>
-                    </div>
+                    </div> <!-- /.card-body -->
                 </div>
             </div>
+
+        </div>
     </section>
+
+    {{-- Modal Upload Surat Perjanjian --}}
+    @if ($showUploadModal)
+        <div class="modal fade show d-block" tabindex="-1" role="dialog"
+            style="background: rgba(0,0,0,0.5); z-index:1050;">
+            <div class="modal-dialog" role="document">
+                <form wire:submit.prevent="uploadSuratPerjanjian" class="modal-content shadow rounded">
+                    <div class="modal-header bg-success text-white">
+                        <h5 class="modal-title">
+                            <i class="fa fa-upload mr-2"></i> Upload Surat Perjanjian
+                        </h5>
+                        <button type="button" class="text-white btn-close" wire:click="$set('showUploadModal', false)">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label for="fileSuratPerjanjian"><i class="fa fa-file-upload"></i> Pilih File Surat
+                                Perjanjian</label>
+                            <input type="file" id="fileSuratPerjanjian" wire:model="fileSuratPerjanjian"
+                                class="form-control @error('fileSuratPerjanjian') is-invalid @enderror">
+                            @error('fileSuratPerjanjian')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div wire:loading wire:target="fileSuratPerjanjian" class="mt-2 text-warning">
+                            <i class="fa fa-spinner fa-spin"></i> Uploading...
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa fa-save"></i> Simpan
+                        </button>
+                        <button type="button" class="btn btn-secondary" wire:click="$set('showUploadModal', false)">
+                            <i class="fa fa-times"></i> Batal
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
+
 </div>
