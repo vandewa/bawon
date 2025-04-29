@@ -77,12 +77,13 @@ class VendorEdit extends Component
                 }
                 $user->save();
             } else {
-                User::create([
+               $user =  User::create([
                     'name' => $this->user['name'],
                     'email' => $this->user['email'],
                     'password' => Hash::make($this->user['password']),
                     'vendor_id' => $this->vendorId,
                 ]);
+                $user->syncRoles(['vendor']);
             }
         }
 
