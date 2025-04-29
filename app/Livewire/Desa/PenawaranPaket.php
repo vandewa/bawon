@@ -127,6 +127,68 @@ class PenawaranPaket extends Component
             JS);
         }
     }
+            public function konfirmasiKirimUndangan()
+        {
+            $jumlahPenawaran = count($this->penawarans);
+
+            if ($this->paketKegiatan->paket_type == 'PAKET_TYPE_01' && $jumlahPenawaran < 2) {
+                $this->js(<<<'JS'
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Minimal harus ada 2 penawaran untuk tipe Paket PAKET_TYPE_01.',
+                    });
+                JS);
+                return;
+            }
+
+            if ($this->paketKegiatan->paket_type == 'PAKET_TYPE_02' && $jumlahPenawaran < 1) {
+                $this->js(<<<'JS'
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal',
+                        text: 'Minimal harus ada 1 penawaran untuk tipe Paket PAKET_TYPE_02.',
+                    });
+                JS);
+                return;
+            }
+
+            // Jika jumlah memenuhi, lanjutkan konfirmasi kirim
+            $this->js(<<<'JS'
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Semua undangan akan dikirimkan sekarang?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Kirim!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.kirimUndangan()
+                }
+            })
+            JS);
+        }
+
+
+public function kirimUndangan()
+{
+    Penawaran::where('paket_kegiatan_id', $this->paketKegiatan->id)
+        ->update(['kirim_st' => true]);
+
+    $this->loadPenawarans(); // Refresh tabel
+
+    $this->js(<<<'JS'
+    Swal.fire({
+        title: 'Berhasil!',
+        text: 'Semua undangan berhasil dikirim!',
+        icon: 'success'
+    })
+    JS);
+}
+
 
     public function preview($path)
     {

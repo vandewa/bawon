@@ -25,6 +25,7 @@ use App\Livewire\Desa\PaketKegiatanIndex;
 use App\Http\Controllers\HelperController;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
+use App\Livewire\Desa\PelaporanIndex;
 use App\Livewire\Penyedia\PengajuanPenawaranCreate;
 use App\Livewire\Penyedia\PaketPekerjaanPenyediaIndex;
 use App\Livewire\Generator\Penyedia\Hps as PenyediaHps;
@@ -164,6 +165,8 @@ Route::middleware([
         Route::get('pelaksanaan-index/', PenawaranIndex::class)->name('penawaran.pelaksanaan.index');
         Route::get('pelaksanaan-index/{penawaranId}/penawaran-preview', PenawaranPreview::class)->name('penawaran.pelaksanaan.preview');
         Route::get('pelaksanaan-index/negoisasi/{paket_kegiatan_id}', NegosiasiPage::class)->name('penawaran.pelaksanaan.negosiasi');
+        Route::get('pelaporan-index', PelaporanIndex::class)->name('pelaporan.index');
+
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
         Route::get('vendor-index', VendorIndex::class)->name('vendor-index')->middleware('role:superadministrator|dinsos') ;

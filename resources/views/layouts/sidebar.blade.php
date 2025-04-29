@@ -192,12 +192,12 @@
                                       </a>
                                   </li>
                                   <li class="nav-item">
-                                      <a href="{{ route('desa.penawaran.pelaksanaan.index') }}"
+                                      <a href="{{ route('desa.pelaporan.index') }}"
                                           class="nav-link
-                          {{ Request::segment(2) == 'pelaksanaan-index' ? 'active' : '' }}
+                          {{ Request::segment(2) == 'pealporan-index' ? 'active' : '' }}
 
                           ">
-                                          @if (Request::segment(2) == 'pelaksanaan-index')
+                                          @if (Request::segment(2) == 'pelaporan-index')
                                               <i class="ml-2 far fa-dot-circle nav-icon"></i>
                                           @else
                                               <i class="ml-2 far fa-circle nav-icon"></i>

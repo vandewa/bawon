@@ -13,7 +13,7 @@
 
                         <div class="mb-3">
                             <button class="btn btn-info" wire:click="$set('showModalVendor', true)">
-                                <i class="fas fa-plus-square mr-1"></i> Tambah Vendor
+                                <i class="mr-1 fas fa-plus-square"></i> Tambah Vendor
                             </button>
                         </div>
 
@@ -25,6 +25,7 @@
                                         <th>Batas Akhir</th>
                                         <th>Surat Undangan</th>
                                         <th>Keterangan</th>
+                                        <th>Status Kirim</th> <!-- tambahan -->
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -45,6 +46,13 @@
                                             </td>
                                             <td>{{ $item['keterangan'] }}</td>
                                             <td>
+                                                @if ($item['kirim_st'] ?? false)
+                                                    <span class="badge bg-success">Terkirim</span>
+                                                @else
+                                                    <span class="badge bg-warning text-dark">Belum Terkirim</span>
+                                                @endif
+                                            </td>
+                                            <td>
                                                 <button class="btn btn-warning btn-sm"
                                                     wire:click="editPenawaran({{ $item['vendor_id'] }})">
                                                     Edit
@@ -57,12 +65,18 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center text-muted">Belum ada data penawaran
+                                            <td colspan="6" class="text-center text-muted">Belum ada data penawaran
                                             </td>
                                         </tr>
                                     @endforelse
                                 </tbody>
+
                             </table>
+                            <div class="mt-3 d-flex justify-content-end">
+                                <button class="btn btn-primary" wire:click="konfirmasiKirimUndangan">
+                                    <i class="fas fa-paper-plane"></i> Kirim Undangan
+                                </button>
+                            </div>
                         </div>
 
                         @if (session()->has('message'))
@@ -73,7 +87,7 @@
 
 
                 @if ($vendorId)
-                    <div class="card mt-3">
+                    <div class="mt-3 card">
                         <div class="card-header bg-light">
                             <h4 class="mb-0 text-primary fw-bold">
                                 @if ($editMode)
@@ -107,7 +121,7 @@
                                 </div>
 
                                 <button type="submit" class="btn btn-success">
-                                    <i class="fas fa-save mr-1"></i> Simpan Penawaran
+                                    <i class="mr-1 fas fa-save"></i> Simpan Penawaran
                                 </button>
                                 <button type="button" class="btn btn-secondary" wire:click="resetForm">
                                     Batal
@@ -135,16 +149,16 @@
     @if ($showModalVendor)
         <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.5);">
             <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content border-0 shadow">
+                <div class="border-0 shadow modal-content">
                     <div class="modal-header bg-info">
-                        <h5 class="modal-title text-white">Pilih Vendor</h5>
-                        <button type="button" class="btn-close text-white" wire:click="$set('showModalVendor', false)">
+                        <h5 class="text-white modal-title">Pilih Vendor</h5>
+                        <button type="button" class="text-white btn-close" wire:click="$set('showModalVendor', false)">
                             <span>&times;</span>
                         </button>
                     </div>
 
                     <div class="modal-body">
-                        <div class="row mb-3">
+                        <div class="mb-3 row">
                             <div class="col-md-6">
                                 <input type="text" class="form-control" wire:model.debounce.500ms="searchVendor"
                                     placeholder="Cari nama perusahaan atau NIB...">
