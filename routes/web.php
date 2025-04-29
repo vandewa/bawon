@@ -81,13 +81,12 @@ Route::middleware([
             Route::get('/pengumuman-perencanaan-pengadaan/{id?}', PenyediaPengumumanPerencanaanPengadaan::class)->name('pengumuman-perencanaan-pengadaan');
             Route::get('/spesifikasi-teknis/{id?}', PenyediaSpesifikasiTeknis::class)->name('spesifikasi-teknis');
             Route::get('/kak/{id?}', PenyediaKak::class)->name('kak');
-            Route::get('/jadwal-pelaksanaan/{id?}', PenyediaSpesifikasiTeknis::class)->name('jadwal-pelaksanaan'); //belum
+            Route::get('/jadwal-pelaksanaan-pekerjaan/{id?}', PenyediaJadwalPelaksaaanPekerjaan::class)->name('jadwal-pelaksanaan-pekerjaan')->name('jadwal-pelaksanaan');
             Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja'); //belum
             Route::get('/hps/{id?}', PenyediaHps::class)->name('hps');
             Route::get('/spk/{id?}', PenyediaSpk::class)->name('spk');
             Route::get('/surat-perjanjian/{id?}', PenyediaSuratPerjanjian::class)->name('surat-perjanjian');
             Route::get('/surat-penawaran/{id?}', PenyediaSuratPenawaran::class)->name('surat-penawaran');
-            Route::get('/jadwal-pelaksanaan-pekerjaan/{id?}', PenyediaJadwalPelaksaaanPekerjaan::class)->name('jadwal-pelaksanaan-pekerjaan');
             Route::get('/surat-pernyataan-kebenaran-usaha/{id?}', PenyediaSuratPernyataanKebenaranUsaha::class)->name('surat-pernyataan-kebenaran-usaha');
             Route::get('/berita-acara-hasil-evaluasi/{id?}', PenyediaBeritaAcaraHasilEvaluasi::class)->name('berita-acara-hasil-evaluasi');
             Route::get('/berita-acara-hasil-negosiasi/{id?}', PenyediaBeritaAcaraHasilNegosiasi::class)->name('berita-acara-hasil-negosiasi');

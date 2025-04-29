@@ -39,7 +39,7 @@
 
                 <!-- Summernote Editor -->
                 <div wire:ignore>
-                    <textarea id="summernote">{!! $isiSurat !!}</textarea>
+                    <textarea id="summernote" wire:model="isiSurat"></textarea>
                 </div>
 
                 <!-- Tombol Aksi -->
@@ -104,8 +104,24 @@
 
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = 'Surat-Dinas.docx';
+            link.download = 'Spesifikasi Teknis.docx';
             link.click();
         }
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('#summernote').summernote({
+                callbacks: {
+                    onChange: function(contents) {
+                        // Kirim nilai terbaru ke Livewire
+                        @this.set('isiSurat', contents);
+                    }
+                }
+            });
+
+            // Set nilai awal dari Livewire ke Summernote
+            $('#summernote').summernote('code', @this.isiSurat);
+        });
     </script>
 @endpush
