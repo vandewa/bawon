@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('hps')->nullable();
             $table->string('ba_evaluasi_penawaran')->nullable();
             $table->string('spk')->nullable();
-            $table->string(' ')->nullable();
+            $table->string('surat_perjanjian')->nullable();
             $table->string('laporan_hasil_pemeriksaan')->nullable();
             $table->string('bast_penyedia')->nullable();
             $table->string('bast_kades')->nullable();
