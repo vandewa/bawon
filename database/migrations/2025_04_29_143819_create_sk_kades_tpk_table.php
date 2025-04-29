@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('spesifikasi_teknis', function (Blueprint $table) {
+        Schema::create('sk_kades_tpk', function (Blueprint $table) {
             $table->id();
             $table->integer('paket_kegiatan_id');
             $table->longText('isi_surat');
@@ -23,6 +23,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('spesifikasi_teknis');
+        Schema::dropIfExists('sk_kades_tpk');
     }
 };
