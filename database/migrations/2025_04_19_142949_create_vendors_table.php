@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('provinsi')->nullable();
             $table->string('kabupaten')->nullable();
             $table->string('kode_pos')->nullable();
+            $table->string('rekening_perusahaan')->nullable();
 
             // Dokumen legalitas
             $table->string('akta_pendirian')->nullable();
@@ -34,7 +35,7 @@ return new class extends Migration
             $table->string('siup')->nullable();
             $table->string('izin_usaha_lain')->nullable();
             $table->string('ktp_direktur')->nullable();
-            $table->string('rekening_perusahaan')->nullable();
+
             $table->timestamps();
         });
     }
