@@ -97,6 +97,13 @@
                                                         class="btn btn-sm btn-success">
                                                         Upload / Edit Penawaran
                                                     </a>
+                                                    @if ($item->paketKegiatan->negosiasi && $item->paketKegiatan->paket_type !== 'PAKET_TYPE_02')
+                                                        <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $item->paketKegiatan->id) }}"
+                                                            class="mb-1 btn btn-sm btn-info">
+                                                            Negosiasi
+                                                        </a>
+                                                    @endif
+
                                                 </td>
                                             </tr>
                                         @empty
