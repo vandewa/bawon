@@ -17,8 +17,8 @@
         <div class="container-fluid">
 
             {{-- Detail Paket --}}
-            <div class="card mb-3">
-                <div class="card-header bg-info text-white">
+            <div class="mb-3 card">
+                <div class="text-white card-header bg-info">
                     <h5 class="mb-0">📋 Detail Paket Pekerjaan</h5>
                 </div>
                 <div class="card-body">
@@ -31,24 +31,30 @@
                         <div class="col-md-6">
                             <h5><i class="fas fa-calendar-alt"></i> Tahun Kegiatan</h5>
                             <p>{{ $penawaran->paketKegiatan->paketPekerjaan->tahun ?? '-' }}</p>
+
                         </div>
 
-                        <div class="col-md-12 mt-3">
+                        <div class="mt-3 col-md-6">
                             <h5><i class="fas fa-tasks"></i> Nama Kegiatan</h5>
                             <p>{{ $penawaran->paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}</p>
                         </div>
+                        <div class="mt-3 col-md-6">
+                            <h5><i class="fas fa-money-bill"></i> Anggaran</h5>
+                            <p>Rp {{ number_format($penawaran->paketKegiatan->jumlah_anggaran ?? 0, 0, ',', '.') }}</p>
 
-                        <div class="col-md-12 mt-3">
+                        </div>
+
+                        <div class="mt-3 col-md-12">
                             <h5><i class="fas fa-clock"></i> Batas Akhir Pengajuan</h5>
                             <p>
                                 {{ \Carbon\Carbon::parse($penawaran->batas_akhir)->translatedFormat('d F Y H:i') }}
                                 @if (now()->greaterThan($penawaran->batas_akhir))
-                                    <span class="badge badge-danger ml-2">Batas Waktu Terlampaui</span>
+                                    <span class="ml-2 badge badge-danger">Batas Waktu Terlampaui</span>
                                 @endif
                             </p>
                         </div>
 
-                        <div class="col-md-12 mt-3">
+                        <div class="mt-3 col-md-12">
                             <h5><i class="fas fa-folder-open"></i> Dokumen Terkait</h5>
                             <ul class="list-group">
                                 @if ($penawaran->paketKegiatan->spek_teknis)
@@ -98,7 +104,7 @@
             {{-- Cek Batas Akhir --}}
             @if (now()->lessThanOrEqualTo($penawaran->batas_akhir))
                 {{-- Form Upload Penawaran --}}
-                <div class="card mt-3">
+                <div class="mt-3 card">
                     <form wire:submit.prevent="save">
                         <div class="card-header">
                             <h5>Form Upload Penawaran</h5>
@@ -174,11 +180,11 @@
                 </div>
             @else
                 {{-- Info Batas Akhir Terlampaui --}}
-                <div class="alert alert-danger mt-3">
+                <div class="mt-3 alert alert-danger">
                     <h5 class="mb-1"><i class="fas fa-exclamation-triangle"></i> Batas Waktu Pengajuan Telah
                         Terlampaui</h5>
                     <p>Maaf, Anda tidak dapat lagi mengirimkan atau mengubah dokumen penawaran untuk paket ini.</p>
-                    <a href="{{ route('penyedia.penawaran-index') }}" class="btn btn-sm btn-light mt-2">Kembali ke
+                    <a href="{{ route('penyedia.penawaran-index') }}" class="mt-2 btn btn-sm btn-light">Kembali ke
                         Daftar
                         Paket</a>
                 </div>
