@@ -15,14 +15,24 @@ class SpesifikasiTeknis extends Component
 
     public function mount($id)
     {
+        // Mengambil data PaketPekerjaan berdasarkan ID
         $this->paketPekerjaan = PaketPekerjaan::with(['desa', 'paketKegiatans'])->findOrFail($id);
-        $this->paketKegiatan = PaketKegiatan::where('paket_pekerjaan_id', $this->paketPekerjaan['id'])->first();
 
-        $this->cekData = GeneratorSpesifikasiTeknis::where('paket_kegiatan_id', $this->paketKegiatan['id'])->first();
+        // Mengambil data PaketKegiatan berdasarkan paket_pekerjaan_id
+        $this->paketKegiatan = PaketKegiatan::where('paket_pekerjaan_id', $this->paketPekerjaan->id)->first();
 
-        if ($this->cekData) {
-            $this->isiSurat = $this->cekData['isi_surat'];
+        // Cek apakah data GeneratorSpesifikasiTeknis sudah ada
+        if ($this->paketKegiatan) {
+            $this->cekData = GeneratorSpesifikasiTeknis::where('paket_kegiatan_id', $this->paketKegiatan->id)->first();
         } else {
+            $this->cekData = null;
+        }
+
+        // Jika data GeneratorSpesifikasiTeknis sudah ada, gunakan isi_surat-nya
+        if ($this->cekData) {
+            $this->isiSurat = $this->cekData->isi_surat;
+        } else {
+            // Jika belum ada, buat template default
             $this->isiSurat = <<<HTML
             <h4 style="text-align: center; font-family: Arial, sans-serif; font-size: 10pt; font-weight: bold;">
                 Spesifikasi Teknis
