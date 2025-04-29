@@ -300,8 +300,8 @@
                       {{-- ROLE PENYEDIA --}}
                       @role(['vendor'])
                           <li class="nav-item">
-                              <a href="{{ route('penyedia.penawaran-index') }}"
-                                  class="nav-link {{ Request::segment(2) == 'penawaran-index' ? 'active' : '' }}">
+                              <a href="{{ route('penyedia.vendor-profile', auth()->user()->vendor_id ?? null) }}"
+                                  class="nav-link {{ Request::segment(2) == 'vendor-profile' ? 'active' : '' }}">
                                   <i class="nav-icon fas fa-id-badge"></i>
                                   <p>
                                       Profil

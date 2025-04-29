@@ -9,9 +9,11 @@ class VendorProfile extends Component
 {
     public $vendor;
 
-    public function mount($id)
+    public function mount($id = null)
     {
-        $this->vendor = Vendor::findOrFail($id);
+        if ($id) {
+            $this->vendor = Vendor::findOrFail($id);
+        }
     }
 
     public function render()

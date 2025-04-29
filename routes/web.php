@@ -145,18 +145,18 @@ Route::middleware([
         Route::get('role-index', RoleIndex::class)->name('role.index');
 
 
-});
+    });
 
     Route::group(['prefix' => 'desa', 'as' => 'desa.'], function () {
         Route::get('desa-create', DesaCreate::class)
-    ->middleware(['auth', 'role:superadministrator|dinsos']) // hanya admin/dinsos
-    ->name('desa-create');
+            ->middleware(['auth', 'role:superadministrator|dinsos']) // hanya admin/dinsos
+            ->name('desa-create');
         Route::get('desa-edit/{id}', DesaEdit::class)->name('desa-edit');
         Route::get('desa-index', DesaCreate::class)
-    ->middleware(['auth', 'role:superadministrator|dinsos']) // hanya admin/dinsos
-    ->name('desa-create');
+            ->middleware(['auth', 'role:superadministrator|dinsos']) // hanya admin/dinsos
+            ->name('desa-create');
 
-        Route::get('desa-index', DesaIndex::class)->name('desa-index')->middleware('role:superadministrator|dinsos') ;
+        Route::get('desa-index', DesaIndex::class)->name('desa-index')->middleware('role:superadministrator|dinsos');
         Route::get('paket-pekerjaan-index', PaketPekerjaanIndex::class)->name('paket-pekerjaan-index');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{paketPekerjaanId}/persiapan/create', PaketKegiatanForm::class)->name('paket-kegiatan.persiapan.create');
         Route::get('paket-pekerjaan-index/paket-kegiatan/{id}/persiapan/edit', PaketKegiatanEdit::class)->name('paket-kegiatan.persiapan.edit');
@@ -169,8 +169,8 @@ Route::middleware([
 
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
-        Route::get('vendor-index', VendorIndex::class)->name('vendor-index')->middleware('role:superadministrator|dinsos') ;
-        Route::get('vendor-profile/{id}', VendorProfile::class)->name('vendor-profile') ;
+        Route::get('vendor-index', VendorIndex::class)->name('vendor-index')->middleware('role:superadministrator|dinsos');
+        Route::get('vendor-profile/{id?}', VendorProfile::class)->name('vendor-profile');
         Route::get('vendor-index/vendor-create', VendorCreate::class)->name('vendor-create');
         Route::get('vendor-index/vendor-edit/{id}', VendorEdit::class)->name('vendor-edit');
         Route::get('penawaran-index', PaketPekerjaanPenyediaIndex::class)->name('penawaran-index');
