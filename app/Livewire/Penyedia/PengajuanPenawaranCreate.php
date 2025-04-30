@@ -23,7 +23,7 @@ class PengajuanPenawaranCreate extends Component
     {
         $this->penawaran = Penawaran::with('paketKegiatan.paketPekerjaan.desa')
             ->where('id', $penawaranId)
-            ->where('vendor_id', Auth::id())
+            // ->where('vendor_id', Auth::id())
             ->firstOrFail();
 
         $this->nilai = $this->penawaran->nilai;
