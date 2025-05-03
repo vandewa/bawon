@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Dashboard;
+use App\Livewire\Desa\AparaturIndex;
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
 use App\Livewire\Desa\DesaEdit;
@@ -166,6 +167,8 @@ Route::middleware([
         Route::get('pelaksanaan-index/{penawaranId}/penawaran-preview', PenawaranPreview::class)->name('penawaran.pelaksanaan.preview');
         Route::get('pelaksanaan-index/negoisasi/{paket_kegiatan_id}', NegosiasiPage::class)->name('penawaran.pelaksanaan.negosiasi');
         Route::get('pelaporan-index', PelaporanIndex::class)->name('pelaporan.index');
+
+        Route::get('aparatur-index/{id?}', AparaturIndex::class)->name('aparatur-index');
 
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {

@@ -95,6 +95,10 @@
                                                                                 class="btn btn-sm btn-danger mb-1">
                                                                                 <i class="fa fa-trash"></i> Hapus
                                                                             </button>
+                                                                            <a href="{{ route('desa.aparatur-index', $item->id) }}"
+                                                                                class="btn btn-sm btn-info mb-1">
+                                                                                <i class="fa fa-users"></i> Aparatur
+                                                                            </a>
                                                                         </td>
 
 
