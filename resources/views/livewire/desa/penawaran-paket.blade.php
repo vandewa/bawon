@@ -5,11 +5,58 @@
 
                 <div class="card card-info card-outline">
                     <div class="card-header">
-                        <h5 class="card-title">Penawaran Vendor untuk Paket: {{ $paketKegiatan->paket_kegiatan }}</h5>
+                        <h5 class="card-title">Penawaran Penyedia untuk Paket:
+                            {{ $paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}</h5>
+
                     </div>
 
                     <div class="card-body">
-                        <p><strong>Anggaran:</strong> Rp{{ number_format($paketKegiatan->jumlah_anggaran) }}</p>
+                        <div class="p-3 mb-4 border rounded bg-light">
+                            <h5 class="text-primary">Informasi Kegiatan</h5>
+                            <dl class="mb-0 row">
+                                <dt class="col-sm-4">Nama Kegiatan</dt>
+                                <dd class="col-sm-8">{{ $paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}</dd>
+
+                                <dt class="col-sm-4">Tahun Anggaran</dt>
+                                <dd class="col-sm-8">{{ $paketKegiatan->paketPekerjaan->tahun ?? '-' }}</dd>
+
+                                <dt class="col-sm-4">Bidang / Subbidang</dt>
+                                <dd class="col-sm-8">
+                                    {{ $paketKegiatan->paketPekerjaan->nama_bidang ?? '-' }} /
+                                    {{ $paketKegiatan->paketPekerjaan->nama_subbidang ?? '-' }}
+                                </dd>
+
+                                <dt class="col-sm-4">Jenis Paket</dt>
+                                <dd class="col-sm-8">
+                                    @php
+                                        $badgeColor = match ($paketKegiatan->paket_type) {
+                                            'PAKET_TYPE_01' => 'primary',
+                                            'PAKET_TYPE_02' => 'success',
+                                            'PAKET_TYPE_03' => 'warning',
+                                            default => 'secondary',
+                                        };
+                                    @endphp
+                                    <span class="badge bg-{{ $badgeColor }} text-white">
+                                        {{ $paketKegiatan->paketType->code_nm ?? 'Tidak Diketahui' }}
+                                    </span>
+                                </dd>
+
+                                <dt class="col-sm-4">Jumlah Anggaran (Pengajuan)</dt>
+                                <dd class="col-sm-8">
+                                    Rp{{ number_format($paketKegiatan->jumlah_anggaran ?? 0, 2, ',', '.') }}</dd>
+
+                                <dt class="col-sm-4">Pagu PAK</dt>
+                                <dd class="col-sm-8">
+                                    Rp{{ number_format($paketKegiatan->paketPekerjaan->pagu_pak ?? 0, 2, ',', '.') }}
+                                </dd>
+
+                                <dt class="col-sm-4">Nilai PAK</dt>
+                                <dd class="col-sm-8">
+                                    Rp{{ number_format($paketKegiatan->paketPekerjaan->nilaipak ?? 0, 2, ',', '.') }}
+                                </dd>
+                            </dl>
+                        </div>
+
 
                         <div class="mb-3">
                             <button class="btn btn-info" wire:click="$set('showModalVendor', true)">
@@ -36,7 +83,7 @@
                                             <td>{{ $item['batas_akhir'] }}</td>
                                             <td>
                                                 @if ($item['surat_undangan'])
-                                                    <a href="{{ Storage::url($item['surat_undangan']) }}"
+                                                    <a href="{{ route('helper.show-picture', ['path' => $item['surat_undangan']]) }}"
                                                         target="_blank" class="btn btn-sm btn-secondary">
                                                         Preview
                                                     </a>
@@ -109,11 +156,24 @@
 
                                 <div class="form-group">
                                     <label>Upload Surat Undangan</label>
-                                    <input type="file" class="form-control" wire:model="suratUndangan">
+                                    <div class="input-group">
+                                        <input type="file" class="form-control" wire:model="suratUndangan">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-outline-primary" disabled>
+                                                <i class="fas fa-magic"></i> Generate
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div wire:loading wire:target="suratUndangan" class="mt-2 text-info">
+                                        <i class="fas fa-spinner fa-spin"></i> Mengunggah Surat Undangan...
+                                    </div>
+
                                     @error('suratUndangan')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+
 
                                 <div class="form-group">
                                     <label>Keterangan</label>

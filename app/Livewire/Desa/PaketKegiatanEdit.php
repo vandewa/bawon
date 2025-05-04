@@ -79,6 +79,18 @@ class PaketKegiatanEdit extends Component
         $this->paketKegiatan->save();
 
         session()->flash('message', 'Dokumen berhasil diperbarui.');
+        $route = route('desa.paket-kegiatan', ['paketPekerjaanId' => $this->paketPekerjaan->id]);
+
+        $this->js(<<<JS
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Dokumen berhasil diperbarui.',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = "$route";
+            });
+        JS);
     }
 
     protected function deleteOldFile($path)

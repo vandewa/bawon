@@ -1,7 +1,7 @@
 <div>
     <!-- Header section -->
     <x-slot name="header">
-        <div class="row mb-1">
+        <div class="mb-1 row">
             <div class="col-sm-6">
                 <h3 class="m-0">Negosiasi</h3>
             </div>
@@ -29,8 +29,8 @@
                                 <div class="card-body">
                                     <h5>Status Negosiasi:</h5>
                                     <span
-                                        class="badge {{ $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'bg-success' : 'bg-warning' }}">
-                                        {{ $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'Disetujui' : 'Proses Negosiasi' }}
+                                        class="badge {{ $paketKegiatan->negosiasi?->negosiasi_st == 'NEGOSIASI_ST_02' ? 'bg-success' : 'bg-warning' }}">
+                                        {{ $paketKegiatan->negosiasi?->status?->code_nm ?? 'Status tidak tersedia' }}
                                     </span>
 
                                     <hr>
@@ -45,13 +45,13 @@
                                     <hr>
 
                                     <h5>Berita Acara Negosiasi:</h5>
-                                    @if ($baNegoisasiPath)
-                                        <a href="{{ asset('storage/' . $baNegoisasiPath) }}" target="_blank"
-                                            class="btn btn-info btn-sm mt-2">
+                                    @if ($paketKegiatan->negosiasi?->ba_negoisasi)
+                                        <a href="{{ route('helper.show-picture', ['path' => $paketKegiatan->negosiasi->ba_negoisasi]) }}"
+                                            target="_blank" class="mt-2 btn btn-info btn-sm">
                                             <i class="fas fa-eye"></i> Lihat BA Negosiasi
                                         </a>
                                     @else
-                                        <button type="button" class="btn btn-secondary btn-sm mt-2" disabled>
+                                        <button type="button" class="mt-2 btn btn-secondary btn-sm" disabled>
                                             <i class="fas fa-eye-slash"></i> BA Belum Tersedia
                                         </button>
                                     @endif
@@ -62,39 +62,64 @@
 
                         <!-- Detail Kegiatan -->
                         <div class="col-md-4">
-                            <div class="card mb-4 border-info shadow-info">
+                            <div class="mb-4 card border-info shadow-info">
                                 <div class="card-body">
                                     <h5>Detail Kegiatan</h5>
                                     <dl class="row">
-                                        <dt class="col-sm-5">Nama</dt>
-                                        <dd class="col-sm-7">{{ $paketKegiatan->nama_kegiatan }}</dd>
-
-                                        <dt class="col-sm-5">Deskripsi</dt>
-                                        <dd class="col-sm-7">{{ $paketKegiatan->deskripsi }}</dd>
+                                        <dt class="col-sm-5">Nama Kegiatan</dt>
+                                        <dd class="col-sm-7">{{ $paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}
+                                        </dd>
 
                                         <dt class="col-sm-5">Tahun Anggaran</dt>
-                                        <dd class="col-sm-7">{{ $paketKegiatan->tahun_anggaran ?? '-' }}</dd>
+                                        <dd class="col-sm-7">{{ $paketKegiatan->paketPekerjaan->tahun ?? '-' }}</dd>
 
-                                        <dt class="col-sm-5">Lokasi</dt>
-                                        <dd class="col-sm-7">{{ $paketKegiatan->lokasi ?? '-' }}</dd>
+                                        <dt class="col-sm-5">Bidang</dt>
+                                        <dd class="col-sm-7">{{ $paketKegiatan->paketPekerjaan->nama_bidang ?? '-' }}
+                                        </dd>
 
-                                        <dt class="col-sm-5">Pagu Anggaran</dt>
+                                        <dt class="col-sm-5">Sub Bidang</dt>
+                                        <dd class="col-sm-7">{{ $paketKegiatan->paketPekerjaan->nama_subbidang ?? '-' }}
+                                        </dd>
+
+                                        <dt class="col-sm-5">Sumber Dana</dt>
+                                        <dd class="col-sm-7">{{ $paketKegiatan->paketPekerjaan->sumberdana ?? '-' }}
+                                        </dd>
+
+                                        <dt class="col-sm-5">Satuan</dt>
+                                        <dd class="col-sm-7">{{ $paketKegiatan->paketPekerjaan->satuan ?? '-' }}</dd>
+
+                                        <dt class="col-sm-5">Nilai PAK</dt>
                                         <dd class="col-sm-7">Rp
-                                            {{ number_format($paketKegiatan->pagu_anggaran ?? 0, 2, ',', '.') }}</dd>
+                                            {{ number_format($paketKegiatan->paketPekerjaan->nilaipak ?? 0, 2, ',', '.') }}
+                                        </dd>
+
+                                        <dt class="col-sm-5">Pagu PAK</dt>
+                                        <dd class="col-sm-7">Rp
+                                            {{ number_format($paketKegiatan->paketPekerjaan->pagu_pak ?? 0, 2, ',', '.') }}
+                                        </dd>
+
+                                        <dt class="col-sm-5">Jumlah Alokasi Anggaran</dt>
+                                        <dd class="col-sm-7">Rp
+                                            {{ number_format($paketKegiatan->jumlah_anggaran ?? 0, 2, ',', '.') }}</dd>
+
+                                        <dt class="col-sm-5">PPTKD</dt>
+                                        <dd class="col-sm-7">{{ $paketKegiatan->paketPekerjaan->nm_pptkd ?? '-' }}
+                                            ({{ $paketKegiatan->paketPekerjaan->jbt_pptkd ?? '-' }})</dd>
                                     </dl>
+
                                 </div>
                             </div>
                         </div>
 
                         <!-- Detail Vendor -->
                         <div class="col-md-4">
-                            <div class="card mb-4 border-primary shadow-primary">
+                            <div class="mb-4 card border-primary shadow-primary">
                                 <div class="card-body">
                                     <h5>Detail Vendor</h5>
                                     @if ($vendor)
                                         <dl class="row">
                                             <dt class="col-sm-5">Nama</dt>
-                                            <dd class="col-sm-7">{{ $vendor->name }}</dd>
+                                            <dd class="col-sm-7">{{ $vendor->nama_perusahaan }}</dd>
 
                                             <dt class="col-sm-5">Alamat</dt>
                                             <dd class="col-sm-7">{{ $vendor->alamat }}</dd>
@@ -107,6 +132,10 @@
 
                                             <dt class="col-sm-5">NPWP</dt>
                                             <dd class="col-sm-7">{{ $vendor->npwp ?? '-' }}</dd>
+                                            <a href="{{ route('penyedia.vendor-profile', $vendor->id) }}"
+                                                target="_blank" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-user"></i> Lihat Profil Penyedia
+                                            </a>
                                         </dl>
                                     @else
                                         <p>Vendor tidak ditemukan.</p>
@@ -123,7 +152,7 @@
                             <h5>Riwayat Negosiasi</h5>
                             <div class="chat-history">
                                 @foreach ($negosiasiLogs as $log)
-                                    <div class="card mb-2"
+                                    <div class="mb-2 card"
                                         style="border-left: 5px solid {{ $log->user_id == auth()->id() ? '#17a2b8' : '#6c757d' }};">
                                         <div class="card-header">
                                             <div class="d-flex justify-content-between">
@@ -136,16 +165,39 @@
                                             <div class="chat-message">
                                                 <p><strong>Penawaran:</strong> Rp
                                                     {{ number_format($log->penawaran, 2, ',', '.') }}</p>
-                                                <p><strong>Status:</strong> {{ ucfirst($log->status_negosiasi) }}</p>
+                                                <p><strong>Status Log:</strong>
+                                                    @if ($log->status_st)
+                                                        <span class="badge bg-success">Disetujui</span>
+                                                    @else
+                                                        <span class="badge bg-secondary">Belum Disetujui</span>
+                                                    @endif
+                                                </p>
                                                 <p><strong>Keterangan:</strong> {{ $log->keterangan ?? '-' }}</p>
                                                 @if ($log->ba_negoisasi)
                                                     <p><a href="{{ asset('storage/' . $log->ba_negoisasi) }}"
                                                             target="_blank">Lihat BA</a></p>
                                                 @endif
+
+                                                @if ($loop->first && !$log->status_st && $negosiasiStatus != 'NEGOSIASI_ST_02' && $log->user_id != auth()->id())
+                                                    <button wire:click="setujuiLog({{ $log->id }})"
+                                                        class="btn btn-success btn-sm">
+                                                        <i class="fas fa-check"></i> Setujui
+                                                    </button>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
                                 @endforeach
+
+                                @if ($negosiasiLogs->first() && $negosiasiLogs->first()->status_st && $negosiasiStatus != 'NEGOSIASI_ST_02')
+                                    <div class="mt-4">
+                                        <button wire:click="konfirmasiSetujuiLog({{ $log->id }})"
+                                            class="btn btn-success btn-sm">
+                                            <i class="fas fa-check"></i> Setujui
+                                        </button>
+                                    </div>
+                                @endif
+
                             </div>
 
                             <!-- Form Input Negosiasi -->
@@ -169,7 +221,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="d-flex gap-2 mt-3">
+                                <div class="gap-2 mt-3 d-flex">
                                     <button type="submit" class="btn btn-primary"
                                         {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
                                         Simpan Negosiasi Log
@@ -184,7 +236,7 @@
                                 </div>
 
                                 @if ($lastSenderId == auth()->id())
-                                    <p class="text-danger mt-2">Menunggu balasan pihak lain sebelum dapat mengisi
+                                    <p class="mt-2 text-danger">Menunggu balasan pihak lain sebelum dapat mengisi
                                         negosiasi baru.</p>
                                 @endif
                             </form>
@@ -223,7 +275,7 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mt-3">
+                                            <div class="mt-3 form-group">
                                                 <label for="ba_negoisasi">Pilih BA Negosiasi (PDF/JPG/PNG)</label>
                                                 <input type="file" wire:model="ba_negoisasi" class="form-control"
                                                     id="ba_negoisasi" required>
@@ -232,7 +284,7 @@
                                                 @enderror
                                             </div>
 
-                                            <div class="form-group mt-3">
+                                            <div class="mt-3 form-group">
                                                 <button type="submit" class="btn btn-primary">Unggah BA</button>
                                                 <button type="button" class="btn btn-secondary"
                                                     wire:click="closeModal">Batal</button>

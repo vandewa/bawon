@@ -121,8 +121,8 @@
                                         </div>
                                     @elseif ($paketKegiatan->{$field})
                                         <div class="mt-2">
-                                            <a href="{{ Storage::url($paketKegiatan->{$field}) }}" target="_blank"
-                                                class="btn btn-sm btn-outline-primary">
+                                            <a href="{{ route('helper.show-picture', ['path' => $paketKegiatan->{$field}]) }}"
+                                                target="_blank" class="btn btn-sm btn-outline-primary">
                                                 <i class="mr-1 fas fa-eye"></i> Lihat Dokumen Lama
                                             </a>
                                         </div>
@@ -137,7 +137,7 @@
                     </div>
 
                     <div class="card-footer bg-light d-flex justify-content-end">
-                        <a href="{{ url()->previous() }}" class="mr-2 btn btn-secondary">
+                        <a href="{{ route('desa.paket-kegiatan', $paketPekerjaan) }}" class="mr-2 btn btn-secondary">
                             <i class="mr-1 fas fa-arrow-left"></i> Kembali
                         </a>
                         <button type="submit" class="text-white btn btn-warning" wire:loading.attr="disabled">

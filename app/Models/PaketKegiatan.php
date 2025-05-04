@@ -21,6 +21,10 @@ class PaketKegiatan extends Model
     public function paketKegiatan() {
         return $this->belongsTo(ComCode::class, 'paket_kegiatan', 'com_cd');
     }
+    public function statusKegiatan()
+    {
+        return $this->belongsTo(ComCode::class, 'paket_kegiatan', 'com_cd');
+    }
         public function penawarans()
     {
         return $this->hasMany(Penawaran::class);

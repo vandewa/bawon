@@ -30,6 +30,7 @@ class NegosiasiPage extends Component
 
     public $showModal = false;
     public $lastSenderId;
+    public $logIdDisetujui;
 
     protected $rules = [
         'penawaran' => 'required|numeric',
@@ -72,8 +73,10 @@ class NegosiasiPage extends Component
     // Fungsi untuk memuat detail kegiatan dan vendor
     public function loadKegiatanAndVendor()
     {
-        $paketKegiatan = PaketKegiatan::find($this->paket_kegiatan_id);
-        $this->vendor = Vendor::find($paketKegiatan->vendor_id); // Menyimpan detail vendor
+        $this->paketKegiatan =$this->paketKegiatan = PaketKegiatan::with(['negosiasi.status', 'paketPekerjaan'])->find($this->paket_kegiatan_id);
+
+            $this->vendor = Vendor::find($this->paketKegiatan->negosiasi->vendor_id);
+
     }
 
     public function saveNegosiasi()
@@ -110,21 +113,70 @@ class NegosiasiPage extends Component
         'nilaiDisepakati' => 'required|numeric|min:0',
     ]);
 
-    $path = $this->ba_negoisasi->store('negoisasi/ba', 'public');
+    $path = $this->ba_negoisasi->store('negoisasi/ba');
 
+    // Update pada tabel negoisasis
     Negoisasi::where('id', $this->negosiasi_id)->update([
         'ba_negoisasi' => $path,
         'negosiasi_st' => 'NEGOSIASI_ST_02',
-        'nilai' => $this->nilaiDisepakati, // Update nilai juga
+        'nilai' => $this->nilaiDisepakati,
+    ]);
+
+    // Update juga ke paket_kegiatans
+    PaketKegiatan::where('id', $this->paket_kegiatan_id)->update([
+        'nilai_kesepakatan' => $this->nilaiDisepakati,
     ]);
 
     $this->loadNegosiasiData();
     $this->loadNegosiasiLogs();
 
-    session()->flash('message', 'BA Negosiasi dan Nilai Disepakati berhasil diupload.');
+    session()->flash('message', 'BA Negosiasi dan Nilai Kesepakatan berhasil diupload.');
 
     $this->reset('ba_negoisasi', 'nilaiDisepakati');
     $this->closeModal();
+}
+
+public function konfirmasiSetujuiLog($id)
+{
+    $this->logIdDisetujui = $id;
+
+    $this->js(<<<'JS'
+        Swal.fire({
+            title: 'Setujui Log Negosiasi?',
+            text: "Log ini akan dianggap disetujui. Tindakan ini tidak dapat dibatalkan.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Setujui',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $wire.setujuiLog()
+            }
+        })
+    JS);
+}
+public function setujuiLog()
+{
+    $log = NegosiasiLog::findOrFail($this->logIdDisetujui);
+
+    if ($log->status_st) {
+        session()->flash('message', 'Log sudah disetujui sebelumnya.');
+        return;
+    }
+
+    $log->update(['status_st' => true]);
+
+    $this->loadNegosiasiLogs();
+
+    $this->js(<<<'JS'
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Log negosiasi telah disetujui.',
+        })
+    JS);
 }
 
 

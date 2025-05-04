@@ -26,7 +26,8 @@ class PenawaranPaket extends Component
 
     public function mount($paketKegiatanId)
     {
-        $this->paketKegiatan = PaketKegiatan::with('paketPekerjaan')->findOrFail($paketKegiatanId);
+        $this->paketKegiatan = PaketKegiatan::with(['paketPekerjaan', 'paketType'])->findOrFail($paketKegiatanId);
+
         $this->loadPenawarans();
     }
 
@@ -52,11 +53,11 @@ class PenawaranPaket extends Component
     {
         $this->validate([
             'vendorId' => 'required|exists:vendors,id',
-            'batasAkhir' => 'required|date',
+          'batasAkhir' => 'required|date|after:today',
             'suratUndangan' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
-        $path = $this->suratUndangan->store('penawarans/surat_undangan', 'public');
+        $path = $this->suratUndangan->store('penawarans/surat_undangan');
 
         Penawaran::updateOrCreate(
             [
@@ -127,34 +128,37 @@ class PenawaranPaket extends Component
             JS);
         }
     }
-            public function konfirmasiKirimUndangan()
-        {
-            $jumlahPenawaran = count($this->penawarans);
+    public function konfirmasiKirimUndangan()
+    {
+        $jumlahPenawaran = count($this->penawarans);
+        $anggaran = $this->paketKegiatan->jumlah_anggaran ?? 0;
 
-            if ($this->paketKegiatan->paket_type == 'PAKET_TYPE_01' && $jumlahPenawaran < 2) {
-                $this->js(<<<'JS'
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: 'Minimal harus ada 2 penawaran untuk tipe Paket PAKET_TYPE_01.',
-                    });
-                JS);
-                return;
-            }
-
-            if ($this->paketKegiatan->paket_type == 'PAKET_TYPE_02' && $jumlahPenawaran < 1) {
-                $this->js(<<<'JS'
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: 'Minimal harus ada 1 penawaran untuk tipe Paket PAKET_TYPE_02.',
-                    });
-                JS);
-                return;
-            }
-
-            // Jika jumlah memenuhi, lanjutkan konfirmasi kirim
+        // Jika anggaran ≥ 10jt → minimal 2 penawaran
+        if ($anggaran >= 10000000 && $jumlahPenawaran < 2) {
             $this->js(<<<'JS'
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Minimal harus ada 2 undangan untuk anggaran di atas atau sama dengan 10 juta.',
+                });
+            JS);
+            return;
+        }
+
+        // Jika anggaran < 10jt → maksimal 1 penawaran
+        if ($anggaran < 10000000 && $jumlahPenawaran > 1) {
+            $this->js(<<<'JS'
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Untuk anggaran di bawah 10 juta, maksimal hanya 1 undangan yang diperbolehkan.',
+                });
+            JS);
+            return;
+        }
+
+        // Jika jumlah memenuhi, lanjutkan konfirmasi kirim
+        $this->js(<<<'JS'
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 text: "Semua undangan akan dikirimkan sekarang?",
@@ -169,8 +173,9 @@ class PenawaranPaket extends Component
                     $wire.kirimUndangan()
                 }
             })
-            JS);
-        }
+        JS);
+    }
+
 
 
 public function kirimUndangan()

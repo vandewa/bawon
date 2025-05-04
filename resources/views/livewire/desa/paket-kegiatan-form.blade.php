@@ -15,7 +15,6 @@
                 </div>
             @endif
 
-            {{-- Informasi Paket --}}
             <livewire:components.paket.informasi-paket :paket-pekerjaan-id="$paketPekerjaan->id" />
 
             <form wire:submit.prevent="save" class="mt-4">
@@ -89,39 +88,15 @@
                                                 file...</label>
                                         </div>
 
-                                        <div class="input-group-append">
-                                            @if (isset($generateRoutes[$field]) && $prefix)
+                                        @if (!empty($paket_type) && isset($generateRoutes[$field]) && !empty($prefix))
+                                            <div class="input-group-append">
                                                 <a href="{{ route($prefix . $generateRoutes[$field], ['id' => $paketPekerjaan->id]) }}"
                                                     target="_blank" class="ml-1 btn btn-outline-success">
                                                     <i class="fas fa-magic"></i> Generate
                                                 </a>
-                                            @else
-                                                <a href="#" target="_blank" class="ml-1 btn btn-outline-success">
-                                                    <i class="fas fa-magic"></i> Generate
-                                                </a>
-                                            @endif
-                                        </div>
+                                            </div>
+                                        @endif
                                     </div>
-
-                                    {{-- Preview & Error --}}
-                                    @if ($$field)
-                                        <div class="mt-2">
-                                            @if (in_array($$field->getClientOriginalExtension(), ['pdf']))
-                                                <iframe
-                                                    src="https://docs.google.com/gview?url={{ urlencode($$field->temporaryUrl()) }}&embedded=true"
-                                                    style="width:100%; height:300px;" frameborder="0">
-                                                </iframe>
-                                            @elseif (in_array($$field->getClientOriginalExtension(), ['doc', 'docx']))
-                                                <div class="text-muted">
-                                                    File <strong>{{ $$field->getClientOriginalName() }}</strong> siap
-                                                    diunggah.
-                                                </div>
-                                            @else
-                                                <div class="text-warning">Format file tidak didukung untuk preview.
-                                                </div>
-                                            @endif
-                                        </div>
-                                    @endif
 
                                     @error($field)
                                         <small class="text-danger d-block">{{ $message }}</small>
@@ -129,7 +104,6 @@
                                 </div>
                             @endforeach
                         </div>
-
 
                     </div>
 

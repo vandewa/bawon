@@ -3,7 +3,7 @@
         <div class="mb-1 row">
             <div class="col-sm-6 d-flex align-items-center">
                 <h3 class="m-0">
-                    <i class="fa fa-folder-open mr-2"></i> Paket Kegiatan
+                    <i class="mr-2 fa fa-folder-open"></i> Paket Kegiatan
                 </h3>
             </div>
             <div class="col-sm-6">
@@ -49,13 +49,13 @@
 
                                                     <div class="table-responsive">
                                                         <table
-                                                            class="table table-hover table-borderless shadow rounded overflow-hidden">
+                                                            class="table overflow-hidden rounded shadow table-hover table-borderless">
                                                             <thead style="background-color: #404040; color: white;">
                                                                 <tr>
                                                                     <th class="px-3 py-2">Desa</th>
                                                                     <th class="px-3 py-2">Tahun</th>
                                                                     <th class="px-3 py-2">Kegiatan</th>
-                                                                    <th class="px-3 py-2">Paket</th>
+                                                                    <th class="px-3 py-2">Jenis Pengadaan</th>
                                                                     <th class="px-3 py-2 text-end">Anggaran</th>
                                                                     <th class="px-3 py-2">Dokumen</th>
                                                                     <th class="px-3 py-2 text-center">Aksi</th>
@@ -76,8 +76,29 @@
                                                                             {{ $paket->paketPekerjaan->nama_kegiatan ?? '-' }}
                                                                         </td>
                                                                         <td class="px-3 py-2 align-middle">
-                                                                            {{ $paket->paket_kegiatan }}</td>
-                                                                        <td class="px-3 py-2 text-end align-middle">
+                                                                            @php
+                                                                                $type =
+                                                                                    $paket->paketType->com_cd ?? null;
+                                                                                $label =
+                                                                                    $paket->paketType->code_nm ?? '-';
+                                                                                $badgeClass = match ($type) {
+                                                                                    'PAKET_TYPE_01'
+                                                                                        => 'badge bg-primary', // Penyedia
+                                                                                    'PAKET_TYPE_02'
+                                                                                        => 'badge bg-warning', // Swakelola
+                                                                                    'PAKET_TYPE_03'
+                                                                                        => 'badge bg-info', // Lelang
+                                                                                    default => 'badge bg-secondary',
+                                                                                };
+                                                                            @endphp
+
+                                                                            <span class="{{ $badgeClass }}">
+                                                                                <i class="mr-1 fas fa-tag"></i>
+                                                                                {{ $label }}
+                                                                            </span>
+                                                                            {{ $paket->paketType->code_nm ?? '-' }}
+                                                                        </td>
+                                                                        <td class="px-3 py-2 align-middle text-end">
                                                                             Rp{{ number_format($paket->jumlah_anggaran, 0, ',', '.') }}
                                                                         </td>
                                                                         <td class="px-3 py-2 align-middle">
@@ -100,14 +121,14 @@
                                                                         <td
                                                                             class="px-3 py-2 text-center align-middle text-nowrap">
                                                                             <a href="{{ route('desa.penawaran.paket', $paket->id) }}"
-                                                                                class="btn btn-sm btn-primary mb-1">
+                                                                                class="mb-1 btn btn-sm btn-primary">
                                                                                 <i class="fa fa-edit"></i> Kelola
                                                                                 Penawaran
                                                                             </a>
 
                                                                             @if ($paket->negosiasi && $paket->paket_type !== 'PAKET_TYPE_02')
                                                                                 <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $paket->id) }}"
-                                                                                    class="btn btn-sm btn-info mb-1">
+                                                                                    class="mb-1 btn btn-sm btn-info">
                                                                                     <i class="fa fa-handshake"></i>
                                                                                     Negosiasi
                                                                                 </a>
@@ -116,7 +137,7 @@
                                                                             @if (($paket->negosiasi_st ?? '') === 'NEGOSIASI_ST_02')
                                                                                 <button
                                                                                     wire:click="openUploadModal({{ $paket->id }})"
-                                                                                    class="btn btn-sm btn-success mb-1">
+                                                                                    class="mb-1 btn btn-sm btn-success">
                                                                                     <i class="fa fa-upload"></i> Upload
                                                                                     Kontrak
                                                                                 </button>
@@ -126,7 +147,7 @@
                                                                 @empty
                                                                     <tr>
                                                                         <td colspan="7"
-                                                                            class="text-center text-muted py-4">
+                                                                            class="py-4 text-center text-muted">
                                                                             <i class="fa fa-folder-open"></i> Data tidak
                                                                             ditemukan.
                                                                         </td>
@@ -159,10 +180,10 @@
         <div class="modal fade show d-block" tabindex="-1" role="dialog"
             style="background: rgba(0,0,0,0.5); z-index:1050;">
             <div class="modal-dialog" role="document">
-                <form wire:submit.prevent="uploadSuratPerjanjian" class="modal-content shadow rounded">
-                    <div class="modal-header bg-success text-white">
+                <form wire:submit.prevent="uploadSuratPerjanjian" class="rounded shadow modal-content">
+                    <div class="text-white modal-header bg-success">
                         <h5 class="modal-title">
-                            <i class="fa fa-upload mr-2"></i> Upload Surat Perjanjian
+                            <i class="mr-2 fa fa-upload"></i> Upload Surat Perjanjian
                         </h5>
                         <button type="button" class="text-white btn-close" wire:click="$set('showUploadModal', false)">
                             <span>&times;</span>
