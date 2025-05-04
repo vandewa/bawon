@@ -130,7 +130,7 @@
                                                                                     $paket->jumlah_anggaran < 10000000;
                                                                             @endphp
 
-                                                                            @if ($paket->negosiasi->negosiasi_st != 'NEGOSIASI_ST_02' and !$langsungKontrak)
+                                                                            @if (($paket->negosiasi->negosiasi_st ?? '') != 'NEGOSIASI_ST_02' and !$langsungKontrak)
                                                                                 <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $paket->id) }}"
                                                                                     class="mb-1 btn btn-sm btn-info">
                                                                                     <i class="fa fa-handshake"></i>
