@@ -16,7 +16,7 @@ class PelaporanIndex extends Component
 
     public function render()
     {
-        $paketKegiatans = PaketKegiatan::with(['paketPekerjaan', 'negosiasi'])
+        $paketKegiatans = PaketKegiatan::with(['paketPekerjaan', 'negosiasi', 'statusKegiatan'])
             ->whereNotNull('surat_perjanjian') // Hanya yang sudah upload kontrak
             ->whereHas('paketPekerjaan', function($q) {
                 $q->where('nama_kegiatan', 'like', '%' . $this->search . '%');
