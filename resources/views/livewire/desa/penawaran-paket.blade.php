@@ -58,11 +58,13 @@
                         </div>
 
 
-                        <div class="mb-3">
-                            <button class="btn btn-info" wire:click="$set('showModalVendor', true)">
-                                <i class="mr-1 fas fa-plus-square"></i> Tambah Vendor
-                            </button>
-                        </div>
+                        @if (!$negosiasiExists)
+                            <div class="mb-3">
+                                <button class="btn btn-info" wire:click="$set('showModalVendor', true)">
+                                    <i class="mr-1 fas fa-plus-square"></i> Tambah Vendor
+                                </button>
+                            </div>
+                        @endif
 
                         <div class="table-responsive">
                             <table class="table table-bordered table-sm">
@@ -100,14 +102,20 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <button class="btn btn-warning btn-sm"
-                                                    wire:click="editPenawaran({{ $item['vendor_id'] }})">
-                                                    Edit
-                                                </button>
-                                                <button class="btn btn-danger btn-sm"
-                                                    wire:click="delete({{ $item['vendor_id'] }})">
-                                                    Hapus
-                                                </button>
+                                                @if (!$negosiasiExists)
+                                                    <button class="btn btn-warning btn-sm"
+                                                        wire:click="editPenawaran({{ $item['vendor_id'] }})">
+                                                        Edit
+                                                    </button>
+                                                    <button class="btn btn-danger btn-sm"
+                                                        wire:click="delete({{ $item['vendor_id'] }})">
+                                                        Hapus
+                                                    </button>
+                                                @else
+                                                    <span class="text-white badge bg-danger">
+                                                        <i class="mr-1 fas fa-lock"></i> Terkunci
+                                                    </span>
+                                                @endif
                                             </td>
                                         </tr>
                                     @empty
@@ -119,11 +127,13 @@
                                 </tbody>
 
                             </table>
-                            <div class="mt-3 d-flex justify-content-end">
-                                <button class="btn btn-primary" wire:click="konfirmasiKirimUndangan">
-                                    <i class="fas fa-paper-plane"></i> Kirim Undangan
-                                </button>
-                            </div>
+                            @if (!$negosiasiExists)
+                                <div class="mt-3 d-flex justify-content-end">
+                                    <button class="btn btn-primary" wire:click="konfirmasiKirimUndangan">
+                                        <i class="fas fa-paper-plane"></i> Kirim Undangan
+                                    </button>
+                                </div>
+                            @endif
                         </div>
 
                         @if (session()->has('message'))

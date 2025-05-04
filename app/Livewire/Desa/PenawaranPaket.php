@@ -2,11 +2,12 @@
 
 namespace App\Livewire\Desa;
 
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use App\Models\PaketKegiatan;
 use App\Models\Vendor;
+use Livewire\Component;
+use App\Models\Negoisasi;
 use App\Models\Penawaran;
+use App\Models\PaketKegiatan;
+use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 
 class PenawaranPaket extends Component
@@ -23,11 +24,12 @@ class PenawaranPaket extends Component
     public $penawarans = [];
     public $editMode = false;
     public $idHapus;
+    public $negosiasiExists = false;
 
     public function mount($paketKegiatanId)
     {
         $this->paketKegiatan = PaketKegiatan::with(['paketPekerjaan', 'paketType'])->findOrFail($paketKegiatanId);
-
+        $this->negosiasiExists = Negoisasi::where('paket_kegiatan_id', $paketKegiatanId)->exists();
         $this->loadPenawarans();
     }
 

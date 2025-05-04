@@ -96,14 +96,14 @@
                                                                                 <i class="mr-1 fas fa-tag"></i>
                                                                                 {{ $label }}
                                                                             </span>
-                                                                            {{ $paket->paketType->code_nm ?? '-' }}
+
                                                                         </td>
                                                                         <td class="px-3 py-2 align-middle text-end">
                                                                             Rp{{ number_format($paket->jumlah_anggaran, 0, ',', '.') }}
                                                                         </td>
                                                                         <td class="px-3 py-2 align-middle">
                                                                             @if ($paket->surat_perjanjian)
-                                                                                <a href="{{ Storage::url($paket->surat_perjanjian) }}"
+                                                                                <a href="{{ route('helper.show-picture', ['path' => $paket->surat_perjanjian]) }}"
                                                                                     target="_blank"
                                                                                     class="btn btn-sm btn-success">
                                                                                     <i class="fa fa-file-contract"></i>
@@ -125,8 +125,12 @@
                                                                                 <i class="fa fa-edit"></i> Kelola
                                                                                 Penawaran
                                                                             </a>
+                                                                            @php
+                                                                                $langsungKontrak =
+                                                                                    $paket->jumlah_anggaran < 10000000;
+                                                                            @endphp
 
-                                                                            @if ($paket->negosiasi && $paket->paket_type !== 'PAKET_TYPE_02')
+                                                                            @if ($paket->negosiasi->negosiasi_st != 'NEGOSIASI_ST_02' and !$langsungKontrak)
                                                                                 <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $paket->id) }}"
                                                                                     class="mb-1 btn btn-sm btn-info">
                                                                                     <i class="fa fa-handshake"></i>
@@ -134,7 +138,9 @@
                                                                                 </a>
                                                                             @endif
 
-                                                                            @if (($paket->negosiasi_st ?? '') === 'NEGOSIASI_ST_02')
+
+
+                                                                            @if ($langsungKontrak || ($paket->negosiasi_st ?? '') === 'NEGOSIASI_ST_02')
                                                                                 <button
                                                                                     wire:click="openUploadModal({{ $paket->id }})"
                                                                                     class="mb-1 btn btn-sm btn-success">
@@ -176,6 +182,7 @@
     </section>
 
     {{-- Modal Upload Surat Perjanjian --}}
+    {{-- Modal Upload Surat Perjanjian --}}
     @if ($showUploadModal)
         <div class="modal fade show d-block" tabindex="-1" role="dialog"
             style="background: rgba(0,0,0,0.5); z-index:1050;">
@@ -189,8 +196,8 @@
                             <span>&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
 
+                    <div class="modal-body">
                         <div class="form-group">
                             <label for="fileSuratPerjanjian"><i class="fa fa-file-upload"></i> Pilih File Surat
                                 Perjanjian</label>
@@ -204,19 +211,34 @@
                         <div wire:loading wire:target="fileSuratPerjanjian" class="mt-2 text-warning">
                             <i class="fa fa-spinner fa-spin"></i> Uploading...
                         </div>
-
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fa fa-save"></i> Simpan
+
+                    <div class="modal-footer d-flex justify-content-between">
+                        {{-- Dummy Button for Generate --}}
+                        <button type="button" class="btn btn-outline-secondary">
+                            <i class="fas fa-magic"></i> Generate Surat Perjanjian
                         </button>
-                        <button type="button" class="btn btn-secondary" wire:click="$set('showUploadModal', false)">
-                            <i class="fa fa-times"></i> Batal
-                        </button>
+
+                        <div class="gap-2 d-flex">
+                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled">
+                                <span wire:loading.remove wire:target="uploadSuratPerjanjian">
+                                    <i class="fa fa-save"></i> Simpan
+                                </span>
+                                <span wire:loading wire:target="uploadSuratPerjanjian">
+                                    <i class="fas fa-spinner fa-spin"></i> Menyimpan...
+                                </span>
+                            </button>
+
+                            <button type="button" class="btn btn-secondary"
+                                wire:click="$set('showUploadModal', false)">
+                                <i class="fa fa-times"></i> Batal
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
         </div>
     @endif
+
 
 </div>

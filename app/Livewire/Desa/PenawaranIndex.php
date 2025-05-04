@@ -47,7 +47,7 @@ class PenawaranIndex extends Component
             'fileSuratPerjanjian' => 'required|file|mimes:pdf,doc,docx|max:2048', // Maks 2MB
         ]);
 
-        $path = $this->fileSuratPerjanjian->store('paket_kegiatan/kontrak', 'public');
+        $path = $this->fileSuratPerjanjian->store('paket_kegiatan/kontrak');
 
         PaketKegiatan::where('id', $this->paketIdUpload)->update([
             'surat_perjanjian' => $path,

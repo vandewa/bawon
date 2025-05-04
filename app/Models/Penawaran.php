@@ -24,7 +24,8 @@ class Penawaran extends Model
         return $this->belongsTo(PaketKegiatan::class);
     }
     public function statusPenawaran()
-{
-    return $this->belongsTo(\App\Models\ComCode::class, 'penawaran_st', 'com_cd');
-}
+    {
+        return $this->belongsTo(\App\Models\ComCode::class, 'penawaran_st', 'com_cd');
+    }
+
 }

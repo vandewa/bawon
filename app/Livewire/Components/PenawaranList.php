@@ -2,12 +2,10 @@
 
 namespace App\Livewire\Components;
 
-
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Penawaran;
 use App\Models\Negoisasi;
-use Illuminate\Support\Facades\Storage;
 use App\Models\PaketKegiatan;
 use Illuminate\Support\Facades\DB;
 
@@ -19,90 +17,115 @@ class PenawaranList extends Component
     public $baEvaluasi;
     public $isModalOpen = false;
     public $paketKegiatanId;
-    // Menampilkan modal dan menyimpan ID penawaran
+    public $isNegotiationExist = false;
+
+
     public function openModal($penawaranId)
     {
         $this->penawaranId = $penawaranId;
         $this->isModalOpen = true;
     }
 
-    // Menutup modal
     public function closeModal()
     {
         $this->isModalOpen = false;
+        $this->reset('baEvaluasi');
     }
 
-    // Menyimpan BA Evaluasi dan data negosiasi hanya jika penawaran disetujui
-       // Menyimpan BA Evaluasi dan data negosiasi hanya jika penawaran disetujui
-       public function simpanEvaluasi()
-{
-    // Validasi upload BA Evaluasi
-    $this->validate([
-        'baEvaluasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-    ]);
+    public function simpanEvaluasi()
+    {
+        $penawaran = Penawaran::with('paketKegiatan')->findOrFail($this->penawaranId);
+        $jumlahAnggaran = $penawaran->paketKegiatan->jumlah_anggaran;
 
-    // Mulai transaksi DB
-    DB::beginTransaction();
+        if ($jumlahAnggaran < 10000000) {
+            DB::beginTransaction();
+            try {
+                $penawaran->update(['penawaran_st' => 'PENAWARAN_ST_02']);
 
-    try {
-        // Simpan file BA Evaluasi
-        $path = $this->baEvaluasi->store('evaluasi/ba_evaluasi', 'public');
+                Penawaran::where('paket_kegiatan_id', $penawaran->paket_kegiatan_id)
+                    ->where('id', '!=', $penawaran->id)
+                    ->update(['nilai_kesepakatan' =>   $jumlahAnggaran ]);
 
-        // Ambil penawaran berdasarkan ID
-        $penawaran = Penawaran::findOrFail($this->penawaranId);
+                PaketKegiatan::where('id', $penawaran->paket_kegiatan_id)
+                    ->update(['kegiatan_st' => 'KEGIATAN_ST_02']);
 
+                Negoisasi::create([
+                    'paket_kegiatan_id' => $penawaran->paket_kegiatan_id,
+                    'vendor_id' => $penawaran->vendor_id,
+                    'nilai' =>   $jumlahAnggaran ,
+                    'negosiasi_st' => 'NEGOSIASI_ST_02',
+                    'ba_negoisasi' => null,
+                ]);
 
+                DB::commit();
+                $this->closeModal();
 
-        // Cek status penawaran, hanya simpan jika status penawaran adalah 'PENAWARAN_ST_01'
-        if ($penawaran->penawaran_st == 'PENAWARAN_ST_01') {
-            // Update penawaran yang disetujui
-            $penawaran->update([
-                'penawaran_st' => 'PENAWARAN_ST_02', // Status disetujui
-            ]);
-
-            // Update status penawaran lain menjadi 'PENAWARAN_ST_03' (Ditolak)
-            Penawaran::where('paket_kegiatan_id', $penawaran->paket_kegiatan_id)
-                ->where('id', '!=', $penawaran->id)  // Pastikan hanya penawaran selain yang disetujui
-                ->update(['penawaran_st' => 'PENAWARAN_ST_03']); // Status Ditolak
-
-            // Simpan path BA Evaluasi di tabel PaketKegiatan
-            PaketKegiatan::where('id', $penawaran->paket_kegiatan_id)->update([
-                'ba_evaluasi_penawaran' => $path, // Simpan path file
-            ]);
-
-            // Simpan data awal di tabel Negosiasi
-            Negoisasi::create([
-                'paket_kegiatan_id' => $penawaran->paket_kegiatan_id,
-                'vendor_id' => $penawaran->vendor_id,
-                'nilai' => null,  // Nilai masih null
-                'negosiasi_st' => 'NEGOSIASI_ST_01',  // Default status
-                'ba_negoisasi' => null,  // BA Negosiasi null
-            ]);
-
-            // Commit transaksi jika semua berhasil
-            DB::commit();
-
-            // Tutup modal dan reset
-            $this->closeModal();
-
-            session()->flash('message', 'Penawaran disetujui, BA Evaluasi berhasil disimpan dan data negosiasi telah dibuat.');
-
+                $this->js(<<<'JS'
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Disetujui!',
+                        text: 'Penawaran disetujui tanpa BA. Negosiasi otomatis disetujui.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                JS);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                dd($e);
+                session()->flash('error', 'Terjadi kesalahan. Silakan coba lagi.');
+            }
         } else {
+            $this->validate([
+                'baEvaluasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            ]);
 
-            session()->flash('error', 'Penawaran ini sudah disetujui sebelumnya.');
+            DB::beginTransaction();
+            try {
+                $path = $this->baEvaluasi->store('evaluasi/ba_evaluasi');
+
+                $penawaran->update(['penawaran_st' => 'PENAWARAN_ST_02']);
+
+                Penawaran::where('paket_kegiatan_id', $penawaran->paket_kegiatan_id)
+                    ->where('id', '!=', $penawaran->id)
+                    ->update(['penawaran_st' => 'PENAWARAN_ST_03']);
+
+                PaketKegiatan::where('id', $penawaran->paket_kegiatan_id)
+                    ->update(['ba_evaluasi_penawaran' => $path]);
+
+                Negoisasi::create([
+                    'paket_kegiatan_id' => $penawaran->paket_kegiatan_id,
+                    'vendor_id' => $penawaran->vendor_id,
+                    'nilai' => null,
+                    'negosiasi_st' => 'NEGOSIASI_ST_01',
+                    'ba_negoisasi' => null,
+                ]);
+
+                DB::commit();
+                $this->closeModal();
+
+                $this->js(<<<'JS'
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: 'Penawaran dan BA Evaluasi berhasil disimpan.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                JS);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                session()->flash('error', 'Terjadi kesalahan saat menyimpan data.');
+            }
         }
-    } catch (\Exception $e) {
-        // Rollback transaksi jika terjadi error
-        DB::rollBack();
-
-        session()->flash('error', 'Terjadi kesalahan, silakan coba lagi.');
     }
-}
 
     public function render()
     {
-        $penawarans = Penawaran::with('vendor')->where('paket_kegiatan_id', $this->paketKegiatanId)
-        ->where('dok_penawaran', '!=', '')->get(); // Ambil penawaran beserta vendor
+        $penawarans = Penawaran::with(['vendor', 'evaluasi'])
+            ->where('paket_kegiatan_id', $this->paketKegiatanId)
+            ->whereNotNull('dok_penawaran')
+            ->get();
+
         return view('livewire.components.penawaran-list', compact('penawarans'));
     }
 }

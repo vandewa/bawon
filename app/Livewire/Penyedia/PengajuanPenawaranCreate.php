@@ -33,7 +33,7 @@ class PengajuanPenawaranCreate extends Component
     public function save()
     {
         $this->validate([
-            'nilai' => 'required|numeric',
+            'nilai' => ['required', 'numeric', 'lte:' . $this->penawaran->paketKegiatan->jumlah_anggaran],
             'bukti_setor_pajak' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'dok_penawaran' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'dok_kebenaran_usaha' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -56,6 +56,18 @@ class PengajuanPenawaranCreate extends Component
         $this->penawaran->save();
 
         session()->flash('message', 'Penawaran berhasil diperbarui.');
+
+        $this->js(<<<'JS'
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Penawaran berhasil disimpan.',
+            timer: 2000,
+            showConfirmButton: false
+        }).then(() => {
+            window.location.href = "/penyedia/penawaran-index";
+        });
+    JS);
         // return redirect()->route('penyedia.list-paket');
     }
 
