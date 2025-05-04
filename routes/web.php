@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Dashboard;
+use App\Livewire\Desa\AparaturIndex;
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
 use App\Livewire\Desa\DesaEdit;
@@ -109,7 +110,7 @@ Route::middleware([
             Route::get('/kak/{id?}', SwakelolaKak::class)->name('kak');
             Route::get('/jadwal-pelaksanaan-pekerjaan/{id?}', JadwalPelaksanaanPekerjaan::class)->name('jadwal-pelaksanaan');
             Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja'); //belum
-            Route::get('/hps/{id?}', PenyediaSpesifikasiTeknis::class)->name('hps');
+            Route::get('/hps/{id?}', PenyediaHps::class)->name('hps');
             Route::get('/sk-kades-tpk/{id?}', SwakelolaSkKepalaDesaTpk::class)->name('sk-kades-tpk');
             Route::get('/pengumuman-perencanaan-pengadaan/{id?}', SwakelolaPengumumanPerencanaanPengadaan::class)->name('pengumuman-perencanaan-pengadaan');
             Route::get('/rab/{id?}', SwakelolaRencanaAnggaranBiaya::class)->name('rab'); //be;um fix
@@ -166,6 +167,8 @@ Route::middleware([
         Route::get('pelaksanaan-index/{penawaranId}/penawaran-preview', PenawaranPreview::class)->name('penawaran.pelaksanaan.preview');
         Route::get('pelaksanaan-index/negoisasi/{paket_kegiatan_id}', NegosiasiPage::class)->name('penawaran.pelaksanaan.negosiasi');
         Route::get('pelaporan-index', PelaporanIndex::class)->name('pelaporan.index');
+
+        Route::get('aparatur-index/{id?}', AparaturIndex::class)->name('aparatur-index');
 
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {

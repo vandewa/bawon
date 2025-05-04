@@ -2,21 +2,46 @@
 
 namespace App\Livewire\Generator\Penyedia;
 
+use App\Models\Generator\JadwalPelaksanaanPekerjaan as GeneratorJadwalPelaksanaanPekerjaan;
 use Livewire\Component;
+use App\Models\PaketKegiatan;
 use App\Models\PaketPekerjaan;
 
 class JadwalPelaksanaanPekerjaan extends Component
 {
-    public string $isiSurat;
+    public $isiSurat;
     public bool $sudahDisimpan = false;
-    public $paketPekerjaan;
+    public $paketPekerjaan, $paketKegiatan, $cekData;
 
-    public function mount()
+    public function mount($id)
     {
-        $this->isiSurat = <<<HTML
+        // Mengambil data PaketPekerjaan berdasarkan ID
+        $this->paketPekerjaan = PaketPekerjaan::with(['desa', 'paketKegiatans'])->findOrFail($id);
+
+        // Mengambil data PaketKegiatan berdasarkan paket_pekerjaan_id
+        $this->paketKegiatan = PaketKegiatan::where('paket_pekerjaan_id', $this->paketPekerjaan->id)->first();
+
+        // Cek apakah data GeneratorSpesifikasiTeknis sudah ada
+        if ($this->paketKegiatan) {
+            $this->cekData = GeneratorJadwalPelaksanaanPekerjaan::where('paket_kegiatan_id', $this->paketKegiatan->id)->first();
+        } else {
+            $this->cekData = null;
+        }
+
+        // Jika data GeneratorSpesifikasiTeknis sudah ada, gunakan isi_surat-nya
+        if ($this->cekData) {
+            $this->isiSurat = $this->cekData->isi_surat;
+        } else {
+            // Jika belum ada, buat template default
+
+            $this->isiSurat = <<<HTML
             <div style="font-family:Arial; font-size:10pt;">
-                <p style="text-align:center;margin:0;">KEPALA SEKSI/KEPALA URUSAN __________________</p>
-                <p style="text-align:center;margin:0;">DESA __________________</p>
+            <p style="text-align: center; margin: 0; text-transform: uppercase;">
+                KEPALA SEKSI/KEPALA URUSAN __________________
+            </p>
+            <p style="text-align: center; margin: 0; text-transform: uppercase;">
+                DESA {$this->paketPekerjaan->desa->name}
+            </p>
 
                 <br>
 
@@ -58,7 +83,7 @@ class JadwalPelaksanaanPekerjaan extends Component
                         <td style="width:60%;"></td>
                         <td style="text-align:center;">
                             Kasi/Kaur ______________, <br>
-                            Desa __________________<br><br><br><br>
+                            Desa {$this->paketPekerjaan->desa->name}<br><br><br><br>
 
                             tanda tangan, <br>
                             nama lengkap
@@ -67,6 +92,7 @@ class JadwalPelaksanaanPekerjaan extends Component
                 </table>
             </div>
         HTML;
+        }
 
     }
 

@@ -128,32 +128,23 @@ class SpesifikasiTeknis extends Component
 
     public function simpan()
     {
-        try {
-            $paketId = $this->paketKegiatan['id'] ?? null;
+        $paketId = $this->paketKegiatan['id'] ?? null;
 
-            if (!$paketId) {
-                session()->flash('error', 'Paket kegiatan tidak ditemukan!');
-                return;
-            }
-
-            if ($this->cekData) {
-                // Update ke database
-                GeneratorSpesifikasiTeknis::where('paket_kegiatan_id', $paketId)->update([
-                    'isi_surat' => $this->isiSurat, // HTML
-                ]);
-            } else {
-                // Simpan data baru
-                GeneratorSpesifikasiTeknis::create([
-                    'paket_kegiatan_id' => $paketId,
-                    'isi_surat' => $this->isiSurat, // HTML
-                ]);
-            }
-
-            $this->sudahDisimpan = true;
-            session()->flash('message', 'Surat berhasil disimpan!');
-        } catch (\Exception $e) {
-            session()->flash('error', 'Gagal menyimpan surat: ' . $e->getMessage());
+        if ($this->cekData) {
+            // Update ke database
+            GeneratorSpesifikasiTeknis::where('paket_kegiatan_id', $paketId)->update([
+                'isi_surat' => $this->isiSurat, // HTML
+            ]);
+        } else {
+            // Simpan data baru
+            GeneratorSpesifikasiTeknis::create([
+                'paket_kegiatan_id' => $paketId,
+                'isi_surat' => $this->isiSurat, // HTML
+            ]);
         }
+
+        $this->sudahDisimpan = true;
+        session()->flash('message', 'Surat berhasil disimpan!');
     }
 
 
