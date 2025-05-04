@@ -165,7 +165,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label>Upload Surat Undangan</label>
+                                    <label>Surat Permintaan Penawaran</label>
                                     <div class="input-group">
                                         <input type="file" class="form-control" wire:model="suratUndangan">
                                         <div class="input-group-append">
