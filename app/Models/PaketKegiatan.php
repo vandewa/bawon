@@ -30,6 +30,11 @@ class PaketKegiatan extends Model
         return $this->hasMany(Penawaran::class);
     }
 
+    public function penawaranTerpilih()
+{
+    return $this->hasOne(Penawaran::class)->where('penawaran_st', 'PENAWARAN_ST_02'); // atau pakai where kondisi tertentu jika diperlukan
+}
+
     public function negosiasi() {
         return $this->hasOne(Negoisasi::class);
     }

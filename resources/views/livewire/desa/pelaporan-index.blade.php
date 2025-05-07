@@ -68,21 +68,17 @@
                                                 $type = $paket->paketType->com_cd ?? null;
                                                 $label = $paket->paketType->code_nm ?? '-';
                                                 $badgeClass = match ($type) {
-                                                    'PAKET_TYPE_01' => 'badge bg-primary', // Penyedia
-                                                    'PAKET_TYPE_02' => 'badge bg-warning', // Swakelola
-                                                    'PAKET_TYPE_03' => 'badge bg-info', // Lelang
+                                                    'PAKET_TYPE_01' => 'badge bg-primary',
+                                                    'PAKET_TYPE_02' => 'badge bg-warning text-dark',
+                                                    'PAKET_TYPE_03' => 'badge bg-info',
                                                     default => 'badge bg-secondary',
                                                 };
                                             @endphp
-
                                             <span class="{{ $badgeClass }}">
-                                                <i class="mr-1 fas fa-tag"></i>
-                                                {{ $label }}
+                                                <i class="mr-1 fas fa-tag"></i> {{ $label }}
                                             </span>
-
                                         </td>
                                         <td>
-
                                             <span class="badge bg-secondary">
                                                 {{ $paket->statusKegiatan->code_nm ?? '-' }}
                                             </span>
@@ -94,38 +90,47 @@
                                             {{-- Surat Perjanjian --}}
                                             @if ($paket->surat_perjanjian)
                                                 <a href="{{ route('helper.show-picture', ['path' => $paket->surat_perjanjian]) }}"
-                                                    target="_blank" class="mb-1 btn btn-sm btn-primary">
+                                                    target="_blank" class="mb-1 btn btn-sm btn-primary d-block">
                                                     <i class="fas fa-file-signature"></i> Surat Perjanjian
                                                 </a>
                                             @else
-                                                <span class="badge bg-secondary">Belum Ada SP</span>
+                                                <span class="mb-1 badge bg-secondary d-block">Belum Ada SP</span>
+                                            @endif
+
+                                            {{-- SPK --}}
+                                            @if ($paket->spk)
+                                                <a href="{{ route('helper.show-picture', ['path' => $paket->spk]) }}"
+                                                    target="_blank" class="mt-1 btn btn-sm btn-dark d-block">
+                                                    <i class="fas fa-file-contract"></i> SPK
+                                                </a>
+                                            @else
+                                                <span class="mt-1 badge bg-secondary d-block">Belum Ada SPK</span>
                                             @endif
 
                                             {{-- BA Evaluasi jika anggaran > 10jt --}}
                                             @if ($paket->jumlah_anggaran > 10000000)
-                                                <br>
                                                 @if ($paket->ba_evaluasi_penawaran)
                                                     <a href="{{ route('helper.show-picture', ['path' => $paket->ba_evaluasi_penawaran]) }}"
-                                                        target="_blank" class="mt-1 btn btn-sm btn-success">
+                                                        target="_blank" class="mt-1 btn btn-sm btn-success d-block">
                                                         <i class="fas fa-file-alt"></i> BA Evaluasi
                                                     </a>
                                                 @else
-                                                    <span class="mt-1 badge bg-warning text-dark">
+                                                    <span class="mt-1 badge bg-warning text-dark d-block">
                                                         <i class="fas fa-exclamation-circle"></i> Belum Upload BA
                                                     </span>
                                                 @endif
                                             @endif
                                         </td>
-
                                         <td class="text-center text-nowrap">
-                                            <a href="" class="btn btn-sm btn-info">
+                                            <a href="{{ route('desa.pelaporan-detail', $paket->id) }}"
+                                                class="btn btn-sm btn-info">
                                                 <i class="fas fa-eye"></i> Lihat Detail
                                             </a>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="py-4 text-center text-muted">
+                                        <td colspan="8" class="py-4 text-center text-muted">
                                             <i class="fas fa-folder-open"></i> Tidak ada data pelaporan tersedia.
                                         </td>
                                     </tr>

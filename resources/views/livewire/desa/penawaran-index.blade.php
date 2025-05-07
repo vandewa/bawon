@@ -57,6 +57,8 @@
                                                                     <th class="px-3 py-2">Kegiatan</th>
                                                                     <th class="px-3 py-2">Jenis Pengadaan</th>
                                                                     <th class="px-3 py-2 text-end">Anggaran</th>
+                                                                    <th class="px-3 py-2 text-end">Nilai Kesepakatan
+                                                                    </th>
                                                                     <th class="px-3 py-2">Dokumen</th>
                                                                     <th class="px-3 py-2 text-center">Aksi</th>
                                                                 </tr>
@@ -101,6 +103,19 @@
                                                                         <td class="px-3 py-2 align-middle text-end">
                                                                             Rp{{ number_format($paket->jumlah_anggaran, 0, ',', '.') }}
                                                                         </td>
+                                                                        <td class="px-3 py-2 align-middle text-end">
+                                                                            @php
+                                                                                $nilaiKesepakatan =
+                                                                                    $paket->negosiasi?->nilai ?? 0;
+                                                                            @endphp
+
+                                                                            @if ($nilaiKesepakatan > 0)
+                                                                                Rp{{ number_format($nilaiKesepakatan, 0, ',', '.') }}
+                                                                            @else
+                                                                                <span class="text-muted">-</span>
+                                                                            @endif
+                                                                        </td>
+
                                                                         <td class="px-3 py-2 align-middle">
                                                                             @if ($paket->surat_perjanjian)
                                                                                 <a href="{{ route('helper.show-picture', ['path' => $paket->surat_perjanjian]) }}"
@@ -114,7 +129,22 @@
                                                                                     class="badge bg-warning text-dark">
                                                                                     <i
                                                                                         class="fa fa-exclamation-circle"></i>
-                                                                                    Belum Upload
+                                                                                    Surat Perjanjian Belum Upload
+                                                                                </span>
+                                                                            @endif
+                                                                            @if ($paket->spk)
+                                                                                <a href="{{ route('helper.show-picture', ['path' => $paket->spk]) }}"
+                                                                                    target="_blank"
+                                                                                    class="btn btn-sm btn-success">
+                                                                                    <i class="fa fa-file-contract"></i>
+                                                                                    SPK
+                                                                                </a>
+                                                                            @else
+                                                                                <span
+                                                                                    class="badge bg-warning text-dark">
+                                                                                    <i
+                                                                                        class="fa fa-exclamation-circle"></i>
+                                                                                    SPK Belum Upload
                                                                                 </span>
                                                                             @endif
                                                                         </td>
@@ -130,10 +160,7 @@
                                                                                     $paket->jumlah_anggaran < 10000000;
                                                                             @endphp
 
-                                                                            @if (
-                                                                                $paket->negosiasi->negosiasi_st ?? null != null and
-                                                                                    $paket->negosiasi->negosiasi_st ?? null != 'NEGOSIASI_ST_02' and
-                                                                                    !$langsungKontrak)
+                                                                            @if (!$langsungKontrak and $paket->negosiasi->negosiasi_st ?? null != 'NEGOSIASI_ST_02')
                                                                                 <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $paket->id) }}"
                                                                                     class="mb-1 btn btn-sm btn-info">
                                                                                     <i class="fa fa-handshake"></i>
@@ -143,7 +170,7 @@
 
 
 
-                                                                            @if ($langsungKontrak || ($paket->negosiasi_st ?? '') === 'NEGOSIASI_ST_02')
+                                                                            @if ($langsungKontrak || ($paket->negosiasi->negosiasi_st ?? '') == 'NEGOSIASI_ST_02')
                                                                                 <button
                                                                                     wire:click="openUploadModal({{ $paket->id }})"
                                                                                     class="mb-1 btn btn-sm btn-success">
@@ -186,6 +213,7 @@
 
     {{-- Modal Upload Surat Perjanjian --}}
     {{-- Modal Upload Surat Perjanjian --}}
+    {{-- Modal Upload Surat Perjanjian & SPK --}}
     @if ($showUploadModal)
         <div class="modal fade show d-block" tabindex="-1" role="dialog"
             style="background: rgba(0,0,0,0.5); z-index:1050;">
@@ -193,7 +221,7 @@
                 <form wire:submit.prevent="uploadSuratPerjanjian" class="rounded shadow modal-content">
                     <div class="text-white modal-header bg-success">
                         <h5 class="modal-title">
-                            <i class="mr-2 fa fa-upload"></i> Upload Surat Perjanjian
+                            <i class="mr-2 fa fa-upload"></i> Upload Dokumen
                         </h5>
                         <button type="button" class="text-white btn-close" wire:click="$set('showUploadModal', false)">
                             <span>&times;</span>
@@ -201,6 +229,7 @@
                     </div>
 
                     <div class="modal-body">
+                        {{-- Input Surat Perjanjian --}}
                         <div class="form-group">
                             <label for="fileSuratPerjanjian"><i class="fa fa-file-upload"></i> Pilih File Surat
                                 Perjanjian</label>
@@ -209,19 +238,37 @@
                             @error('fileSuratPerjanjian')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
+                            <div wire:loading wire:target="fileSuratPerjanjian" class="mt-2 text-warning">
+                                <i class="fa fa-spinner fa-spin"></i> Uploading Surat Perjanjian...
+                            </div>
                         </div>
 
-                        <div wire:loading wire:target="fileSuratPerjanjian" class="mt-2 text-warning">
-                            <i class="fa fa-spinner fa-spin"></i> Uploading...
+                        {{-- Input SPK --}}
+                        <div class="mt-3 form-group">
+                            <label for="fileSPK"><i class="fa fa-file-upload"></i> Pilih File SPK</label>
+                            <input type="file" id="fileSPK" wire:model="fileSPK"
+                                class="form-control @error('fileSPK') is-invalid @enderror">
+                            @error('fileSPK')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                            <div wire:loading wire:target="fileSPK" class="mt-2 text-warning">
+                                <i class="fa fa-spinner fa-spin"></i> Uploading SPK...
+                            </div>
                         </div>
                     </div>
 
                     <div class="modal-footer d-flex justify-content-between">
-                        {{-- Dummy Button for Generate --}}
-                        <button type="button" class="btn btn-outline-secondary">
-                            <i class="fas fa-magic"></i> Generate Surat Perjanjian
-                        </button>
+                        {{-- Tombol Dummy Generate --}}
+                        <div class="gap-2 d-flex">
+                            <button type="button" class="btn btn-outline-secondary">
+                                <i class="fas fa-magic"></i> Generate Surat Perjanjian
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary">
+                                <i class="fas fa-file-alt"></i> Generate SPK
+                            </button>
+                        </div>
 
+                        {{-- Tombol Simpan dan Batal --}}
                         <div class="gap-2 d-flex">
                             <button type="submit" class="btn btn-success" wire:loading.attr="disabled">
                                 <span wire:loading.remove wire:target="uploadSuratPerjanjian">
@@ -242,6 +289,7 @@
             </div>
         </div>
     @endif
+
 
 
 </div>

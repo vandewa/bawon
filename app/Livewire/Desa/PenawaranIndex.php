@@ -12,22 +12,27 @@ class PenawaranIndex extends Component
     use WithPagination, WithFileUploads;
 
     public $search = '';
-
     public $showUploadModal = false;
     public $fileSuratPerjanjian;
+    public $fileSPK;
     public $paketIdUpload;
 
-    protected $paginationTheme = 'bootstrap'; // Agar pagination cocok jika pakai AdminLTE/Bootstrap
+    protected $paginationTheme = 'bootstrap';
 
     public function render()
     {
         $paketKegiatans = PaketKegiatan::with(['paketPekerjaan', 'negosiasi'])
-            ->whereHas('paketPekerjaan', function($q) {
-                $q->where('nama_kegiatan', 'like', '%' . $this->search . '%');
-            })
-            ->where('paket_kegiatan', 'PAKET_KEGIATAN_ST_02')
-            ->latest()
-            ->paginate(10);
+        ->whereHas('paketPekerjaan', function ($q) {
+            $q->where('nama_kegiatan', 'like', '%' . $this->search . '%');
+        })
+        ->where('paket_kegiatan', 'PAKET_KEGIATAN_ST_02')
+        ->where(function ($q) {
+            $q->whereNull('surat_perjanjian')
+              ->orWhereNull('spk');
+        })
+        ->latest()
+        ->paginate(10);
+
 
         return view('livewire.desa.penawaran-index', [
             'paketKegiatans' => $paketKegiatans,
@@ -38,30 +43,39 @@ class PenawaranIndex extends Component
     {
         $this->paketIdUpload = $paketId;
         $this->fileSuratPerjanjian = null;
+        $this->fileSPK = null;
         $this->showUploadModal = true;
     }
 
     public function uploadSuratPerjanjian()
     {
         $this->validate([
-            'fileSuratPerjanjian' => 'required|file|mimes:pdf,doc,docx|max:2048', // Maks 2MB
+            'fileSuratPerjanjian' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'fileSPK' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
-        $path = $this->fileSuratPerjanjian->store('paket_kegiatan/kontrak');
+        $data = [];
 
-        PaketKegiatan::where('id', $this->paketIdUpload)->update([
-            'surat_perjanjian' => $path,
-        ]);
+        if ($this->fileSuratPerjanjian) {
+            $data['surat_perjanjian'] = $this->fileSuratPerjanjian->store('paket_kegiatan/kontrak');
+        }
+
+        if ($this->fileSPK) {
+            $data['spk'] = $this->fileSPK->store('paket_kegiatan/spk');
+        }
+
+        PaketKegiatan::where('id', $this->paketIdUpload)->update($data);
 
         $this->resetUploadModal();
 
-        session()->flash('message', 'Surat Perjanjian berhasil diupload.');
+        session()->flash('message', 'Dokumen berhasil diupload.');
     }
 
     public function resetUploadModal()
     {
         $this->showUploadModal = false;
         $this->fileSuratPerjanjian = null;
+        $this->fileSPK = null;
         $this->paketIdUpload = null;
     }
 }

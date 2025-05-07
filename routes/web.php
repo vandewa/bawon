@@ -1,32 +1,33 @@
 <?php
 
 use App\Livewire\Dashboard;
-use App\Livewire\Desa\AparaturIndex;
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
 use App\Livewire\Desa\DesaEdit;
-
 use App\Livewire\NegosiasiPage;
+
 use App\Livewire\Desa\DesaIndex;
 use App\Livewire\Desa\DesaCreate;
 use App\Livewire\Master\RoleIndex;
 use App\Livewire\Master\UserIndex;
+use App\Livewire\Desa\AparaturIndex;
+use App\Livewire\Desa\PelaporanIndex;
 use App\Livewire\Desa\PenawaranIndex;
 use App\Livewire\Desa\PenawaranPaket;
 use App\Livewire\Penyedia\VendorEdit;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Desa\PelaporanDetail;
 use App\Livewire\Penyedia\VendorIndex;
 use App\Livewire\Desa\PenawaranPreview;
 use App\Livewire\Penyedia\VendorCreate;
 use App\Livewire\Desa\PaketKegiatanEdit;
 use App\Livewire\Desa\PaketKegiatanForm;
+
 use App\Livewire\Penyedia\VendorProfile;
 use App\Livewire\Desa\PaketKegiatanIndex;
-
 use App\Http\Controllers\HelperController;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
-use App\Livewire\Desa\PelaporanIndex;
 use App\Livewire\Penyedia\PengajuanPenawaranCreate;
 use App\Livewire\Penyedia\PaketPekerjaanPenyediaIndex;
 use App\Livewire\Generator\Penyedia\Hps as PenyediaHps;
@@ -35,8 +36,8 @@ use App\Livewire\Generator\Penyedia\Spk as PenyediaSpk;
 use App\Livewire\Generator\Swakelola\Kak as SwakelolaKak;
 use App\Livewire\Generator\Penyedia\JadwalPelaksanaanPekerjaan;
 use App\Livewire\Generator\Lelang\PengumumanLelang as LelangPengumumanLelang;
-use App\Livewire\Generator\Penyedia\SkKepalaDesaTpk as PenyediaSkKepalaDesaTpk;
 
+use App\Livewire\Generator\Penyedia\SkKepalaDesaTpk as PenyediaSkKepalaDesaTpk;
 use App\Livewire\Generator\Penyedia\SuratPerjanjian as PenyediaSuratPerjanjian;
 use App\Livewire\Generator\Swakelola\SkKepalaDesaTpk as SwakelolaSkKepalaDesaTpk;
 use App\Livewire\Generator\Penyedia\PenetapanPemenang as PenyediaPenetapanPemenang;
@@ -169,6 +170,7 @@ Route::middleware([
         Route::get('pelaporan-index', PelaporanIndex::class)->name('pelaporan.index');
 
         Route::get('aparatur-index/{id?}', AparaturIndex::class)->name('aparatur-index');
+        Route::get('pelaporan-index/{id?}', PelaporanDetail::class)->name('pelaporan-detail');
 
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {

@@ -16,14 +16,21 @@ class PelaporanIndex extends Component
 
     public function render()
     {
-        $paketKegiatans = PaketKegiatan::with(['paketPekerjaan', 'negosiasi', 'statusKegiatan'])
-            ->whereNotNull('surat_perjanjian') // Hanya yang sudah upload kontrak
-            ->whereHas('paketPekerjaan', function($q) {
+        $user = auth()->user();
+
+        $paketKegiatans = PaketKegiatan::with(['paketPekerjaan', 'negosiasi', 'statusKegiatan', 'paketType'])
+            ->whereNotNull('surat_perjanjian') // Sudah upload Surat Perjanjian
+            ->whereNotNull('spk')              // Sudah upload SPK
+            ->whereHas('paketPekerjaan', function($q) use ($user) {
                 $q->where('nama_kegiatan', 'like', '%' . $this->search . '%');
+
+                // Jika user memiliki desa_id, tambahkan filter
+                if (!empty($user->desa_id)) {
+                    $q->where('desa_id', $user->desa_id);
+                }
             })
             ->latest()
             ->paginate(10);
-
         return view('livewire.desa.pelaporan-index', [
             'paketKegiatans' => $paketKegiatans,
         ]);
