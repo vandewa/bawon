@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Dashboard;
+use App\Livewire\Desa\TpkIndex;
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
 use App\Livewire\Desa\DesaEdit;
@@ -171,6 +172,8 @@ Route::middleware([
 
         Route::get('aparatur-index/{id?}', AparaturIndex::class)->name('aparatur-index');
         Route::get('pelaporan-index/{id?}', PelaporanDetail::class)->name('pelaporan-detail');
+        Route::get('tpk-index/{id?}', TpkIndex::class)->name('tpk-index');
+
 
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
