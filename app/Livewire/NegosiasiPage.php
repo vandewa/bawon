@@ -6,6 +6,7 @@ use App\Models\Negoisasi;
 use Livewire\Component;
 use App\Models\PaketKegiatan;
 use App\Models\NegosiasiLog;
+use App\Models\Penawaran;
 use App\Models\Vendor;
 use Livewire\WithFileUploads;
 
@@ -16,6 +17,7 @@ class NegosiasiPage extends Component
     public $paket_kegiatan_id;
     public $negosiasi_id;
     public $penawaran;
+    public $penawaranAwalDetail;
     public $keterangan;
     public $status_negosiasi = 'pending';
     public $ba_negoisasi;
@@ -54,6 +56,9 @@ class NegosiasiPage extends Component
         if ($paketKegiatan) {
             $this->paketKegiatan = $paketKegiatan; // Menyimpan detail kegiatan
             $negosiasi = $paketKegiatan->negosiasi;
+            $this->penawaranAwalDetail = Penawaran::where('paket_kegiatan_id', $this->paket_kegiatan_id)
+            ->where('vendor_id', $negosiasi->vendor_id)->first();
+
             $this->negosiasiStatus = $negosiasi->negosiasi_st;
             $this->negosiasi_id = $negosiasi->id;
             $this->baNegoisasiPath = $this->negosiasi->ba_negoisasi ?? null;

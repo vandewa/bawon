@@ -18,4 +18,6 @@ class Negoisasi extends Model
     {
         return $this->belongsTo(Vendor::class);
     }
+
+    
 }

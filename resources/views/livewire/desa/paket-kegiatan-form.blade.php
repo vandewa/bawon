@@ -82,10 +82,9 @@
 
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="{{ $field }}"
+                                            <input type="file" class="form-control" id="{{ $field }}"
                                                 wire:model="{{ $field }}">
-                                            <label class="custom-file-label" for="{{ $field }}">Pilih
-                                                file...</label>
+
                                         </div>
 
                                         @if (!empty($paket_type) && isset($generateRoutes[$field]) && !empty($prefix))

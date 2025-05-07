@@ -30,6 +30,9 @@
                             <li><strong>Evaluasi Harga:</strong>
                                 {{ $penawaran->evaluasi->harga_hasil ?? 'Belum Dievaluasi' }}
                             </li>
+                            <li><strong>Keterangan:</strong>
+                                <p>{{ $penawaran->keterangan }}</p>
+                            </li>
                         </ul>
                     </div>
                     <div class="text-center card-footer">

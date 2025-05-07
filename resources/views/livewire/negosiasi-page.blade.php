@@ -55,9 +55,37 @@
                                             <i class="fas fa-eye-slash"></i> BA Belum Tersedia
                                         </button>
                                     @endif
+
+                                    <hr>
+
+                                    <h5>Penawaran Awal:</h5>
+                                    <h4>Rp {{ number_format($penawaranAwalDetail->nilai ?? 0, 2, ',', '.') }}</h4>
+
+                                    <hr>
+
+                                    <h5>Dokumen Tambahan:</h5>
+
+                                    @if ($penawaranAwalDetail?->bukti_setor_pajak)
+                                        <a href="{{ route('helper.show-picture', ['path' => $penawaranAwalDetail->bukti_setor_pajak]) }}"
+                                            target="_blank" class="mb-1 btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-file-download"></i> Bukti Setor Pajak
+                                        </a>
+                                    @endif
+
+                                    @if ($penawaranAwalDetail?->dok_penawaran)
+                                        <a href="{{ route('helper.show-picture', ['path' => $penawaranAwalDetail->dok_penawaran]) }}"
+                                            target="_blank" class="mb-1 btn btn-outline-info btn-sm">
+                                            <i class="fas fa-file-download"></i> Dokumen Penawaran
+                                        </a>
+                                    @endif
+
+                                    @if (!$penawaranAwalDetail?->bukti_setor_pajak && !$penawaranAwalDetail?->dok_penawaran)
+                                        <p class="text-muted">Tidak ada dokumen tambahan.</p>
+                                    @endif
                                 </div>
                             </div>
                         </div>
+
 
 
                         <!-- Detail Kegiatan -->
@@ -78,7 +106,8 @@
                                         </dd>
 
                                         <dt class="col-sm-5">Sub Bidang</dt>
-                                        <dd class="col-sm-7">{{ $paketKegiatan->paketPekerjaan->nama_subbidang ?? '-' }}
+                                        <dd class="col-sm-7">
+                                            {{ $paketKegiatan->paketPekerjaan->nama_subbidang ?? '-' }}
                                         </dd>
 
                                         <dt class="col-sm-5">Sumber Dana</dt>
@@ -227,12 +256,15 @@
                                         Simpan Negosiasi Log
                                     </button>
 
-                                    @if ($negosiasiStatus != 'NEGOSIASI_ST_02')
-                                        <button type="button" class="btn btn-success" wire:click="openModal"
-                                            {{ $lastSenderId == auth()->id() ? 'disabled' : '' }}>
-                                            Upload BA Negosiasi
-                                        </button>
-                                    @endif
+                                    @role(['desa', 'dinsos', 'superadministrator'])
+
+                                        @if ($negosiasiStatus != 'NEGOSIASI_ST_02')
+                                            <button type="button" class="btn btn-success" wire:click="openModal"
+                                                {{ $lastSenderId == auth()->id() ? 'disabled' : '' }}>
+                                                Upload BA Negosiasi
+                                            </button>
+                                        @endif
+                                    @endrole
                                 </div>
 
                                 @if ($lastSenderId == auth()->id())
