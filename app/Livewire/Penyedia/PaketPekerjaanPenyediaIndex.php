@@ -17,11 +17,15 @@ class PaketPekerjaanPenyediaIndex extends Component
 
     public function render()
     {
-        $posts = Penawaran::with('paketKegiatan.paketPekerjaan.desa', 'statusPenawaran')
-            ->where('kirim_st', true)
-            ->whereHas('paketKegiatan.paketPekerjaan', function ($query) {
-                $query->where('nama_kegiatan', 'like', '%' . $this->cari . '%');
-            });
+        $posts = Penawaran::with([
+            'paketKegiatan.paketPekerjaan.desa',
+            'paketKegiatan.paketType', // tambahkan ini
+            'statusPenawaran'
+        ])
+        ->where('kirim_st', true)
+        ->whereHas('paketKegiatan.paketPekerjaan', function ($query) {
+            $query->where('nama_kegiatan', 'like', '%' . $this->cari . '%');
+        });
 
         if (Auth::user()->vendor_id) {
             $posts->where('vendor_id', Auth::user()->vendor_id);

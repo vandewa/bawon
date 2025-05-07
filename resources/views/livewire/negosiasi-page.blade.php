@@ -36,8 +36,8 @@
                                     <hr>
 
                                     <h5>Nilai Negosiasi Disepakati:</h5>
-                                    @if ($nilaiDisepakati && $nilaiDisepakati > 0)
-                                        <h4>Rp {{ number_format($nilaiDisepakati, 2, ',', '.') }}</h4>
+                                    @if ($paketKegiatan->nilai_kesepakatan && $paketKegiatan->nilai_kesepakatan > 0)
+                                        <h4>Rp {{ number_format($paketKegiatan->nilai_kesepakatan, 2, ',', '.') }}</h4>
                                     @else
                                         <h5 class="text-danger">Belum ditentukan</h5>
                                     @endif
@@ -208,7 +208,7 @@
                                                 @endif
 
                                                 @if ($loop->first && !$log->status_st && $negosiasiStatus != 'NEGOSIASI_ST_02' && $log->user_id != auth()->id())
-                                                    <button wire:click="setujuiLog({{ $log->id }})"
+                                                    <button wire:click="konfirmasiSetujuiLog({{ $log->id }})"
                                                         class="btn btn-success btn-sm">
                                                         <i class="fas fa-check"></i> Setujui
                                                     </button>
@@ -218,14 +218,7 @@
                                     </div>
                                 @endforeach
 
-                                @if ($negosiasiLogs->first() && $negosiasiLogs->first()->status_st && $negosiasiStatus != 'NEGOSIASI_ST_02')
-                                    <div class="mt-4">
-                                        <button wire:click="konfirmasiSetujuiLog({{ $log->id }})"
-                                            class="btn btn-success btn-sm">
-                                            <i class="fas fa-check"></i> Setujui
-                                        </button>
-                                    </div>
-                                @endif
+
 
                             </div>
 
@@ -257,14 +250,13 @@
                                     </button>
 
                                     @role(['desa', 'dinsos', 'superadministrator'])
-
-                                        @if ($negosiasiStatus != 'NEGOSIASI_ST_02')
-                                            <button type="button" class="btn btn-success" wire:click="openModal"
-                                                {{ $lastSenderId == auth()->id() ? 'disabled' : '' }}>
+                                        @if ($negosiasiStatus != 'NEGOSIASI_ST_02' && $negosiasiLogs->contains('status_st', true))
+                                            <button type="button" class="btn btn-success" wire:click="openModal">
                                                 Upload BA Negosiasi
                                             </button>
                                         @endif
                                     @endrole
+
                                 </div>
 
                                 @if ($lastSenderId == auth()->id())

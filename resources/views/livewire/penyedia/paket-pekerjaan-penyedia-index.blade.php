@@ -3,7 +3,7 @@
         <div class="mb-1 row">
             <div class="col-sm-6 d-flex align-items-center">
                 <h3 class="m-0">
-                    <i class="fas fa-briefcase mr-2"></i> Paket Pekerjaan untuk Penyedia
+                    <i class="mr-2 fas fa-briefcase"></i> Paket Pekerjaan untuk Penyedia
                 </h3>
             </div>
             <div class="col-sm-6">
@@ -21,12 +21,10 @@
 
     <section class="content">
         <div class="container-fluid">
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-info card-outline card-tabs">
                         <div class="card-body">
-
                             <div class="mb-3 row">
                                 <div class="col-md-3">
                                     <input type="text" class="form-control" placeholder="🔍 Cari kegiatan..."
@@ -35,13 +33,15 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table table-hover table-borderless shadow rounded overflow-hidden">
+                                <table class="table overflow-hidden rounded shadow table-hover table-borderless">
                                     <thead style="background-color: #404040; color: white;">
                                         <tr>
                                             <th class="px-3 py-2">Desa</th>
                                             <th class="px-3 py-2">Tahun</th>
                                             <th class="px-3 py-2">Kegiatan</th>
+                                            <th class="px-3 py-2">Jenis Pengadaan</th>
                                             <th class="px-3 py-2 text-end">Pagu</th>
+                                            <th class="px-3 py-2 text-end">Nilai Kesepakatan</th>
                                             <th class="px-3 py-2">Status Dokumen</th>
                                             <th class="px-3 py-2">Status</th>
                                             <th class="px-3 py-2 text-center">Aksi</th>
@@ -61,18 +61,31 @@
                                                 <td class="px-3 py-2 align-middle">
                                                     {{ $item->paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}
                                                 </td>
-                                                <td class="px-3 py-2 text-end align-middle">
+                                                <td class="px-3 py-2 align-middle">
+                                                    <span
+                                                        class="badge
+                                                        @switch($item->paketKegiatan->paketType->com_cd ?? '')
+                                                            @case('PAKET_TYPE_01') bg-primary @break
+                                                            @case('PAKET_TYPE_02') bg-warning text-dark @break
+                                                            @case('PAKET_TYPE_03') bg-success @break
+                                                            @default bg-secondary
+                                                        @endswitch">
+                                                        {{ $item->paketKegiatan->paketType->code_nm ?? '-' }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-3 py-2 align-middle text-end">
                                                     Rp{{ number_format($item->paketKegiatan->jumlah_anggaran ?? 0, 0, ',', '.') }}
                                                 </td>
+                                                <td class="px-3 py-2 align-middle text-end">
+                                                    Rp{{ number_format($item->paketKegiatan->nilai_kontrak ?? 0, 0, ',', '.') }}
+                                                </td>
                                                 <td class="px-3 py-2 align-middle">
-                                                    <ul class="list-unstyled mb-0">
+                                                    <ul class="mb-0 list-unstyled">
                                                         <li>
                                                             @if ($item->bukti_setor_pajak)
                                                                 <i class="fas fa-check-circle text-success"></i>
                                                                 <a href="{{ Storage::url($item->bukti_setor_pajak) }}"
-                                                                    target="_blank">
-                                                                    Bukti Setor Pajak
-                                                                </a>
+                                                                    target="_blank">Bukti Setor Pajak</a>
                                                             @else
                                                                 <i class="fas fa-times-circle text-danger"></i> Bukti
                                                                 Setor Pajak
@@ -82,9 +95,7 @@
                                                             @if ($item->dok_penawaran)
                                                                 <i class="fas fa-check-circle text-success"></i>
                                                                 <a href="{{ Storage::url($item->dok_penawaran) }}"
-                                                                    target="_blank">
-                                                                    Dokumen Penawaran
-                                                                </a>
+                                                                    target="_blank">Dokumen Penawaran</a>
                                                             @else
                                                                 <i class="fas fa-times-circle text-danger"></i> Dokumen
                                                                 Penawaran
@@ -94,9 +105,7 @@
                                                             @if ($item->dok_kebenaran_usaha)
                                                                 <i class="fas fa-check-circle text-success"></i>
                                                                 <a href="{{ Storage::url($item->dok_kebenaran_usaha) }}"
-                                                                    target="_blank">
-                                                                    Dok Kebenaran Usaha
-                                                                </a>
+                                                                    target="_blank">Dok Kebenaran Usaha</a>
                                                             @else
                                                                 <i class="fas fa-times-circle text-danger"></i> Dok
                                                                 Kebenaran Usaha
@@ -107,7 +116,13 @@
                                                 <td class="px-3 py-2 align-middle">
                                                     @if ($item->statusPenawaran)
                                                         <span
-                                                            class="badge badge-{{ $item->statusPenawaran->com_cd == 'PENAWARAN_ST_01' ? 'warning' : 'success' }}">
+                                                            class="badge
+                                                            @switch($item->statusPenawaran->com_cd)
+                                                                @case('PENAWARAN_ST_01') badge-warning @break
+                                                                @case('PENAWARAN_ST_02') badge-success @break
+                                                                @case('PENAWARAN_ST_03') badge-danger @break
+                                                                @default badge-secondary
+                                                            @endswitch">
                                                             {{ $item->statusPenawaran->code_nm }}
                                                         </span>
                                                     @else
@@ -121,7 +136,10 @@
                                                             <i class="fas fa-upload"></i> Upload/Edit
                                                         </a>
 
-                                                        @if ($item->paketKegiatan->negosiasi && $item->paketKegiatan->paket_type !== 'PAKET_TYPE_02')
+                                                        @if (
+                                                            $item->paketKegiatan->negosiasi &&
+                                                                $item->paketKegiatan->jumlah_anggaran > 10000000 &&
+                                                                $item->statusPenawaran?->com_cd == 'PENAWARAN_ST_02')
                                                             <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $item->paketKegiatan->id) }}"
                                                                 class="inline-flex items-center gap-1 px-3 py-1.5 text-sm bg-cyan-100 text-cyan-800 border border-cyan-300 rounded hover:bg-cyan-200 transition">
                                                                 <i class="fas fa-handshake"></i> Negosiasi
@@ -132,7 +150,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="7" class="text-center text-muted py-4">
+                                                <td colspan="9" class="py-4 text-center text-muted">
                                                     <i class="fas fa-folder-open"></i> Tidak ada data.
                                                 </td>
                                             </tr>
@@ -149,7 +167,6 @@
                     </div> <!-- /.card -->
                 </div>
             </div> <!-- /.row -->
-
         </div>
     </section>
 </div>

@@ -141,14 +141,16 @@ class NegosiasiPage extends Component
     $this->closeModal();
 }
 
+
+
 public function konfirmasiSetujuiLog($id)
 {
     $this->logIdDisetujui = $id;
 
     $this->js(<<<'JS'
         Swal.fire({
-            title: 'Setujui Log Negosiasi?',
-            text: "Log ini akan dianggap disetujui. Tindakan ini tidak dapat dibatalkan.",
+            title: 'Setujui Penawaran?',
+            text: "Penawaran ini akan disetujui. Tindakan ini tidak dapat dibatalkan.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -183,6 +185,7 @@ public function setujuiLog()
         })
     JS);
 }
+
 
 
     public function render()
