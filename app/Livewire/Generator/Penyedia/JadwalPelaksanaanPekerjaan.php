@@ -33,14 +33,16 @@ class JadwalPelaksanaanPekerjaan extends Component
             $this->isiSurat = $this->cekData->isi_surat;
         } else {
             // Jika belum ada, buat template default
+            $bidang = strtoupper($this->paketPekerjaan->nama_subbidang);
+            $desa = strtoupper($this->paketPekerjaan->desa->name);
 
             $this->isiSurat = <<<HTML
             <div style="font-family:Arial; font-size:10pt;">
             <p style="text-align: center; margin: 0; text-transform: uppercase;">
-                KEPALA SEKSI/KEPALA URUSAN __________________
+                KEPALA SEKSI/KEPALA URUSAN {$bidang}
             </p>
             <p style="text-align: center; margin: 0; text-transform: uppercase;">
-                DESA {$this->paketPekerjaan->desa->name}
+                DESA {$desa}
             </p>
 
                 <br>
@@ -82,11 +84,11 @@ class JadwalPelaksanaanPekerjaan extends Component
                     <tr>
                         <td style="width:60%;"></td>
                         <td style="text-align:center;">
-                            Kasi/Kaur ______________, <br>
+                            Kasi/Kaur {$this->paketPekerjaan->nama_subbidang}, <br>
                             Desa {$this->paketPekerjaan->desa->name}<br><br><br><br>
 
                             tanda tangan, <br>
-                            nama lengkap
+                            {$this->paketPekerjaan->nm_pptkd}
                         </td>
                     </tr>
                 </table>

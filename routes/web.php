@@ -95,8 +95,8 @@ Route::middleware([
             Route::get('/rencana-kerja/{id?}', PenyediaSpesifikasiTeknis::class)->name('rencana-kerja'); //belum
             Route::get('/hps/{id?}', PenyediaHps::class)->name('hps');
             Route::get('/spk/{id?}', PenyediaSpk::class)->name('spk');
-            Route::get('/surat-perjanjian/{id?}', PenyediaSuratPerjanjian::class)->name('surat-perjanjian');
-            Route::get('/surat-penawaran/{id?}', PenyediaSuratPenawaran::class)->name('surat-penawaran');
+            Route::get('/surat-perjanjian/{paketId?}', PenyediaSuratPerjanjian::class)->name('surat-perjanjian');
+            Route::get('/surat-penawaran/{paketKegiatan}/{vendorId}', PenyediaSuratPenawaran::class)->name('surat-penawaran');
             Route::get('/surat-pernyataan-kebenaran-usaha/{id?}', PenyediaSuratPernyataanKebenaranUsaha::class)->name('surat-pernyataan-kebenaran-usaha');
             Route::get('/berita-acara-hasil-evaluasi/{id?}', PenyediaBeritaAcaraHasilEvaluasi::class)->name('berita-acara-hasil-evaluasi');
             Route::get('/berita-acara-hasil-negosiasi/{id?}', PenyediaBeritaAcaraHasilNegosiasi::class)->name('berita-acara-hasil-negosiasi');

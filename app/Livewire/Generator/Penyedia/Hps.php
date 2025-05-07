@@ -138,13 +138,22 @@ class Hps extends Component
 
     public function simpan()
     {
-        // Simpan ke database sebagai HTML
-        //  \App\Models\Surat::create([
-        //     'judul' => 'Surat dari Summernote',
-        //     'isi' => $this->isiSurat, // disimpan dalam format HTML
-        // ]);
+        $paketId = $this->paketKegiatan['id'] ?? null;
 
-        $this->sudahDisimpan = true; // aktifkan tombol download setelah simpan
+        if ($this->cekData) {
+            // Update ke database
+            HargaPerkiraanSendiri::where('paket_kegiatan_id', $paketId)->update([
+                'isi_surat' => $this->isiSurat, // HTML
+            ]);
+        } else {
+            // Simpan data baru
+            HargaPerkiraanSendiri::create([
+                'paket_kegiatan_id' => $paketId,
+                'isi_surat' => $this->isiSurat, // HTML
+            ]);
+        }
+
+        $this->sudahDisimpan = true;
         session()->flash('message', 'Surat berhasil disimpan!');
     }
 

@@ -169,9 +169,10 @@
                                     <div class="input-group">
                                         <input type="file" class="form-control" wire:model="suratUndangan">
                                         <div class="input-group-append">
-                                            <button type="button" class="btn btn-outline-primary" disabled>
+                                            <a href="{{ route('generator.penyedia.surat-penawaran', ['paketKegiatan' => $paketKegiatan->id, 'vendorId' => $vendorId]) }}"
+                                                target="_blank" class="ml-1 btn btn-outline-success">
                                                 <i class="fas fa-magic"></i> Generate
-                                            </button>
+                                            </a>
                                         </div>
                                     </div>
 
@@ -222,7 +223,8 @@
                 <div class="border-0 shadow modal-content">
                     <div class="modal-header bg-info">
                         <h5 class="text-white modal-title">Pilih Vendor</h5>
-                        <button type="button" class="text-white btn-close" wire:click="$set('showModalVendor', false)">
+                        <button type="button" class="text-white btn-close"
+                            wire:click="$set('showModalVendor', false)">
                             <span>&times;</span>
                         </button>
                     </div>
