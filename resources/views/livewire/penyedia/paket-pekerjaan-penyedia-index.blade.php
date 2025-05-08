@@ -138,7 +138,7 @@
 
                                                         @if (
                                                             $item->paketKegiatan->negosiasi &&
-                                                                $item->paketKegiatan->jumlah_anggaran > 10000000 &&
+                                                                $item->paketKegiatan->paket_type != 'PAKET_TYPE_02' &&
                                                                 $item->statusPenawaran?->com_cd == 'PENAWARAN_ST_02')
                                                             <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $item->paketKegiatan->id) }}"
                                                                 class="inline-flex items-center gap-1 px-3 py-1.5 text-sm bg-cyan-100 text-cyan-800 border border-cyan-300 rounded hover:bg-cyan-200 transition">
