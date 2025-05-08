@@ -51,27 +51,49 @@ class VendorCreate extends Component
         'vendor.kode_pos' => 'nullable|string|max:10',
         'vendor.latitude' => 'nullable|numeric',
         'vendor.longitude' => 'nullable|numeric',
-
-        'user.name' => 'required|string|max:255',
-        'user.email' => 'required|email|unique:users,email',
-        'user.password' => 'required|string|min:6|confirmed',
-
-        'foto_vendor.*' => 'image|max:2048', // max 2MB per file
+        'foto_vendor.*' => 'image|max:2048',
+        'akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'nib_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'npwp_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'siup' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'izin_usaha_lain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'ktp_direktur' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
     ]);
 
-    // Simpan data vendor
-    $vendor = Vendor::create($this->vendor);
+    $vendor = Vendor::findOrFail($this->vendorId);
 
-    // Simpan data user
-    $user = new User();
-    $user->name = $this->user['name'];
-    $user->email = $this->user['email'];
-    $user->password = Hash::make($this->user['password']);
-    $user->vendor_id = $vendor->id;
-    $user->assignRole('vendor'); // jika pakai spatie
-    $user->save();
+    foreach ([
+        'akta_pendirian', 'nib_file', 'npwp_file', 'siup', 'izin_usaha_lain', 'ktp_direktur'
+    ] as $field) {
+        if ($this->$field) {
+            $path = $this->$field->store('vendor/dokumen');
+            $vendor->$field = $path;
+        }
+    }
 
-    // Simpan foto vendor (jika ada)
+    $vendor->update($this->vendor);
+
+    // ✅ Tambahkan atau update user
+    if ($this->userExists && !empty($this->user['id'])) {
+        // Update user yang sudah ada
+        $user = User::find($this->user['id']);
+        $user->name = $this->user['name'];
+        $user->email = $this->user['email'];
+        $user->save();
+    } else {
+        // Buat user baru
+        $user = User::create([
+            'name' => $this->user['name'],
+            'email' => $this->user['email'],
+            'password' => bcrypt('defaultpassword'), // ganti default ini sesuai kebutuhan
+            'vendor_id' => $vendor->id,
+        ]);
+
+        // Jika kamu menggunakan Laratrust / assign role
+        $user->syncRoles(['vendor']);
+    }
+
+    // Simpan foto vendor
     if ($this->foto_vendor && is_array($this->foto_vendor)) {
         foreach ($this->foto_vendor as $foto) {
             $path = $foto->store('vendor/foto', 'public');
@@ -82,9 +104,10 @@ class VendorCreate extends Component
         }
     }
 
-    session()->flash('message', 'Vendor dan user berhasil ditambahkan.');
+    session()->flash('message', 'Vendor berhasil diperbarui.');
     return redirect()->route('penyedia.vendor-index');
 }
+
 
     public function updatedSingleFoto()
     {

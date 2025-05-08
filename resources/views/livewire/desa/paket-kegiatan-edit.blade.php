@@ -78,17 +78,11 @@
                             @foreach ($labelDokumen as $field => $label)
                                 <div class="mb-4 col-md-6">
                                     <label><strong>{{ $label }}</strong></label>
-
-                                    <div wire:loading wire:target="{{ $field }}" class="mb-2 text-info">
-                                        <i class="fas fa-spinner fa-spin"></i> Mengunggah {{ $label }}...
-                                    </div>
-
                                     <div class="input-group">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" id="{{ $field }}"
+                                            <input type="file" class="form-control" id="{{ $field }}"
                                                 wire:model="{{ $field }}">
-                                            <label class="custom-file-label" for="{{ $field }}">Pilih
-                                                file...</label>
+
                                         </div>
                                         <div class="input-group-append">
                                             @if (isset($generateRoutes[$field]) && $prefix)
@@ -96,30 +90,12 @@
                                                     target="_blank" class="ml-1 btn btn-outline-success">
                                                     <i class="fas fa-magic"></i> Generate
                                                 </a>
-                                            @else
-                                                <a href="#" target="_blank" class="ml-1 btn btn-outline-success">
-                                                    <i class="fas fa-magic"></i> Generate
-                                                </a>
                                             @endif
                                         </div>
                                     </div>
 
-                                    {{-- Preview baru jika ada file ter-upload --}}
-                                    @if ($$field)
-                                        <div class="mt-2">
-                                            @if (in_array($$field->getClientOriginalExtension(), ['pdf']))
-                                                <embed src="{{ $$field->temporaryUrl() }}" type="application/pdf"
-                                                    width="100%" height="300px">
-                                            @elseif (in_array($$field->getClientOriginalExtension(), ['doc', 'docx']))
-                                                <p class="text-muted">File
-                                                    <strong>{{ $$field->getClientOriginalName() }}</strong> siap
-                                                    diunggah.
-                                                </p>
-                                            @else
-                                                <p class="text-warning">Preview tidak tersedia untuk format ini.</p>
-                                            @endif
-                                        </div>
-                                    @elseif ($paketKegiatan->{$field})
+                                    {{-- Preview dokumen lama --}}
+                                    @if ($paketKegiatan->{$field})
                                         <div class="mt-2">
                                             <a href="{{ route('helper.show-picture', ['path' => $paketKegiatan->{$field}]) }}"
                                                 target="_blank" class="btn btn-sm btn-outline-primary">

@@ -31,7 +31,9 @@ class VendorEdit extends Component
         $this->vendor = $vendor->only([
             'nama_perusahaan', 'nib', 'npwp', 'alamat', 'email', 'telepon',
             'nama_direktur', 'jenis_usaha', 'klasifikasi', 'kualifikasi',
-            'provinsi', 'kabupaten', 'kode_pos', 'latitude', 'longitude'
+            'provinsi', 'kabupaten', 'kode_pos', 'rekening_perusahaan',
+            'akta_pendirian', 'nib_file', 'npwp_file', 'siup', 'izin_usaha_lain',
+            'ktp_direktur', 'latitude', 'longitude'
         ]);
 
         $this->foto_vendor = [];

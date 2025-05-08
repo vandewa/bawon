@@ -263,10 +263,10 @@
                                   <i class="nav-icon fas fa-project-diagram"></i>
                                   <p>
                                       Perencanaan
-                                      <span
+                                      {{-- <span
                                           class="badge badge-{{ $jumlahPerencanaan > 0 ? 'danger' : 'secondary' }} ml-2">
                                           {{ $jumlahPerencanaan }}
-                                      </span>
+                                      </span> --}}
                                   </p>
                               </a>
                           </li>

@@ -240,6 +240,7 @@
                                             <input type="file"
                                                 class="form-control @error($field) is-invalid @enderror"
                                                 wire:model="{{ $field }}">
+
                                             @if (!empty($vendor[$field]))
                                                 <div class="mt-2">
                                                     <a href="{{ Storage::url($vendor[$field]) }}" target="_blank"
