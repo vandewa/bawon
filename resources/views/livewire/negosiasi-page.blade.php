@@ -122,7 +122,7 @@
 
 
 
-                                        <dt class="col-sm-5">Jumlah Alokasi Anggaran</dt>
+                                        <dt class="col-sm-5">HPS</dt>
                                         <dd class="col-sm-7">Rp
                                             {{ number_format($paketKegiatan->jumlah_anggaran ?? 0, 2, ',', '.') }}</dd>
 
