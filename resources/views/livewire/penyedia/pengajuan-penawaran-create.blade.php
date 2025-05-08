@@ -82,14 +82,7 @@
                                     </a>
                                 </li>
                             @endif
-                            @if ($penawaran->paketKegiatan->hps)
-                                <li class="list-group-item">
-                                    <a href="{{ route('helper.show-picture', ['path' => $penawaran->paketKegiatan->hps]) }}"
-                                        target="_blank">
-                                        📄 Harga Perkiraan Sendiri (HPS)
-                                    </a>
-                                </li>
-                            @endif
+
                         </ul>
                     </div>
                 </div>
