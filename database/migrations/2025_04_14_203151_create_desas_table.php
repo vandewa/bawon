@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('desas', function (Blueprint $table) {
             $table->id();
             $table->string('kabupaten')->default('Wonosobo');
-            $table->string('kode_desa');
-            $table->string('kecamatan_id');
-            $table->string('name');
+            $table->string('kode_desa')->nullable();
+            $table->string('kecamatan_id')->nullable();
+            $table->string('name')->nullable();
             $table->string('kode_pos')->nullable();
             $table->string('alamat')->nullable();
             $table->string('web')->nullable();
