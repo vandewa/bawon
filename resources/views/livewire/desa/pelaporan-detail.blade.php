@@ -70,7 +70,7 @@
                         </div>
                         <div class="card-body">
                             <form wire:submit.prevent="save" enctype="multipart/form-data">
-                                @if ($paketKegiatan->paket_kegiatan === 'KEGIATAN_ST_01')
+                                @if ($paketKegiatan->paket_kegiatan === 'PAKET_KEGIATAN_ST_02')
                                     <div class="row">
                                         @foreach ([
         'laporan_hasil_pemeriksaan' => 'Laporan Hasil Pemeriksaan',
