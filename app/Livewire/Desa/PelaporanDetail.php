@@ -37,9 +37,8 @@ class PelaporanDetail extends Component
 
     public function save()
     {
-        // 'laporan_hasil_pemeriksaan',
         $fields = [
-
+            'laporan_hasil_pemeriksaan',
             'bast_penyedia',
             'bast_kades'
         ];
