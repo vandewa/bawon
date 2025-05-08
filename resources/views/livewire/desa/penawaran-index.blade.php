@@ -157,7 +157,8 @@
                                                                             </a>
                                                                             @php
                                                                                 $langsungKontrak =
-                                                                                    $paket->jumlah_anggaran < 10000000;
+                                                                                    $paket->paket_type ==
+                                                                                    'PAKET_TYPE_02';
                                                                             @endphp
 
                                                                             @if (!$langsungKontrak and $paket->negosiasi->negosiasi_st ?? null != 'NEGOSIASI_ST_02')
