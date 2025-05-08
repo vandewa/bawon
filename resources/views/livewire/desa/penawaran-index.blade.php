@@ -169,7 +169,6 @@
                                                                             @endif
 
 
-
                                                                             @if ($langsungKontrak || ($paket->negosiasi->negosiasi_st ?? '') == 'NEGOSIASI_ST_02')
                                                                                 <button
                                                                                     wire:click="openUploadModal({{ $paket->id }})"
@@ -223,7 +222,7 @@
                         <h5 class="modal-title">
                             <i class="mr-2 fa fa-upload"></i> Upload Dokumen
                         </h5>
-                        <button type="button" class="text-white btn-close" wire:click="$set('showUploadModal', false)">
+                        <button type="button" class="btn-close" wire:click="$set('showUploadModal', false)">
                             <span>&times;</span>
                         </button>
                     </div>
@@ -260,17 +259,21 @@
                     <div class="modal-footer d-flex justify-content-between">
                         {{-- Tombol Dummy Generate --}}
                         <div class="gap-2 d-flex">
-                            <button type="button" class="btn btn-outline-secondary">
+                            <a href="{{ route('generator.penyedia.surat-perjanjian', ['paketId' => $paketIdUpload]) }}"
+                                target="_blank" class="mr-1 btn btn-outline-dark">
                                 <i class="fas fa-magic"></i> Generate Surat Perjanjian
-                            </button>
-                            <button type="button" class="btn btn-outline-secondary">
+                            </a>
+
+                            <a href="{{ route('generator.penyedia.spk', ['paketId' => $paketIdUpload]) }}"
+                                target="_blank" class="mr-1 btn btn-outline-dark">
                                 <i class="fas fa-file-alt"></i> Generate SPK
-                            </button>
+                            </a>
+
                         </div>
 
                         {{-- Tombol Simpan dan Batal --}}
                         <div class="gap-2 d-flex">
-                            <button type="submit" class="btn btn-success" wire:loading.attr="disabled">
+                            <button type="submit" class="btn btn-success mr-2" wire:loading.attr="disabled">
                                 <span wire:loading.remove wire:target="uploadSuratPerjanjian">
                                     <i class="fa fa-save"></i> Simpan
                                 </span>

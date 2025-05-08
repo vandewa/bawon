@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Generator\Penyedia;
 
+use App\Models\Generator\SuratPerjanjian as GeneratorSuratPerjanjian;
+use App\Models\PaketKegiatan;
 use Livewire\Component;
 use App\Models\PaketPekerjaan;
 
@@ -9,18 +11,33 @@ class SuratPerjanjian extends Component
 {
     public string $isiSurat;
     public bool $sudahDisimpan = false;
-    public $paketPekerjaan;
 
-    public function mount()
+    public $paketPekerjaan, $paketKegiatan, $cekData;
+
+    public function mount($paketId)
     {
-        $this->isiSurat = <<<HTML
+        $this->paketKegiatan = PaketKegiatan::with(['paketPekerjaan.desa'])->find($paketId);
+
+        // dd($this->paketKegiatan);
+
+        if ($this->paketKegiatan) {
+            $this->cekData = GeneratorSuratPerjanjian::where('paket_kegiatan_id', $this->paketKegiatan->id)->first();
+        } else {
+            $this->cekData = null;
+        }
+
+        if ($this->cekData) {
+            $this->isiSurat = $this->cekData->isi_surat;
+        } else {
+
+            $this->isiSurat = <<<HTML
             <div style="font-family: Arial; font-size: 10pt; text-align: justify;">
                 <p style="text-align: center;margin:0;font-weight:bold;">SURAT PERJANJIAN</p>
                 <p style="text-align: center;margin:0;">Untuk melaksanakan</p>
-                <p style="text-align: center;margin:0;">Pekerjaan \${pekerjaan}</p>
-                <p style="text-align: center;margin:0;">Nomor: \${nomor}</p>
+                <p style="text-align: center;margin:0;">Pekerjaan {$this->paketKegiatan->paketPekerjaan->nama_kegiatan}</p>
+                <p style="text-align: center;margin:0;">Nomor: ____________</p>
 
-                <p>SURAT PERJANJIAN ini berikut semua lampirannya dibuat dan ditandatangani di Desa \${desa} Kecamatan \${kecamatan} Kabupaten Wonosobo, pada hari \${hari} tanggal \${tanggal} bulan \${bulan} tahun \${tahun} [tanggal, bulan dan tahun diisi dengan huruf], antara \${nama_kasi_kaur} selaku Kasi/Kaur* \${bidang} yang bertugas sebagai Pelaksana Kegiatan Anggaran, bertindak untuk dan atas nama Desa \${desa} Kecamatan \${kecamatan} yang berkedudukan di \${berkedudukan} selanjutnya disebut "<b>PKA</b>" dan ___________________ selaku Pimpinan/Pemilik* Perusahaan/Pemasok/Toko* _______ yang bertindak untuk dan atas nama Perusahaan/Pemasok/Toko* ______ yang berkedudukan di ___________________, selanjutnya disebut "<b>Penyedia</b>".</p>
+                <p>SURAT PERJANJIAN ini berikut semua lampirannya dibuat dan ditandatangani di Desa {$this->paketKegiatan->paketPekerjaan->desa->name} Kecamatan ___________ Kabupaten Wonosobo, pada hari \${hari} tanggal \${tanggal} bulan \${bulan} tahun \${tahun} [tanggal, bulan dan tahun diisi dengan huruf], antara {$this->paketKegiatan->paketPekerjaan->nm_pptkd} selaku Kasi/Kaur* {$this->paketKegiatan->paketPekerjaan->nama_subbidang} yang bertugas sebagai Pelaksana Kegiatan Anggaran, bertindak untuk dan atas nama Desa {$this->paketKegiatan->paketPekerjaan->desa->name} Kecamatan ________ yang berkedudukan di _________ selanjutnya disebut "<b>PKA</b>" dan ___________________ selaku Pimpinan/Pemilik* Perusahaan/Pemasok/Toko* _______ yang bertindak untuk dan atas nama Perusahaan/Pemasok/Toko* ______ yang berkedudukan di ___________________, selanjutnya disebut "<b>Penyedia</b>".</p>
 
                 <p>
                 PKA dan Penyedia sesuai dengan kewenangannya masing-masing bersepakat dan menyetujui 
@@ -32,7 +49,7 @@ class SuratPerjanjian extends Component
                 <ol style="font-size:10pt; font-family:Arial;">
                     <li style="margin-bottom:6pt;">Ruang Lingkup Pekerjaan<br>
                         <span style="text-align: justify;">
-                            Ruang lingkup pekerjaan dari Surat Perjanjian ini adalah ________________________________ [diisi dengan nama pekerjaan yang akan dilakukan, contoh: Pengadaan laptop/pengadaan bahan material/peralatan untuk pembangunan jalan desa] dengan spesifikasi ______________ _____________________. 
+                            Ruang lingkup pekerjaan dari Surat Perjanjian ini adalah {$this->paketKegiatan->paketPekerjaan->nama_kegiatan} dengan spesifikasi ______________ _____________________. 
                         </span>
                     </li>
                     <li style="margin-bottom:6pt;">Ruang Lingkup Pekerjaan<br>
@@ -124,8 +141,8 @@ class SuratPerjanjian extends Component
                             <p style="margin:0; text-align:center; font-size:10pt; font-family:Arial;">&nbsp;</p>
                             <p style="margin:0; text-align:center; font-size:10pt; font-family:Arial;">[tanda tangan dan cap sekretariat Desa] </p>
                             <p style="margin:0; text-align:center; font-size:10pt; font-family:Arial;">&nbsp;</p>
-                            <p style="margin:0; text-align:center; font-size:10pt; font-family:Arial;">[nama lengkap],</p>
-                            <p style="margin:0; text-align:center; font-size:10pt; font-family:Arial;">[jabatan]</p>
+                            <p style="margin:0; text-align:center; font-size:10pt; font-family:Arial;">{$this->paketKegiatan->paketPekerjaan->nm_pptkd},</p>
+                            <p style="margin:0; text-align:center; font-size:10pt; font-family:Arial;">{$this->paketKegiatan->paketPekerjaan->jbt_pptkd}</p>
                         </td>
                         <td style="width:50%; padding:10pt; vertical-align:top;">
                             <p style="margin:0; text-align:center; font-size:10pt; font-family:Arial;">Untuk dan atas nama</p>
@@ -151,18 +168,28 @@ class SuratPerjanjian extends Component
                 </div>
 
             HTML;
-
+        }
 
     }
 
 
     public function simpan()
     {
-        // Simpan ke database sebagai HTML
-        //  \App\Models\Surat::create([
-        //     'judul' => 'Surat dari Summernote',
-        //     'isi' => $this->isiSurat, // disimpan dalam format HTML
-        // ]);
+        $paketId = $this->paketKegiatan['id'] ?? null;
+
+        if ($this->cekData) {
+            // Update ke database
+            GeneratorSuratPerjanjian::where('paket_kegiatan_id', $paketId)->update([
+                'isi_surat' => $this->isiSurat, // HTML
+            ]);
+        } else {
+            // Simpan data baru
+            GeneratorSuratPerjanjian::create([
+                'paket_kegiatan_id' => $paketId,
+                'isi_surat' => $this->isiSurat, // HTML
+            ]);
+        }
+
 
         $this->sudahDisimpan = true; // aktifkan tombol download setelah simpan
         session()->flash('message', 'Surat berhasil disimpan!');

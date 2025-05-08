@@ -32,6 +32,8 @@ class Kak extends Component
         if ($this->cekData) {
             $this->isiSurat = $this->cekData->isi_surat;
         } else {
+            $format_rupiah = format_rupiah($this->paketKegiatan->jumlah_anggaran);
+            $terbilang = ucwords(terbilang($this->paketKegiatan->jumlah_anggaran)) . ' Rupiah';
             // Jika belum ada, buat template default
             $this->isiSurat = <<<HTML
                 <p style="margin-top:0pt; margin-bottom:8pt; text-align:center; line-height:116%; font-size:10pt;"><strong><span style="font-family:Arial;"><b>Kerangka Acuan Kerja (KAK)</b></span></strong></p>
@@ -49,7 +51,7 @@ class Kak extends Component
                         <tr>
                             <td style="width:2%; font-weight: bold;">1.</td>
                             <td style="width:20%; font-weight: bold;">Latar Belakang</td>
-                            <td style="width:78%;">\${latar_belakang}</td>
+                            <td style="width:78%;">(diisi dengan latar belakang perlunya pekerjaan dilaksanakan)</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">2.</td>
@@ -59,12 +61,12 @@ class Kak extends Component
                                     <tr>
                                         <td style="width:70px;">Maksud</td>
                                         <td style="width:10px;">:</td>
-                                        <td>\${maksud}</td>
+                                        <td>(diisi dengan maksud dilaksanakannya pekerjaan)</td>
                                     </tr>
                                     <tr>
                                         <td>Tujuan</td>
                                         <td>:</td>
-                                        <td>\${tujuan}</td>
+                                        <td>(diisi dengan tujuan yang ingin dicapai dari pelaksanaan pekerjaan ini, biasanya berhubungan dengan pembangunan desa)</td>
                                     </tr>
                                 </table>
                             </td>
@@ -72,27 +74,28 @@ class Kak extends Component
                         <tr>
                             <td style="font-weight: bold;">3.</td>
                             <td style="font-weight: bold;">Sasaran / Output</td>
-                            <td>\${sasaran}</td>
+                            <td>(diisi dengan hasil akhir dari pekerjaan disertai dengan satuan. Contoh: 1 (satu)
+                            bangunan saung pertemuan)</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">4.</td>
                             <td style="font-weight: bold;">Lokasi Pengerjaan</td>
-                            <td>\${lokasi}</td>
+                            <td>(diisi nama jalan, tempat, atau posisi pekerjaan dilakukan)</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">5.</td>
                             <td style="font-weight: bold;">Sumber Pendanaan</td>
-                            <td>Pekerjaan ini dibiayai dari sumber pendanaan: \${sumber_pendanaan}</td>
+                            <td>Pekerjaan ini dibiayai dari sumber pendanaan: {$this->paketPekerjaan->sumberdana}</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">6.</td>
                             <td style="font-weight: bold;">Nilai Pekerjaan</td>
-                            <td>Rp \${rupiah} (\${terbilang})</td>
+                            <td>{$format_rupiah} ({$terbilang})</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">7.</td>
                             <td style="font-weight: bold;">Kode Rekening</td>
-                            <td>\${kode_rekening}</td>
+                            <td>{$this->paketPekerjaan->kd_keg}</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">8.</td>
@@ -102,12 +105,12 @@ class Kak extends Component
                                     <tr>
                                         <td style="width:70px;">Nama</td>
                                         <td style="width:10px;">:</td>
-                                        <td>\${nama_kasi_kaur}</td>
+                                        <td>{$this->paketPekerjaan->nm_pptkd}</td>
                                     </tr>
                                     <tr>
                                         <td>Bidang</td>
                                         <td>:</td>
-                                        <td>\${bidang}</td>
+                                        <td>{$this->paketPekerjaan->nama_bidang}</td>
                                     </tr>
                                 </table>
                             </td>
@@ -115,32 +118,41 @@ class Kak extends Component
                         <tr>
                             <td style="font-weight: bold;">9.</td>
                             <td style="font-weight: bold;">TPK</td>
-                            <td>\${tpk}</td>
+                            <td>Ketua : <br>
+                                Sekretaris : <br>
+                                Anggota : <br>
+                                1. <br>
+                                2. <br>
+                                3. <br>
+                            </td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">10.</td>
                             <td style="font-weight: bold;">Lingkup Pekerjaan</td>
-                            <td>\${lingkup_pekerjaan}</td>
+                            <td>(diisi dengan komponen, tahapan pekerjaan)</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">11.</td>
                             <td style="font-weight: bold;">Spesifikasi Teknis</td>
-                            <td>\${spesifikasi_teknis}</td>
+                            <td>(diisi dengan spesifikasi sumber daya yang dibutuhkan: SDM, material/bahan,
+                            peralatan yang dibutuhkan)</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">12.</td>
                             <td style="font-weight: bold;"> Peralatan, Material, Personel dan Fasilitas dari Kasi/Kaur </td>
-                            <td>\${peralatan}</td>
+                            <td>(diisi dengan peralatan, material, personel dan fasilitas yang tercatat/dikuasai desa yang akan digunakan pada pelaksanaan pekerjaan ini)</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">13.</td>
-                            <td style="font-weight: bold;">Jangka Waktu  Jangka Waktu Penyelesaian Pekerjaan</td>
-                            <td>Pengadaan ini dilaksanakan selama \${jangka_waktu} hari kalender/bulan.</td>
+                            <td style="font-weight: bold;">Jangka Waktu Penyelesaian Pekerjaan</td>
+                            <td>Pengadaan ini dilaksanakan selama ________ hari kalender/bulan.</td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">14.</td>
                             <td style="font-weight: bold;">Jadwal Pelaksanaan Pekerjaan</td>
-                            <td>\${jadwal_pelaksanaan}</td>
+                            <td>Pengadaan ini dilaksanakan sesuai dengan jadwal (bentuk
+                                tabel) (diisi dengan tahapan kegiatan, volume/durasi waktu yang dibutuhkan per tahapan kegiatan, satuan waktu/keterangan)
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="3" style="text-align: center; font-weight: bold; background-color: #d9e2f3;">Laporan</td>
@@ -149,16 +161,22 @@ class Kak extends Component
                             <td style="font-weight: bold;">15.</td>
                             <td style="font-weight: bold;">Laporan Kemajuan Pelaksanaan Pekerjaan</td>
                             <td>
-                                Laporan kemajuan pelaksanaan pekerjaan: \${laporan_kemajuan}<br>
-                                Diserahkan paling lambat (\${durasi_laporan_kemajuan}) sejak pekerjaan dimulai sebanyak \${jml_laporan_kemajuan} laporan.
+                                Laporan kemajuan pelaksanaan pekerjaan: _____________<br>
+                                Laporan harus diserahkan selambat-lambatnya: (______________) *hari/bulan sejak pekerjaan dimulai sebanyak ___________ laporan. <br>
+                                *pilih salah satu <br>
+                                (diisi dengan penyampaian laporan kemajuan pelaksanaan. Misalnya: pada
+                                pekerjaan konstruksi: laporan pembangunan pondasi bangunan pada pengadaan
+                                jasa: laporan tanggapan KAK, hasil studi awal)
                             </td>
                         </tr>
                         <tr>
                             <td style="font-weight: bold;">16.</td>
                             <td style="font-weight: bold;">Laporan pelaksanaan pengadaan yang telah selesai 100%</td>
                             <td>
-                                Laporan pelaksanaan pengadaan: \${laporan_pelaksanaan}<br>
-                                Diserahkan paling lambat (\${durasi_laporan_pelaksanaan}) sejak selesai 100%, sebanyak \${jml_laporan_kemajuan} laporan.
+                                Laporan pelaksanaan pengadaan: _____________<br>
+                                Laporan harus diserahkan selambat-lambatnya: (______________) *hari/bulan sejak selesainya pekerjaan 100%, sebanyak __________ laporan. <br>
+                                *pilih salah satu <br>
+                                (diisi dengan penyampaian laporan pelaksanaan pengadaan yang telah selesai)
                             </td>
                         </tr>
                     </tbody>
@@ -200,11 +218,21 @@ class Kak extends Component
 
     public function simpan()
     {
-        // Simpan ke database sebagai HTML
-        //  \App\Models\Surat::create([
-        //     'judul' => 'Surat dari Summernote',
-        //     'isi' => $this->isiSurat, // disimpan dalam format HTML
-        // ]);
+        $paketId = $this->paketKegiatan['id'] ?? null;
+
+        if ($this->cekData) {
+            // Update ke database
+            KerangkaAcuanKerja::where('paket_kegiatan_id', $paketId)->update([
+                'isi_surat' => $this->isiSurat, // HTML
+            ]);
+        } else {
+            // Simpan data baru
+            KerangkaAcuanKerja::create([
+                'paket_kegiatan_id' => $paketId,
+                'isi_surat' => $this->isiSurat, // HTML
+            ]);
+        }
+
 
         $this->sudahDisimpan = true; // aktifkan tombol download setelah simpan
         session()->flash('message', 'Surat berhasil disimpan!');
