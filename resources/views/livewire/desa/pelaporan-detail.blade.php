@@ -18,7 +18,7 @@
                 <div class="col-md-8">
                     <!-- Statistik -->
                     <div class="mb-4 row">
-                        @foreach ([['label' => 'Anggaran', 'value' => $paketKegiatan->jumlah_anggaran], ['label' => 'Nilai Kesepakatan', 'value' => $paketKegiatan->nilai_kesepakatan], ['label' => 'Tahun', 'value' => $paketKegiatan->paketPekerjaan->tahun ?? '-']] as $stat)
+                        @foreach ([['label' => 'HPS', 'value' => $paketKegiatan->jumlah_anggaran], ['label' => 'Nilai Pengadaan', 'value' => $paketKegiatan->nilai_kesepakatan], ['label' => 'Sisa', 'value' => $paketKegiatan->jumlah_anggaran - $paketKegiatan->nilai_kesepakatan ?? '-']] as $stat)
                             <div class="col-md-4">
                                 <div class="text-center shadow-sm card">
                                     <div class="card-body">
@@ -106,7 +106,7 @@
                                     </button>
 
                                     @if ($paketKegiatan->laporan_hasil_pemeriksaan && $paketKegiatan->bast_penyedia && $paketKegiatan->bast_kades)
-                                        @if ($paketKegiatan->paket_kegiatan === 'PAKET_KEGIATAN_ST_02')
+                                        @if ($paketKegiatan->paket_kegiatan !== 'PAKET_KEGIATAN_ST_02')
                                             <button type="button" class="btn btn-warning"
                                                 wire:click="konfirmasiBatalPenutupan">
                                                 <i class="fas fa-undo"></i> Batalkan Penutupan
