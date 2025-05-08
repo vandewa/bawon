@@ -54,7 +54,7 @@
                                 'spek_teknis' => 'Spesifikasi Teknis',
                                 'kak' => 'Kerangka Acuan Kerja (KAK)',
                                 'jadwal_pelaksanaan' => 'Jadwal Pelaksanaan',
-                                'rencana_kerja' => 'Rencana Kerja',
+                                'rencana_kerja' => 'Rencana Kerja (Bila diperlukan)',
                                 'hps' => 'Harga Perkiraan Sendiri (HPS)',
                             ];
 
@@ -62,7 +62,7 @@
                                 'spek_teknis' => 'spesifikasi-teknis',
                                 'kak' => 'kak',
                                 'jadwal_pelaksanaan' => 'jadwal-pelaksanaan',
-                                'rencana_kerja' => 'rencana-kerja',
+
                                 'hps' => 'hps',
                             ];
 
