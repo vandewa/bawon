@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="{{ asset('css/hover-master/css/hover.css') }}">
     <link rel="stylesheet" href="{{ asset('AdminLTE/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('AdminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
@@ -164,11 +165,12 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     {{-- <script src="{{ asset('AdminLTE/dist/js/pages/dashboard.js') }}"></script> --}}
     <script src="https://kit.fontawesome.com/bb9305debb.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    @stack('js')
+
     @livewireScripts
     @livewireChartsScripts
-
+    @stack('js')
     <script>
         $(function() {
             //Initialize Select2 Elements

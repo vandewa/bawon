@@ -10,4 +10,13 @@ class Vendor extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'tag_vendor');
+    }
+    public function photos()
+{
+    return $this->hasMany(VendorPhoto::class);
+}
+
 }

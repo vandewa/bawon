@@ -59,10 +59,10 @@
                                     <td class="px-3 py-2 align-middle">{{ $vendor->nama_direktur }}</td>
                                     <td class="px-3 py-2 align-middle">{{ $vendor->jenis_usaha }}</td>
                                     <td class="px-3 py-2 text-center align-middle text-nowrap">
-                                        <button wire:click="showDetail({{ $vendor->id }})"
+                                        <a href="{{ route('penyedia.vendor-profile', $vendor->id) }}') }}"
                                             class="btn btn-sm btn-info mb-1">
                                             <i class="fas fa-eye"></i> Detail
-                                        </button>
+                                        </a>
                                         <a href="{{ route('penyedia.vendor-edit', $vendor->id) }}"
                                             class="btn btn-sm btn-warning mb-1">
                                             <i class="fas fa-edit"></i> Edit

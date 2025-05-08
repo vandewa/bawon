@@ -2,77 +2,124 @@
 
 namespace App\Livewire\Penyedia;
 
-use App\Models\Vendor;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Vendor;
 use Livewire\Component;
+use App\Models\VendorPhoto;
+use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
+use Livewire\WithTemporaryFiles;
+
+use Livewire\Attributes\Validate;
+use Illuminate\Support\Facades\Hash;
 
 
 class VendorCreate extends Component
 {
     use WithFileUploads;
 
-    public $vendor = [];
+    public $foto_vendor = [];
+    public $single_foto;
+
+
+
     public $user = [];
+
+    public $vendor = [
+        'latitude' => null,
+        'longitude' => null,
+    ];
 
     // Tambah properti untuk upload file
     public $akta_pendirian, $nib_file, $npwp_file, $siup, $izin_usaha_lain, $ktp_direktur;
 
     public function save()
+{
+    $this->validate([
+        'vendor.nama_perusahaan' => 'required|string|max:255',
+        'vendor.nib' => 'required|string|max:100',
+        'vendor.npwp' => 'nullable|string|max:100',
+        'vendor.alamat' => 'required|string|max:255',
+        'vendor.email' => 'nullable|email',
+        'vendor.telepon' => 'nullable|string|max:20',
+        'vendor.nama_direktur' => 'required|string|max:255',
+        'vendor.jenis_usaha' => 'nullable|string|max:255',
+        'vendor.klasifikasi' => 'nullable|string|max:255',
+        'vendor.kualifikasi' => 'nullable|string|max:255',
+        'vendor.provinsi' => 'nullable|string|max:100',
+        'vendor.kabupaten' => 'nullable|string|max:100',
+        'vendor.kode_pos' => 'nullable|string|max:10',
+        'vendor.latitude' => 'nullable|numeric',
+        'vendor.longitude' => 'nullable|numeric',
+
+        'user.name' => 'required|string|max:255',
+        'user.email' => 'required|email|unique:users,email',
+        'user.password' => 'required|string|min:6|confirmed',
+
+        'foto_vendor.*' => 'image|max:2048', // max 2MB per file
+    ]);
+
+    // Simpan data vendor
+    $vendor = Vendor::create($this->vendor);
+
+    // Simpan data user
+    $user = new User();
+    $user->name = $this->user['name'];
+    $user->email = $this->user['email'];
+    $user->password = Hash::make($this->user['password']);
+    $user->vendor_id = $vendor->id;
+    $user->assignRole('vendor'); // jika pakai spatie
+    $user->save();
+
+    // Simpan foto vendor (jika ada)
+    if ($this->foto_vendor && is_array($this->foto_vendor)) {
+        foreach ($this->foto_vendor as $foto) {
+            $path = $foto->store('vendor/foto', 'public');
+            VendorPhoto::create([
+                'vendor_id' => $vendor->id,
+                'photo_path' => $path,
+            ]);
+        }
+    }
+
+    session()->flash('message', 'Vendor dan user berhasil ditambahkan.');
+    return redirect()->route('penyedia.vendor-index');
+}
+
+    public function updatedSingleFoto()
+    {
+        if ($this->single_foto) {
+            $this->validateOnly('single_foto', [
+                'single_foto' => 'image|max:2048',
+            ]);
+
+            $this->foto_vendor[] = $this->single_foto;
+            $this->single_foto = null;
+        }
+    }
+
+    public function removeFotoVendor($index)
+    {
+        unset($this->foto_vendor[$index]);
+        $this->foto_vendor = array_values($this->foto_vendor);
+    }
+
+    // Untuk drag & drop manual
+    public function addDroppedFile($file)
     {
         $this->validate([
-            'vendor.nama_perusahaan' => 'required|string',
-            'vendor.nib' => 'required|string|unique:vendors,nib',
-            'vendor.alamat' => 'required|string',
-            'vendor.nama_direktur' => 'required|string',
-            'user.name' => 'required|string',
-            'user.email' => 'required|email|unique:users,email',
-            'user.password' => 'required|string|min:6|confirmed',
-            'akta_pendirian' => 'nullable|file|mimes:pdf,doc,docx',
-            'nib_file' => 'nullable|file|mimes:pdf,doc,docx',
-            'npwp_file' => 'nullable|file|mimes:pdf,doc,docx',
-            'siup' => 'nullable|file|mimes:pdf,doc,docx',
-            'izin_usaha_lain' => 'nullable|file|mimes:pdf,doc,docx',
-            'ktp_direktur' => 'nullable|file|mimes:pdf,doc,docx',
+            'file' => 'image|max:2048',
         ]);
 
-        $vendor = Vendor::create([
-            'nama_perusahaan' => $this->vendor['nama_perusahaan'],
-            'nib' => $this->vendor['nib'],
-            'npwp' => $this->vendor['npwp'] ?? null,
-            'alamat' => $this->vendor['alamat'],
-            'email' => $this->vendor['email'] ?? null,
-            'telepon' => $this->vendor['telepon'] ?? null,
-            'nama_direktur' => $this->vendor['nama_direktur'],
-            'jenis_usaha' => $this->vendor['jenis_usaha'] ?? null,
-            'klasifikasi' => $this->vendor['klasifikasi'] ?? null,
-            'kualifikasi' => $this->vendor['kualifikasi'] ?? null,
-            'provinsi' => $this->vendor['provinsi'] ?? null,
-            'kabupaten' => $this->vendor['kabupaten'] ?? null,
-            'kode_pos' => $this->vendor['kode_pos'] ?? null,
-        ]);
+        $this->foto_vendor[] = $file;
+    }
 
-        foreach ([
-            'akta_pendirian', 'nib_file', 'npwp_file', 'siup', 'izin_usaha_lain', 'ktp_direktur'
-        ] as $field) {
-            if ($this->$field) {
-                $vendor->$field = $this->$field->store("dokumen/vendor/$field", 'public');
-            }
-        }
+    #[On('setCoordinate')]
+    public function setCoordinate($lat, $lng)
+    {
 
-        $vendor->save();
-
-        $user = User::create([
-            'name' => $this->user['name'],
-            'email' => $this->user['email'],
-            'password' => Hash::make($this->user['password']),
-            'vendor_id' => $vendor->id,
-        ]);
-        $user->syncRoles(['vendor']);
-
-        session()->flash('message', 'Vendor dan User berhasil dibuat.');
-        return redirect()->route('penyedia.vendor-index');
+        $this->vendor['latitude'] = $lat;
+        $this->vendor['longitude'] = $lng;
     }
 
     public function render()

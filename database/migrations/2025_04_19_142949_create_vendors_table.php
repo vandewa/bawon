@@ -35,6 +35,8 @@ return new class extends Migration
             $table->string('siup')->nullable();
             $table->string('izin_usaha_lain')->nullable();
             $table->string('ktp_direktur')->nullable();
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
 
             $table->timestamps();
         });

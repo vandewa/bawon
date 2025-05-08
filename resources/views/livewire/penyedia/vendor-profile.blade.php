@@ -16,6 +16,7 @@
     <section class="content">
         <div class="container-fluid">
 
+            {{-- Data Perusahaan --}}
             <div class="mb-3 card">
                 <div class="text-white card-header bg-primary d-flex align-items-center">
                     <i class="mr-2 fas fa-building"></i>
@@ -44,6 +45,7 @@
                 </div>
             </div>
 
+            {{-- Dokumen Legalitas dengan Preview --}}
             @if ($vendor)
                 <div class="mb-4 card">
                     <div class="text-white card-header bg-info d-flex align-items-center">
@@ -62,13 +64,18 @@
     ] as $field => $label)
                                 <div class="mb-3 col-md-4">
                                     <div class="border shadow-sm card h-100">
-                                        <div class="text-center card-body">
+                                        <div class="card-body d-flex flex-column align-items-center text-center">
                                             <i class="mb-2 fas fa-file-pdf fa-3x text-danger"></i>
-                                            <h5 class="mt-2">{{ $label }}</h5> {{-- Ganti h6 jadi h5 di sini --}}
+                                            <h5 class="mt-2">{{ $label }}</h5>
                                             @if ($vendor->$field)
-                                                <a href="{{ Storage::url($vendor->$field) }}" target="_blank"
-                                                    class="mt-2 btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-eye"></i> Lihat
+                                                {{-- Embed preview PDF --}}
+                                                <embed
+                                                    src="{{ route('helper.show-picture', ['path' => $vendor->$field]) }}"
+                                                    type="application/pdf" width="100%" height="150"
+                                                    class="mt-2" />
+                                                <a href="{{ route('helper.show-picture', ['path' => $vendor->$field]) }}"
+                                                    target="_blank" class="mt-2 btn btn-sm btn-outline-primary">
+                                                    <i class="fas fa-eye"></i> Lihat Full
                                                 </a>
                                             @else
                                                 <span class="mt-2 text-muted small d-block">Belum diunggah</span>
@@ -80,14 +87,76 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- Foto Vendor Preview --}}
+                <div class="mb-4 card">
+                    <div class="text-white card-header bg-secondary d-flex align-items-center">
+                        <i class="mr-2 fas fa-camera"></i>
+                        <h5 class="m-0 card-title">Foto Vendor</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            @foreach ($vendor->photos as $photo)
+                                <div class="col-md-3 mb-3">
+                                    <a href="{{ route('helper.show-picture', ['path' => $photo->path]) }}"
+                                        target="_blank">
+                                        <img src="{{ route('helper.show-picture', ['path' => $photo->path]) }}"
+                                            class="img-fluid img-thumbnail" alt="Foto Vendor">
+                                    </a>
+                                </div>
+                            @endforeach
+                            @if ($vendor->photos->isEmpty())
+                                <div class="col-12 text-center text-muted">
+                                    Tidak ada foto tersedia.
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Map Lokasi Vendor --}}
+                <div class="mb-4 card">
+                    <div class="text-white card-header bg-success d-flex align-items-center">
+                        <i class="mr-2 fas fa-map-marker-alt"></i>
+                        <h5 class="m-0 card-title">Lokasi Vendor</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="map" style="height: 300px;"></div>
+                    </div>
+                </div>
             @endif
 
-            {{-- <div class="mb-4">
+            {{-- Back Button --}}
+            {{--
+            <div class="mt-3">
                 <a href="{{ route('penyedia.vendor-index') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Kembali ke Daftar Vendor
                 </a>
-            </div> --}}
+            </div>
+            --}}
 
         </div>
     </section>
 </div>
+
+@push('styles')
+    {{-- Leaflet CSS (jika belum ada di layout) --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+@endpush
+
+@push('scripts')
+    {{-- Leaflet JS (jika belum ada di layout) --}}
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var lat = parseFloat('{{ $vendor->latitude ?? 0 }}');
+            var lng = parseFloat('{{ $vendor->longitude ?? 0 }}');
+            var map = L.map('map').setView([lat, lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+            L.marker([lat, lng]).addTo(map);
+        });
+    </script>
+@endpush
