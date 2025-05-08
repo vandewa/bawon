@@ -41,11 +41,44 @@
                                                 <div class="tab-pane fade show active">
                                                     <div class="card-body">
 
-                                                        <div class="mb-3 row">
+                                                        <div class="mb-3 row g-2">
                                                             <div class="col-md-3">
                                                                 <input type="text" class="form-control"
                                                                     placeholder="🔍 Cari kegiatan..."
                                                                     wire:model.live="cari">
+                                                            </div>
+                                                            <div class="col-md-2" wire:ignore>
+
+                                                                <select id="desa-select" class="form-control select2">
+                                                                    <option value="">— Semua Desa —</option>
+                                                                    @foreach ($desas as $desa)
+                                                                        <option value="{{ $desa->id }}">
+                                                                            {{ $desa->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+
+
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <select class="form-control"
+                                                                    wire:model.live="filterTahun">
+                                                                    <option value="">— Semua Tahun —</option>
+                                                                    @foreach ($tahuns as $th)
+                                                                        <option value="{{ $th }}">
+                                                                            {{ $th }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <input type="text" class="form-control"
+                                                                    placeholder="🔍 Filter Sumber Dana"
+                                                                    wire:model.live="filterSumber">
+                                                            </div>
+                                                            <div class="col-md-2">
+                                                                <button class="btn btn-secondary w-100"
+                                                                    wire:click="resetFilters">
+                                                                    <i class="fa fa-undo"></i> Reset
+                                                                </button>
                                                             </div>
                                                         </div>
 
@@ -59,6 +92,8 @@
                                                                         <th class="px-3 py-2">Kegiatan</th>
                                                                         <th class="px-3 py-2">Sumber Dana</th>
                                                                         <th class="px-3 py-2 text-end">Pagu</th>
+                                                                        <th>Penggunaan Anggaran</th>
+                                                                        <th>Sisa Anggaran</th>
                                                                         <th class="px-3 py-2 text-center">Aksi</th>
                                                                     </tr>
                                                                 </thead>
@@ -77,6 +112,12 @@
                                                                                 {{ $item->sumberdana }}</td>
                                                                             <td class="px-3 py-2 text-end align-middle">
                                                                                 Rp{{ number_format($item->pagu_pak, 0, ',', '.') }}
+                                                                            </td>
+                                                                            <td class="px-3 py-2 text-end align-middle">
+                                                                                Rp{{ number_format($item->paket_kegiatans_sum_nilai_kesepakatan, 0, ',', '.') }}
+                                                                            </td>
+                                                                            <td class="px-3 py-2 text-end align-middle">
+                                                                                Rp{{ number_format($item->pagu_pak - $item->paket_kegiatans_sum_nilai_kesepakatan, 0, ',', '.') }}
                                                                             </td>
                                                                             <td class="text-nowrap">
                                                                                 <button
@@ -137,7 +178,8 @@
                 <form wire:submit.prevent="save" class="modal-content shadow-lg">
                     <div class="modal-header bg-primary text-white">
                         <h5 class="modal-title">
-                            <i class="fa fa-clipboard-list mr-1"></i> {{ $isEdit ? 'Edit' : 'Tambah' }} Paket Pekerjaan
+                            <i class="fa fa-clipboard-list mr-1"></i> {{ $isEdit ? 'Edit' : 'Tambah' }} Paket
+                            Pekerjaan
                         </h5>
                         <button type="button" class="close text-white" wire:click="resetForm">
                             <span>&times;</span>
@@ -146,41 +188,76 @@
                     <div class="modal-body">
 
                         <div class="form-group">
-                            <label>Desa</label>
-                            <select wire:model.live="desa_id" class="form-control">
-                                <option value="">-- Pilih Desa --</option>
-                                @foreach ($desas as $desa)
-                                    <option value="{{ $desa->id }}">{{ $desa->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('desa_id')
+                            <label>Kode Kegiatan</label>
+                            <input type="text" class="form-control" wire:model.live="kd_keg">
+                            @error('kd_keg')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-
                         <div class="form-group">
                             <label>Tahun</label>
-                            <input type="number" class="form-control" wire:model.live="tahun">
+                            <input type="text" class="form-control" wire:model="tahun">
                             @error('tahun')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <label>Nama Kegiatan</label>
-                            <input type="text" class="form-control" wire:model.live="nama_kegiatan">
-                            @error('nama_kegiatan')
+                            <label>Nilai PAK</label>
+                            <input type="number" class="form-control" wire:model.live="nilaipak" step="0.01">
+                            @error('nilaipak')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <label>Sumber Dana</label>
-                            <input type="text" class="form-control" wire:model.live="sumberdana">
-                            @error('sumberdana')
+                            <label>Satuan</label>
+                            <input type="text" class="form-control" wire:model.live="satuan">
+                            @error('satuan')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
+
+                        <div class="form-group">
+                            <label>Pagu PAK</label>
+                            <input type="number" class="form-control" wire:model.live="pagu_pak" step="0.01">
+                            @error('pagu_pak')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nama PPTKD</label>
+                            <input type="text" class="form-control" wire:model.live="nm_pptkd">
+                            @error('nm_pptkd')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Jabatan PPTKD</label>
+                            <input type="text" class="form-control" wire:model.live="jbt_pptkd">
+                            @error('jbt_pptkd')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nama Bidang</label>
+                            <input type="text" class="form-control" wire:model.live="nama_bidang">
+                            @error('nama_bidang')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nama Sub‑Bidang</label>
+                            <input type="text" class="form-control" wire:model.live="nama_subbidang">
+                            @error('nama_subbidang')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
 
                     </div>
                     <div class="modal-footer">
@@ -198,3 +275,13 @@
 
 
 </div>
+
+
+@push('js')
+    <script>
+        $('#desa-select').select2();
+        $('#desa-select').change(function() {
+            @this.set('filterDesa', $(this).val());
+        });
+    </script>
+@endpush
