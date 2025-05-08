@@ -59,7 +59,6 @@
                                                             $item->spek_teknis &&
                                                             $item->kak &&
                                                             $item->jadwal_pelaksanaan &&
-                                                            $item->rencana_kerja &&
                                                             $item->hps;
                                                     @endphp
                                                     <tr>
