@@ -106,7 +106,7 @@
                                     </button>
 
                                     @if ($paketKegiatan->laporan_hasil_pemeriksaan && $paketKegiatan->bast_penyedia && $paketKegiatan->bast_kades)
-                                        @if ($paketKegiatan->paket_kegiatan === 'KEGIATAN_ST_02')
+                                        @if ($paketKegiatan->paket_kegiatan === 'PAKET_KEGIATAN_ST_02')
                                             <button type="button" class="btn btn-warning"
                                                 wire:click="konfirmasiBatalPenutupan">
                                                 <i class="fas fa-undo"></i> Batalkan Penutupan
