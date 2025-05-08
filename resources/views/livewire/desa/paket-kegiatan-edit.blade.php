@@ -83,6 +83,11 @@
                                             <input type="file" class="form-control" id="{{ $field }}"
                                                 wire:model="{{ $field }}">
 
+                                            <div wire:loading wire:target="{{ $field }}" class="mb-2 text-info">
+                                                <i class="fas fa-spinner fa-spin"></i> Mengunggah
+                                                {{ $label }}...
+                                            </div>
+
                                         </div>
                                         <div class="input-group-append">
                                             @if (isset($generateRoutes[$field]) && $prefix)
