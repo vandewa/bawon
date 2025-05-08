@@ -34,7 +34,7 @@
                         <p>{{ $penawaran->paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}</p>
                     </div>
                     <div class="mt-3 col-md-6">
-                        <h5><i class="fas fa-money-bill"></i> Anggaran</h5>
+                        <h5><i class="fas fa-money-bill"></i> HPS</h5>
                         <p>Rp {{ number_format($penawaran->paketKegiatan->jumlah_anggaran ?? 0, 0, ',', '.') }}</p>
                     </div>
                     <div class="mt-3 col-md-12">
