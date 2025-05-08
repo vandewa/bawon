@@ -13,19 +13,30 @@
                     <div class="card-body">
                         <div class="p-3 mb-4 border rounded bg-light">
                             <h5 class="text-primary">Informasi Kegiatan</h5>
+
                             <dl class="mb-0 row">
+                                <dt class="col-sm-4">Bidang / Subbidang</dt>
+                                <dd class="col-sm-8">
+                                    {{ $paketKegiatan->paketPekerjaan->nama_bidang ?? '-' }} /
+                                    {{ $paketKegiatan->paketPekerjaan->nama_subbidang ?? '-' }}
+                                </dd>
                                 <dt class="col-sm-4">Nama Kegiatan</dt>
                                 <dd class="col-sm-8">{{ $paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}</dd>
 
                                 <dt class="col-sm-4">Tahun Anggaran</dt>
                                 <dd class="col-sm-8">{{ $paketKegiatan->paketPekerjaan->tahun ?? '-' }}</dd>
 
-                                <dt class="col-sm-4">Bidang / Subbidang</dt>
-                                <dd class="col-sm-8">
-                                    {{ $paketKegiatan->paketPekerjaan->nama_bidang ?? '-' }} /
-                                    {{ $paketKegiatan->paketPekerjaan->nama_subbidang ?? '-' }}
-                                </dd>
 
+
+
+                                <dt class="col-sm-4">Jumlah Anggaran (Pengajuan)</dt>
+                                <dd class="col-sm-8">
+                                    Rp{{ number_format($paketKegiatan->jumlah_anggaran ?? 0, 2, ',', '.') }}</dd>
+
+                                <dt class="col-sm-4">Pagu Kegiatan</dt>
+                                <dd class="col-sm-8">
+                                    Rp{{ number_format($paketKegiatan->paketPekerjaan->pagu_pak ?? 0, 2, ',', '.') }}
+                                </dd>
                                 <dt class="col-sm-4">Jenis Paket</dt>
                                 <dd class="col-sm-8">
                                     @php
@@ -41,19 +52,8 @@
                                     </span>
                                 </dd>
 
-                                <dt class="col-sm-4">Jumlah Anggaran (Pengajuan)</dt>
-                                <dd class="col-sm-8">
-                                    Rp{{ number_format($paketKegiatan->jumlah_anggaran ?? 0, 2, ',', '.') }}</dd>
 
-                                <dt class="col-sm-4">Pagu PAK</dt>
-                                <dd class="col-sm-8">
-                                    Rp{{ number_format($paketKegiatan->paketPekerjaan->pagu_pak ?? 0, 2, ',', '.') }}
-                                </dd>
 
-                                <dt class="col-sm-4">Nilai PAK</dt>
-                                <dd class="col-sm-8">
-                                    Rp{{ number_format($paketKegiatan->paketPekerjaan->nilaipak ?? 0, 2, ',', '.') }}
-                                </dd>
                             </dl>
                         </div>
 
@@ -223,8 +223,7 @@
                 <div class="border-0 shadow modal-content">
                     <div class="modal-header bg-info">
                         <h5 class="text-white modal-title">Pilih Vendor</h5>
-                        <button type="button" class="text-white btn-close"
-                            wire:click="$set('showModalVendor', false)">
+                        <button type="button" class="text-white btn-close" wire:click="$set('showModalVendor', false)">
                             <span>&times;</span>
                         </button>
                     </div>
