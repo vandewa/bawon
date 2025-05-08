@@ -167,7 +167,7 @@
                         </fieldset>
 
                         <fieldset class="p-3 mb-4 border rounded">
-                            <legend class="w-auto font-weight-bold">Upload Foto Vendor</legend>
+                            <legend class="w-auto font-weight-bold">Upload Foto Tempat Usaha</legend>
 
                             <div x-data x-on:dragover.prevent
                                 x-on:drop.prevent="

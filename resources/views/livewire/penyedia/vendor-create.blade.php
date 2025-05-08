@@ -167,7 +167,7 @@
                         </fieldset>
 
                         <fieldset class="p-3 mb-4 border rounded">
-                            <legend class="w-auto font-weight-bold">Upload Foto Vendor</legend>
+                            <legend class="w-auto font-weight-bold">Upload Foto Tempat Usaha</legend>
 
                             <div x-data x-on:dragover.prevent
                                 x-on:drop.prevent="
@@ -250,7 +250,7 @@
                 <div class="mb-3 card card-success">
                     <div class="card-header d-flex align-items-center">
                         <i class="mr-2 fas fa-user"></i>
-                        <h5 class="m-0 card-title">Data User Vendor</h5>
+                        <h5 class="m-0 card-title">Data User Penyedia</h5>
                     </div>
                     <div class="p-3 card-body">
                         <fieldset class="p-3 border rounded">
