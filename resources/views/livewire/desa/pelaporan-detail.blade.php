@@ -72,8 +72,8 @@
                             <form wire:submit.prevent="save" enctype="multipart/form-data">
                                 @if ($paketKegiatan->paket_kegiatan === 'PAKET_KEGIATAN_ST_02')
                                     <div class="row">
+                                        {{-- 'laporan_hasil_pemeriksaan' => 'Laporan Hasil Pemeriksaan', --}}
                                         @foreach ([
-        'laporan_hasil_pemeriksaan' => 'Laporan Hasil Pemeriksaan',
         'bast_penyedia' => 'BAST Penyedia',
         'bast_kades' => 'BAST Kepala Desa',
     ] as $field => $label)
@@ -105,7 +105,7 @@
                                         <i class="fas fa-save"></i> Simpan Dokumen
                                     </button>
 
-                                    @if ($paketKegiatan->laporan_hasil_pemeriksaan && $paketKegiatan->bast_penyedia && $paketKegiatan->bast_kades)
+                                    @if ($paketKegiatan->bast_penyedia && $paketKegiatan->bast_kades)
                                         @if ($paketKegiatan->paket_kegiatan !== 'PAKET_KEGIATAN_ST_02')
                                             <button type="button" class="btn btn-warning"
                                                 wire:click="konfirmasiBatalPenutupan">
