@@ -46,7 +46,7 @@
                             </div>
                         </div>
 
-                        @php
+                        {{-- @php
                             $labelDokumen = [
                                 'spek_teknis' => 'Spesifikasi Teknis',
                                 'kak' => 'Kerangka Acuan Kerja (KAK)',
@@ -101,26 +101,26 @@
                                         <small class="text-danger d-block">{{ $message }}</small>
                                     @enderror
                                 </div>
-                            @endforeach
-                        </div>
-
+                            @endforeach --}}
                     </div>
 
-                    <div class="card-footer bg-light d-flex justify-content-end">
-                        <a href="{{ route('desa.paket-kegiatan', $paketPekerjaan) }}" class="mr-2 btn btn-secondary">
-                            <i class="mr-1 fas fa-arrow-left"></i> Kembali
-                        </a>
-                        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
-                            <span wire:loading.remove wire:target="save">
-                                <i class="mr-1 fas fa-save"></i> Simpan Dokumen
-                            </span>
-                            <span wire:loading wire:target="save">
-                                <i class="mr-1 fas fa-spinner fa-spin"></i> Menyimpan...
-                            </span>
-                        </button>
-                    </div>
                 </div>
-            </form>
+
+                <div class="card-footer bg-light d-flex justify-content-end">
+                    <a href="{{ route('desa.paket-kegiatan', $paketPekerjaan) }}" class="mr-2 btn btn-secondary">
+                        <i class="mr-1 fas fa-arrow-left"></i> Kembali
+                    </a>
+                    <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+                        <span wire:loading.remove wire:target="save">
+                            <i class="mr-1 fas fa-save"></i> Simpan Dokumen
+                        </span>
+                        <span wire:loading wire:target="save">
+                            <i class="mr-1 fas fa-spinner fa-spin"></i> Menyimpan...
+                        </span>
+                    </button>
+                </div>
         </div>
-    </section>
+        </form>
+</div>
+</section>
 </div>
