@@ -89,6 +89,7 @@
                                                                     <tr>
                                                                         <th class="px-3 py-2">Desa</th>
                                                                         <th class="px-3 py-2">Tahun</th>
+                                                                        <th class="px-3 py-2">Kode Kegiatan</th>
                                                                         <th class="px-3 py-2">Kegiatan</th>
                                                                         <th class="px-3 py-2">Sumber Dana</th>
                                                                         <th class="px-3 py-2 text-end">Pagu</th>
@@ -106,6 +107,8 @@
                                                                                 {{ $item->desa->name ?? '-' }}</td>
                                                                             <td class="px-3 py-2 align-middle">
                                                                                 {{ $item->tahun }}</td>
+                                                                            <td class="px-3 py-2 align-middle">
+                                                                                {{ $item->kd_keg }}</td>
                                                                             <td class="px-3 py-2 align-middle">
                                                                                 {{ $item->nama_kegiatan }}</td>
                                                                             <td class="px-3 py-2 align-middle">
