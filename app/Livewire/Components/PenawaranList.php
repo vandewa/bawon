@@ -35,9 +35,9 @@ class PenawaranList extends Component
     public function simpanEvaluasi()
     {
         $penawaran = Penawaran::with('paketKegiatan')->findOrFail($this->penawaranId);
-        $jumlahAnggaran = $penawaran->paketKegiatan->jumlah_anggaran;
+        $jumlahAnggaran = $penawaran->paketKegiatan->paket_type;
 
-        if ($jumlahAnggaran < 10000000) {
+        if ($jumlahAnggaran == 'PAKET_TYPE_02') {
             DB::beginTransaction();
             try {
                 $penawaran->update(['penawaran_st' => 'PENAWARAN_ST_02']);
