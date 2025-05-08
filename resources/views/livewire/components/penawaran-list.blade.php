@@ -48,7 +48,7 @@
 
                         <a href="{{ route('desa.penawaran.pelaksanaan.preview', $penawaran->id) }}"
                             class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-eye"></i> Lihat Detail
+                            <i class="fas fa-eye"></i> Evaluasi Penawaran
                         </a>
 
                         <a href="{{ route('penyedia.vendor-profile', $penawaran->vendor->id) }}"
