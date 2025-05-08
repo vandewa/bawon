@@ -86,21 +86,18 @@
                                 $modalPenawaran = \App\Models\Penawaran::with('paketKegiatan')->find($penawaranId);
                             @endphp
 
-                            @if ($modalPenawaran && $modalPenawaran->paketKegiatan->jumlah_anggaran >= 10000000)
-                                <div class="form-group">
-                                    <label for="baEvaluasi">Upload File BA Evaluasi</label>
-                                    <input type="file" wire:model="baEvaluasi" class="form-control">
-                                    <div wire:loading wire:target="baEvaluasi" class="mt-2 text-info">
-                                        <i class="fas fa-spinner fa-spin"></i> Mengunggah...
-                                    </div>
-                                    @error('baEvaluasi')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
+
+                            <div class="form-group">
+                                <label for="baEvaluasi">Upload File BA Evaluasi</label>
+                                <input type="file" wire:model="baEvaluasi" class="form-control">
+                                <div wire:loading wire:target="baEvaluasi" class="mt-2 text-info">
+                                    <i class="fas fa-spinner fa-spin"></i> Mengunggah...
                                 </div>
-                            @else
-                                <p class="text-success">Tidak perlu unggah dokumen. Penawaran dapat langsung disetujui.
-                                </p>
-                            @endif
+                                @error('baEvaluasi')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
 
                             <div class="mt-3 form-group">
                                 <button type="submit" class="btn btn-primary">Simpan</button>
