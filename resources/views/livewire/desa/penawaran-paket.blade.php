@@ -15,9 +15,13 @@
                             <h5 class="text-primary">Informasi Kegiatan</h5>
 
                             <dl class="mb-0 row">
-                                <dt class="col-sm-4">Bidang / Subbidang</dt>
+                                <dt class="col-sm-4">Bidang</dt>
                                 <dd class="col-sm-8">
                                     {{ $paketKegiatan->paketPekerjaan->nama_bidang ?? '-' }} /
+
+                                </dd>
+                                <dt class="col-sm-4">Subbidang</dt>
+                                <dd class="col-sm-8">
                                     {{ $paketKegiatan->paketPekerjaan->nama_subbidang ?? '-' }}
                                 </dd>
                                 <dt class="col-sm-4">Nama Kegiatan</dt>
@@ -223,7 +227,8 @@
                 <div class="border-0 shadow modal-content">
                     <div class="modal-header bg-info">
                         <h5 class="text-white modal-title">Pilih Vendor</h5>
-                        <button type="button" class="text-white btn-close" wire:click="$set('showModalVendor', false)">
+                        <button type="button" class="text-white btn-close"
+                            wire:click="$set('showModalVendor', false)">
                             <span>&times;</span>
                         </button>
                     </div>
