@@ -9,6 +9,7 @@ use App\Models\VendorPhoto;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use Livewire\WithTemporaryFiles;
+use Illuminate\Validation\Rule;
 
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Hash;
@@ -58,6 +59,16 @@ class VendorCreate extends Component
         'siup' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'izin_usaha_lain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'ktp_direktur' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'user.name' => 'required|string|max:255',
+    'user.email' => [
+        'required',
+        'email',
+        'max:255',
+        Rule::unique('users', 'email')->ignore($this->user['id'] ?? null),
+    ],
+    'user.password' => $this->userExists
+        ? 'nullable|string|min:6' // update → boleh kosong
+        : 'required|string|min:6', // create → wajib diisi
     ]);
 
     $vendor = Vendor::findOrFail($this->vendorId);
@@ -74,23 +85,29 @@ class VendorCreate extends Component
     $vendor->update($this->vendor);
 
     // ✅ Tambahkan atau update user
-    if ($this->userExists && !empty($this->user['id'])) {
-        // Update user yang sudah ada
-        $user = User::find($this->user['id']);
-        $user->name = $this->user['name'];
-        $user->email = $this->user['email'];
-        $user->save();
-    } else {
-        // Buat user baru
-        $user = User::create([
-            'name' => $this->user['name'],
-            'email' => $this->user['email'],
-            'password' => bcrypt('defaultpassword'), // ganti default ini sesuai kebutuhan
-            'vendor_id' => $vendor->id,
-        ]);
+    if (!empty($this->user['email'])) {
+        if ($this->userExists) {
+            // Update user yang sudah ada
+            $user = User::findOrFail($this->user['id']);
+            $user->name = $this->user['name'];
+            $user->email = $this->user['email'];
 
-        // Jika kamu menggunakan Laratrust / assign role
-        $user->syncRoles(['vendor']);
+            if (!empty($this->user['password'])) {
+                $user->password = Hash::make($this->user['password']);
+            }
+
+            $user->save();
+        } else {
+            // Buat user baru
+            $user = User::create([
+                'name' => $this->user['name'],
+                'email' => $this->user['email'],
+                'password' => Hash::make($this->user['password'] ?? 'password123'), // fallback jika password tidak diisi
+                'vendor_id' => $vendor->id,
+            ]);
+
+            $user->syncRoles(['vendor']);
+        }
     }
 
     // Simpan foto vendor

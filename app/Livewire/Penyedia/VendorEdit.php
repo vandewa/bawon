@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Validation\Rule;
 
 class VendorEdit extends Component
 {
@@ -94,6 +95,16 @@ class VendorEdit extends Component
             'siup' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'izin_usaha_lain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
             'ktp_direktur' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            'user.name' => 'required|string|max:255',
+    'user.email' => [
+        'required',
+        'email',
+        'max:255',
+        Rule::unique('users', 'email')->ignore($this->user['id'] ?? null),
+    ],
+    'user.password' => $this->userExists
+        ? 'nullable|string|min:6' // update → boleh kosong
+        : 'required|string|min:6', // create → wajib diisi
         ]);
 
         $vendor = Vendor::findOrFail($this->vendorId);
@@ -109,11 +120,29 @@ class VendorEdit extends Component
 
         $vendor->update($this->vendor);
 
-        if ($this->userExists) {
-            $user = User::find($this->user['id']);
-            $user->name = $this->user['name'];
-            $user->email = $this->user['email'];
-            $user->save();
+        if (!empty($this->user['email'])) {
+            if ($this->userExists) {
+                // Update user yang sudah ada
+                $user = User::findOrFail($this->user['id']);
+                $user->name = $this->user['name'];
+                $user->email = $this->user['email'];
+
+                if (!empty($this->user['password'])) {
+                    $user->password = Hash::make($this->user['password']);
+                }
+
+                $user->save();
+            } else {
+                // Buat user baru
+                $user = User::create([
+                    'name' => $this->user['name'],
+                    'email' => $this->user['email'],
+                    'password' => Hash::make($this->user['password'] ?? 'password123'), // fallback jika password tidak diisi
+                    'vendor_id' => $vendor->id,
+                ]);
+
+                $user->syncRoles(['vendor']);
+            }
         }
 
         if ($this->foto_vendor && is_array($this->foto_vendor)) {
