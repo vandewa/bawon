@@ -303,10 +303,16 @@
                                                 @enderror
                                             </div>
 
+                                            <div wire:loading wire:target="ba_negoisasi" class="text-info mt-1">
+                                                <i class="fas fa-spinner fa-spin"></i> Mengunggah file...
+                                            </div>
+
                                             <div class="mt-3 form-group">
                                                 <button type="submit" class="btn btn-primary">Unggah BA</button>
                                                 <button type="button" class="btn btn-secondary"
                                                     wire:click="closeModal">Batal</button>
+                                                <button type="button" class="btn btn-success ml-2">Generate
+                                                    BA</button>
                                             </div>
                                         </form>
                                     </div>
