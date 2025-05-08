@@ -17,7 +17,7 @@
                             <dl class="mb-0 row">
                                 <dt class="col-sm-4">Bidang</dt>
                                 <dd class="col-sm-8">
-                                    {{ $paketKegiatan->paketPekerjaan->nama_bidang ?? '-' }} /
+                                    {{ $paketKegiatan->paketPekerjaan->nama_bidang ?? '-' }}
 
                                 </dd>
                                 <dt class="col-sm-4">Subbidang</dt>
