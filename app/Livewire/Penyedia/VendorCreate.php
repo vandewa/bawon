@@ -73,46 +73,30 @@ class VendorCreate extends Component
         : 'required|string|min:6', // create → wajib diisi
     ]);
 
-    $vendor = Vendor::findOrFail($this->vendorId);
+    $vendor = Vendor::create($this->vendor);
 
-    foreach ([
-        'akta_pendirian', 'nib_file', 'npwp_file', 'siup', 'izin_usaha_lain', 'ktp_direktur'
-    ] as $field) {
+    // Upload dokumen
+    foreach (['akta_pendirian', 'nib_file', 'npwp_file', 'siup', 'izin_usaha_lain', 'ktp_direktur'] as $field) {
         if ($this->$field) {
             $path = $this->$field->store('vendor/dokumen');
             $vendor->$field = $path;
         }
     }
+    $vendor->save(); // simpan kembali jika ada dokumen
 
-    $vendor->update($this->vendor);
-
-    // ✅ Tambahkan atau update user
+    // Buat user baru jika disediakan
     if (!empty($this->user['email'])) {
-        if ($this->userExists) {
-            // Update user yang sudah ada
-            $user = User::findOrFail($this->user['id']);
-            $user->name = $this->user['name'];
-            $user->email = $this->user['email'];
+        $user = User::create([
+            'name' => $this->user['name'],
+            'email' => $this->user['email'],
+            'password' => Hash::make($this->user['password']),
+            'vendor_id' => $vendor->id,
+        ]);
 
-            if (!empty($this->user['password'])) {
-                $user->password = Hash::make($this->user['password']);
-            }
-
-            $user->save();
-        } else {
-            // Buat user baru
-            $user = User::create([
-                'name' => $this->user['name'],
-                'email' => $this->user['email'],
-                'password' => Hash::make($this->user['password'] ?? 'password123'), // fallback jika password tidak diisi
-                'vendor_id' => $vendor->id,
-            ]);
-
-            $user->syncRoles(['vendor']);
-        }
+        $user->syncRoles(['vendor']);
     }
 
-    // Simpan foto vendor
+    // Simpan multi-foto
     if ($this->foto_vendor && is_array($this->foto_vendor)) {
         foreach ($this->foto_vendor as $foto) {
             $path = $foto->store('vendor/foto', 'public');
@@ -123,8 +107,10 @@ class VendorCreate extends Component
         }
     }
 
-    session()->flash('message', 'Vendor berhasil diperbarui.');
+    session()->flash('message', 'Vendor berhasil ditambahkan.');
     return redirect()->route('penyedia.vendor-index');
+
+
 }
 
 
