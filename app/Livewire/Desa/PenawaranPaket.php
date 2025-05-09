@@ -187,13 +187,18 @@ public function kirimUndangan()
 
     $this->loadPenawarans(); // Refresh tabel
 
-    $this->js(<<<'JS'
-    Swal.fire({
-        title: 'Berhasil!',
-        text: 'Semua undangan berhasil dikirim!',
-        icon: 'success'
-    })
-    JS);
+    $route = route('desa.penawaran.pelaksanaan.index');
+
+        $this->js(<<<JS
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Dokumen berhasil diperbarui.',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = "$route";
+            });
+        JS);
 }
 
 
