@@ -22,6 +22,8 @@ class VendorCreate extends Component
     public $foto_vendor = [];
     public $single_foto;
 
+    public $userExists;
+
 
 
     public $user = [];
