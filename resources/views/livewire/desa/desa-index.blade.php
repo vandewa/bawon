@@ -53,8 +53,7 @@
                                                     <div class="mb-3 row">
                                                         <div class="col-md-3">
                                                             <input type="text" class="form-control"
-                                                                placeholder="🔍 Cari Desa..."
-                                                                wire:model.debounce.500ms="cari">
+                                                                placeholder="🔍 Cari Desa..." wire:model.live="cari">
                                                         </div>
                                                     </div>
 
