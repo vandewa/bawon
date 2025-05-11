@@ -322,7 +322,7 @@
                           </li>
                           <li class="nav-item">
                               <a href="{{ route('penyedia.lelang-index') }}"
-                                  class="nav-link {{ Request::segment(2) == 'lelang-index' ? 'active' : '' }}">
+                                  class="nav-link {{ Request::segment(2) == 'lelang-index' ? 'active' : '' }}{{ Request::segment(2) == 'pengajuan-lelang' ? 'active' : '' }}">
                                   <i class="nav-icon fas fa-gavel"></i>
                                   <p>
                                       Lelang
