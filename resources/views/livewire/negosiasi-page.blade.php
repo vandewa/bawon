@@ -238,21 +238,24 @@
                                     @enderror
                                 </div>
 
-                                <div class="gap-2 mt-3 d-flex">
-                                    <button type="submit" class="btn btn-primary"
+                                <div class="gap-2 mt-3 d-flex justify-content-start">
+                                    <!-- Simpan Negosiasi Log Button -->
+                                    <button type="submit" class="btn btn-primary mr-2"
                                         {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
-                                        Simpan Negosiasi Log
+                                        <i class="fas fa-save"></i> Simpan Negosiasi Log
                                     </button>
 
+                                    <!-- Upload BA Negosiasi Button -->
                                     @role(['desa', 'dinsos', 'superadministrator'])
                                         @if ($negosiasiStatus != 'NEGOSIASI_ST_02' && $negosiasiLogs->contains('status_st', true))
                                             <button type="button" class="btn btn-success" wire:click="openModal">
-                                                Upload BA Negosiasi
+                                                <i class="fas fa-upload"></i> Upload Berita Acara Negosiasi
                                             </button>
                                         @endif
                                     @endrole
-
                                 </div>
+
+
 
                                 @if ($lastSenderId == auth()->id())
                                     <p class="mt-2 text-danger">Menunggu balasan pihak lain sebelum dapat mengisi
@@ -269,7 +272,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Upload BA Negosiasi</h5>
+                                        <h5 class="modal-title">Upload Berita Acara Negosiasi</h5>
                                         <button type="button" class="close" wire:click="closeModal"
                                             aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
@@ -295,7 +298,8 @@
                                             </div>
 
                                             <div class="mt-3 form-group">
-                                                <label for="ba_negoisasi">Pilih BA Negosiasi (PDF/JPG/PNG)</label>
+                                                <label for="ba_negoisasi">Pilih Berita Acara Negosiasi
+                                                    (PDF/JPG/PNG)</label>
                                                 <input type="file" wire:model="ba_negoisasi" class="form-control"
                                                     id="ba_negoisasi" required>
                                                 @error('ba_negoisasi')
@@ -307,13 +311,28 @@
                                                 <i class="fas fa-spinner fa-spin"></i> Mengunggah file...
                                             </div>
 
-                                            <div class="mt-3 form-group">
-                                                <button type="submit" class="btn btn-primary">Unggah BA</button>
-                                                <button type="button" class="btn btn-secondary"
-                                                    wire:click="closeModal">Batal</button>
-                                                <button type="button" class="btn btn-success ml-2">Generate
-                                                    BA</button>
+                                            <div class="mt-3 form-group d-flex justify-content-start gap-3">
+                                                <!-- Unggah BA Button -->
+                                                <button type="submit"
+                                                    class="btn btn-primary d-flex align-items-center mr-1">
+                                                    <i class="mr-1 fas fa-upload"></i> Upload
+                                                </button>
+
+                                                <!-- Batal Button -->
+                                                <button type="button"
+                                                    class="btn btn-secondary d-flex align-items-center mr-1"
+                                                    wire:click="closeModal">
+                                                    <i class="mr-1 fas fa-times"></i> Batal
+                                                </button>
+
+                                                <!-- Generate BA Button -->
+                                                <a href="{{ route('generator.penyedia.berita-acara-hasil-negosiasi') }}"
+                                                    target="_blank"
+                                                    class="btn btn-outline-success d-flex align-items-center ml-auto">
+                                                    <i class="mr-1 fas fa-file-download"></i> Generate Berita Acara
+                                                </a>
                                             </div>
+
                                         </form>
                                     </div>
                                 </div>

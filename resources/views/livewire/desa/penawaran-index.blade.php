@@ -238,7 +238,7 @@
                             @error('fileSuratPerjanjian')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            <div wire:loading wire:target="fileSuratPerjanjian" class="mt-2 text-warning">
+                            <div wire:loading wire:target="fileSuratPerjanjian" class="mt-2 text-info">
                                 <i class="fa fa-spinner fa-spin"></i> Uploading Surat Perjanjian...
                             </div>
                         </div>
@@ -251,7 +251,7 @@
                             @error('fileSPK')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
-                            <div wire:loading wire:target="fileSPK" class="mt-2 text-warning">
+                            <div wire:loading wire:target="fileSPK" class="mt-2 text-info">
                                 <i class="fa fa-spinner fa-spin"></i> Uploading SPK...
                             </div>
                         </div>
