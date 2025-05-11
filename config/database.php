@@ -104,12 +104,11 @@ return [
     'charset'  => env('DB_CHARSET', 'utf8'),
     'prefix'   => '',
     'prefix_indexes' => true,
-   'options' => extension_loaded('sqlsrv') ? array_filter([
-    PDO::SQLSRV_ATTR_ENCRYPT => env('DB_ENCRYPT_SQLSRV', true), // true = "Encrypt=Yes"
-    PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE => env('DB_TRUST_SERVER_CERTIFICATE_SQLSRV', true),
-]) : [],
-
-    ],
+   'options' => extension_loaded('sqlsrv') ? [
+        PDO::SQLSRV_ATTR_ENCRYPT => true,
+        PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE => true,
+    ] : [],
+],
 
     /*
     |--------------------------------------------------------------------------
