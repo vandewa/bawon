@@ -64,6 +64,9 @@ use App\Livewire\Generator\Swakelola\SuratPenyampaianDokumenPersiapan as Swakelo
 use App\Livewire\Generator\Penyedia\LaporanHasilPemeriksaanOlehKasiKaur as PenyediaLaporanHasilPemeriksaanOlehKasiKaur;
 use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan as SwakelolaHasilPembahasanKegiatanPersiapanPengadaan;
 
+use App\Livewire\Generator\Desa\Tpk as GeneratorTpk;
+
+
 // use App\Livewire\Generator\SpesifikasiTeknisEditor;
 
 
@@ -173,6 +176,7 @@ Route::middleware([
         Route::get('aparatur-index/{id?}', AparaturIndex::class)->name('aparatur-index');
         Route::get('pelaporan-index/{id?}', PelaporanDetail::class)->name('pelaporan-detail');
         Route::get('tpk-index/{id?}', TpkIndex::class)->name('tpk-index');
+        Route::get('generator-tpk/{desaId?}/{tahun?}', GeneratorTpk::class)->name('generator-tpk');
 
 
     });

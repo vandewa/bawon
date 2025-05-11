@@ -13,7 +13,7 @@ class TpkIndex extends Component
 {
     use WithPagination;
 
-    public $desa_id, $aparatur_id, $tpk_type, $tahun;
+    public $desa_id, $aparatur_id, $tpk_type, $tahun, $cari;
     public $tpk_id;
     public $isEdit = false;
 
@@ -21,19 +21,38 @@ class TpkIndex extends Component
     {
         $this->desa_id = $id;
         $this->tahun = date('Y');
+
     }
 
     public function render()
     {
-        $tpk = Tpk::with(['desa', 'aparatur', 'jenis'])->where('desa_id', $this->desa_id)->paginate(10);
+        $tahunDefault = date('Y'); // Tahun sekarang
+        $tpk = Tpk::with(['desa', 'aparatur', 'jenis'])
+            ->when(empty($this->cari), function ($query) use ($tahunDefault) {
+                // Jika $this->cari kosong, gunakan tahun ini
+                $query->where('tahun', $tahunDefault);
+            }, function ($query) {
+                // Jika $this->cari tidak kosong, lakukan pencarian dengan $this->cari
+                $query->where('tahun', 'like', '%' . $this->cari . '%');
+            })
+            ->where('desa_id', $this->desa_id)
+            ->paginate(10);
+
 
         $aparatur = Aparatur::where('desa_id', $this->desa_id)->get();
         $jenis = ComCode::where('code_group', 'TPK_TYPE')->get();
+        // Ambil daftar tahun yang ada pada tabel 'tpks' dan mengurutkannya secara descending
+        $tahunList = Tpk::select('tahun')
+            ->distinct()
+            ->orderBy('tahun', 'desc')
+            ->get()
+            ->pluck('tahun'); // Ambil hanya kolom tahun
 
         return view('livewire.desa.tpk-index', [
             'tpks' => $tpk,
             'aparaturs' => $aparatur,
             'jenis' => $jenis,
+            'tahunList' => $tahunList,
         ]);
     }
 
@@ -51,6 +70,7 @@ class TpkIndex extends Component
         if ($this->tpk_type == 'TPK_TYPE_01' || $this->tpk_type == 'TPK_TYPE_02') {
             $existingTpk = Tpk::where('tpk_type', $this->tpk_type)
                 ->where('tahun', $this->tahun)
+                ->where('desa_id', $this->desa_id)
                 ->first();
 
             if ($existingTpk) {
@@ -95,6 +115,7 @@ class TpkIndex extends Component
             $existingTpk = Tpk::where('tpk_type', $this->tpk_type)
                 ->where('tahun', $this->tahun)
                 ->where('id', '!=', $this->tpk_id) // Menghindari pengecekan pada data yang sedang diupdate
+                ->where('desa_id', $this->desa_id)
                 ->exists();
             if ($existingTpk) {
                 session()->flash('error', 'Hanya boleh ada satu Ketua atau Sekretaris dalam tahun yang sama.');
