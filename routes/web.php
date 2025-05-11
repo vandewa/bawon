@@ -65,6 +65,9 @@ use App\Livewire\Generator\Penyedia\LaporanHasilPemeriksaanOlehKasiKaur as Penye
 use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan as SwakelolaHasilPembahasanKegiatanPersiapanPengadaan;
 
 use App\Livewire\Generator\Desa\Tpk as GeneratorTpk;
+use App\Livewire\Penyedia\LelangIndex;
+use App\Livewire\Penyedia\PengajuanLelangCreate;
+
 
 
 // use App\Livewire\Generator\SpesifikasiTeknisEditor;
@@ -187,6 +190,8 @@ Route::middleware([
         Route::get('vendor-index/vendor-edit/{id}', VendorEdit::class)->name('vendor-edit');
         Route::get('penawaran-index', PaketPekerjaanPenyediaIndex::class)->name('penawaran-index');
         Route::get('penawaran-index/{penawaranId}/create', PengajuanPenawaranCreate::class)->name('penawaran.create');
+        Route::get('lelang-index', LelangIndex::class)->name('lelang-index');
+        Route::get('pengajuan-lelang/create/{paketKegiatanId?}/{vendorId?}', PengajuanLelangCreate::class)->name('pengajuan-lelang.create');
 
 
     });

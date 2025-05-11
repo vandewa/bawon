@@ -3,7 +3,7 @@
         <div class="mb-1 row">
             <div class="col-sm-6 d-flex align-items-center">
                 <h3 class="m-0">
-                    <i class="mr-2 fas fa-briefcase"></i> Paket Pekerjaan untuk Penyedia
+                    <i class="mr-2 fas fa-briefcase"></i> Paket Lelang untuk Penyedia
                 </h3>
             </div>
             <div class="col-sm-6">
@@ -12,7 +12,7 @@
                         <a href="#"><i class="fas fa-building"></i> Penyedia</a>
                     </li>
                     <li class="breadcrumb-item active">
-                        <i class="fas fa-tasks"></i> Paket Pekerjaan
+                        <i class="fas fa-tasks"></i> Paket Lelang
                     </li>
                 </ol>
             </div>
@@ -53,34 +53,34 @@
                                                 onmouseover="this.style.background='#f0f9ff'"
                                                 onmouseout="this.style.background='white'">
                                                 <td class="px-3 py-2 align-middle">
-                                                    {{ $item->paketKegiatan->paketPekerjaan->desa->name ?? '-' }}
+                                                    {{ $item->paketPekerjaan->desa->name ?? '-' }}
                                                 </td>
                                                 <td class="px-3 py-2 align-middle">
-                                                    {{ $item->paketKegiatan->paketPekerjaan->tahun ?? '-' }}
+                                                    {{ $item->paketPekerjaan->tahun ?? '-' }}
                                                 </td>
                                                 <td class="px-3 py-2 align-middle">
-                                                    {{ $item->paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}
+                                                    {{ $item->paketPekerjaan->nama_kegiatan ?? '-' }}
                                                 </td>
                                                 <td class="px-3 py-2 align-middle">
                                                     <span
                                                         class="badge
-                                                        @switch($item->paketKegiatan->paketType->com_cd ?? '')
+                                                        @switch($item->paketType->com_cd ?? '')
                                                             @case('PAKET_TYPE_01') bg-primary @break
                                                             @case('PAKET_TYPE_02') bg-warning text-dark @break
                                                             @case('PAKET_TYPE_03') bg-success @break
                                                             @default bg-secondary
                                                         @endswitch">
-                                                        {{ $item->paketKegiatan->paketType->code_nm ?? '-' }}
+                                                        {{ $item->paketType->code_nm ?? '-' }}
                                                     </span>
                                                 </td>
                                                 <td class="px-3 py-2 align-middle text-end">
-                                                    Rp{{ number_format($item->paketKegiatan->jumlah_anggaran ?? 0, 0, ',', '.') }}
+                                                    Rp{{ number_format($item->jumlah_anggaran ?? 0, 0, ',', '.') }}
                                                 </td>
                                                 <td class="px-3 py-2 align-middle text-end">
-                                                    Rp{{ number_format($item->paketKegiatan->nilai_kontrak ?? 0, 0, ',', '.') }}
+                                                    Rp{{ number_format($item->nilai_kontrak ?? 0, 0, ',', '.') }}
                                                 </td>
                                                 <td class="px-3 py-2 align-middle">
-                                                    <ul class="mb-0 list-unstyled">
+                                                    {{-- <ul class="mb-0 list-unstyled">
                                                         <li>
                                                             @if ($item->bukti_setor_pajak)
                                                                 <i class="fas fa-check-circle text-success"></i>
@@ -111,10 +111,10 @@
                                                                 Kebenaran Usaha
                                                             @endif
                                                         </li>
-                                                    </ul>
+                                                    </ul> --}}
                                                 </td>
                                                 <td class="px-3 py-2 align-middle">
-                                                    @if ($item->statusPenawaran)
+                                                    {{-- @if ($item->statusPenawaran)
                                                         <span
                                                             class="badge
                                                             @switch($item->statusPenawaran->com_cd)
@@ -127,15 +127,17 @@
                                                         </span>
                                                     @else
                                                         <span class="badge badge-secondary">-</span>
-                                                    @endif
+                                                    @endif --}}
                                                 </td>
+                                                {{-- <h1>{{ $item->id . ' ' . auth()->user()->vendor_id }}</h1> --}}
                                                 <td class="px-3 py-2 text-center align-middle">
                                                     <div class="d-flex justify-content-center gap-3">
                                                         <!-- Tombol Upload/Edit -->
-                                                        <a href="{{ route('penyedia.penawaran.create', $item->id) }}"
+                                                        <a href="{{ route('penyedia.pengajuan-lelang.create', ['paketKegiatanId' => $item->id, 'vendorId' => auth()->user()->vendor_id]) }}"
                                                             class="btn btn-outline-secondary btn-sm d-flex align-items-center mr-1">
                                                             <i class="mr-1 fas fa-upload"></i> Upload/Edit
                                                         </a>
+
 
                                                         <!-- Tombol Negosiasi (conditional) -->
                                                         @if (
@@ -149,7 +151,6 @@
                                                         @endif
                                                     </div>
                                                 </td>
-
                                             </tr>
                                         @empty
                                             <tr>

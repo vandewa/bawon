@@ -314,15 +314,15 @@
                                   <i class="nav-icon fas fa-file-signature"></i>
                                   <p>
                                       Penawaran
-                                      <span class="badge badge-{{ $jumlahPenawaran > 0 ? 'danger' : 'secondary' }} ml-2">
-                                          {{ $jumlahPenawaran }}
+                                      <span class="badge badge-{{ badgePenawaran() > 0 ? 'danger' : 'secondary' }} ml-2">
+                                          {{ badgePenawaran() }}
                                       </span>
                                   </p>
                               </a>
                           </li>
                           <li class="nav-item">
-                              <a href="{{ route('desa.penawaran.pelaksanaan.index') }}"
-                                  class="nav-link {{ Request::segment(2) == 'pelaksanaan-index' ? 'active' : '' }}">
+                              <a href="{{ route('penyedia.lelang-index') }}"
+                                  class="nav-link {{ Request::segment(2) == 'lelang-index' ? 'active' : '' }}">
                                   <i class="nav-icon fas fa-gavel"></i>
                                   <p>
                                       Lelang

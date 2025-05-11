@@ -22,10 +22,14 @@ class PaketPekerjaanPenyediaIndex extends Component
             'paketKegiatan.paketType', // tambahkan ini
             'statusPenawaran'
         ])
-        ->where('kirim_st', true)
-        ->whereHas('paketKegiatan.paketPekerjaan', function ($query) {
-            $query->where('nama_kegiatan', 'like', '%' . $this->cari . '%');
-        });
+            ->where('kirim_st', true)
+            ->whereHas('paketKegiatan.paketPekerjaan', function ($query) {
+                $query->where('nama_kegiatan', 'like', '%' . $this->cari . '%');
+            })
+            ->whereHas('paketKegiatan', function ($query) {
+                // Menambahkan kondisi untuk filter paket_type = PAKET_TYPE_01
+                $query->where('paket_type', 'PAKET_TYPE_01');
+            });
 
         if (Auth::user()->vendor_id) {
             $posts->where('vendor_id', Auth::user()->vendor_id);
