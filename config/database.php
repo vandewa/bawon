@@ -112,8 +112,8 @@ return [
             'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE_SQLSRV', true),
 
             'options' => extension_loaded('sqlsrv') ? [
-                PDO::SQLSRV_ATTR_ENCRYPT => true,
-                PDO::SQLSRV_ATTR_TRUST_SERVER_CERTIFICATE => true,
+                "Encrypt" => "yes",
+                "TrustServerCertificate" => "yes",
             ] : [],
         ]
 
