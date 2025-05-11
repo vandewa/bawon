@@ -95,21 +95,27 @@ return [
         ],
 
        'sqlsrv' => [
-    'driver'   => 'sqlsrv',
-    'host'     => env('DB_HOST_SQLSRV'),
-    'port'     => env('DB_PORT_SQLSRV'),
-    'database' => env('DB_DATABASE_SQLSRV'),
-    'username' => env('DB_USERNAME_SQLSRV'),
-    'password' => env('DB_PASSWORD_SQLSRV'),
-    'charset'  => env('DB_CHARSET', 'utf8'),
-    'prefix'   => '',
-    'prefix_indexes' => true,
-    // force the driver to see exactly “Yes”/“True”
-    'options'  => extension_loaded('sqlsrv') ? array_filter([
-        'Encrypt'                => env('DB_ENCRYPT_SQLSRV', 'Yes'),
-        'TrustServerCertificate' => env('DB_TRUST_SERVER_CERTIFICATE_SQLSRV', 'True'),
-    ]) : [],
-],
+            'driver'               => 'sqlsrv',
+            'url'                  => env('DB_URL_SQLSRV'),
+            'host'                 => env('DB_HOST_SQLSRV', 'localhost'),
+            'port'                 => env('DB_PORT_SQLSRV', '1433'),
+            'database'             => env('DB_DATABASE_SQLSRV', 'laravel'),
+            'username'             => env('DB_USERNAME_SQLSRV', 'root'),
+            'password'             => env('DB_PASSWORD_SQLSRV', ''),
+            'charset'              => env('DB_CHARSET', 'utf8'),
+            'prefix'               => '',
+            'prefix_indexes'       => true,
+
+            // disable TLS encryption
+            'encrypt'              => env('DB_ENCRYPT_SQLSRV', false),
+            // trust self‑signed certificate
+            'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE_SQLSRV', true),
+
+            'options' => extension_loaded('sqlsrv') ? [
+                "Encrypt" => "yes",
+                "TrustServerCertificate" => "yes",
+            ] : [],
+        ]
 
     ],
 
