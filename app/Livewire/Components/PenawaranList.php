@@ -44,15 +44,15 @@ class PenawaranList extends Component
 
                 Penawaran::where('paket_kegiatan_id', $penawaran->paket_kegiatan_id)
                     ->where('id', '!=', $penawaran->id)
-                    ->update(['nilai_kesepakatan' =>   $jumlahAnggaran ]);
+                    ->update(['nilai' =>   $penawaran->jumlah_anggaran ]);
 
-                PaketKegiatan::where('id', $penawaran->paket_kegiatan_id)
-                    ->update(['kegiatan_st' => 'KEGIATAN_ST_02']);
+                // PaketKegiatan::where('id', $penawaran->paket_kegiatan_id)
+                //     ->update(['kegiatan_st' => 'KEGIATAN_ST_02']);
 
                 Negoisasi::create([
                     'paket_kegiatan_id' => $penawaran->paket_kegiatan_id,
                     'vendor_id' => $penawaran->vendor_id,
-                    'nilai' =>   $jumlahAnggaran ,
+                    'nilai' =>    $penawaran->jumlah_anggaran ,
                     'negosiasi_st' => 'NEGOSIASI_ST_02',
                     'ba_negoisasi' => null,
                 ]);
@@ -103,13 +103,16 @@ class PenawaranList extends Component
                 DB::commit();
                 $this->closeModal();
 
-                $this->js(<<<'JS'
+                $route = route('desa.penawaran.pelaksanaan.index');
+
+                $this->js(<<<JS
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
-                        text: 'Penawaran dan BA Evaluasi berhasil disimpan.',
-                        timer: 2000,
-                        showConfirmButton: false
+                        text: 'Dokumen berhasil diperbarui.',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = "$route";
                     });
                 JS);
             } catch (\Exception $e) {
