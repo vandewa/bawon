@@ -1,7 +1,7 @@
 <div>
     <div class="container">
         <x-slot name="header">
-            <h1 class="m-0 text-dark">Manajemen TPK</h1>
+            <h1 class="m-0 text-dark">Manajemen Tim Pelaksana Kegiatan</h1>
         </x-slot>
 
         @if (session()->has('message'))

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Penawaran;
 use App\Models\Pengajuan;
 use Illuminate\Support\Facades\DB;
 
@@ -127,3 +128,19 @@ if (!function_exists('formatTanggalIndonesia')) {
     }
 }
 
+
+if (!function_exists('badgePenawaran')) {
+    function badgePenawaran()
+    {
+        return Penawaran::with(['paketKegiatan'])
+            ->whereHas('paketKegiatan', function ($query) {
+                $query->where('paket_type', 'PAKET_TYPE_01');
+            })
+            ->where('bukti_setor_pajak', null)
+            ->orWhere('dok_penawaran', null)
+            ->orWhere('dok_kebenaran_usaha', null)
+            ->where('vendor_id', auth()->user()->vendor_id)
+            ->count();
+    }
+
+}

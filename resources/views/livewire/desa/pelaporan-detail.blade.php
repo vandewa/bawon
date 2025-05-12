@@ -20,7 +20,7 @@
                     <div class="mb-4 row">
                         @foreach ([['label' => 'HPS', 'value' => $paketKegiatan->jumlah_anggaran], ['label' => 'Nilai Pengadaan', 'value' => $paketKegiatan->nilai_kesepakatan], ['label' => 'Sisa', 'value' => $paketKegiatan->jumlah_anggaran - $paketKegiatan->nilai_kesepakatan ?? '-']] as $stat)
                             <div class="col-md-4">
-                                <div class="text-center shadow-sm card">
+                                <div class="text-center card shadow-lg rounded">
                                     <div class="card-body">
                                         <div class="text-muted small">{{ $stat['label'] }}</div>
                                         <div class="h5">
@@ -32,40 +32,64 @@
                         @endforeach
                     </div>
 
+
                     <!-- Profil Vendor -->
-                    <div class="mb-4 shadow-sm card">
-                        <div class="card-header bg-light">
-                            <strong>Profil Vendor</strong>
+                    <div class="mb-4 shadow-md card">
+                        <div class="card-header bg-secondary">
+                            <strong>Profil Penyedia</strong>
                         </div>
                         <div class="card-body">
-                            <div class="mb-3 media">
-                                <img class="mr-3 rounded-circle" width="48"
+                            <div class="mb-3 d-flex align-items-start">
+                                <!-- Vendor Image -->
+                                <img class="mr-3 rounded-circle" width="80" height="80"
                                     src="https://ui-avatars.com/api/?name={{ urlencode($paketKegiatan->negosiasi?->vendor?->nama_perusahaan ?? 'V') }}"
                                     alt="vendor">
+
+                                <!-- Vendor Details -->
                                 <div class="media-body">
-                                    <h6 class="mt-0 mb-1">
-                                        {{ $paketKegiatan->negosiasi?->vendor?->nama_perusahaan ?? '-' }}</h6>
-                                    <p class="mb-1"><small class="text-muted">NIB:
-                                            {{ $paketKegiatan->negosiasi?->vendor?->nib ?? '-' }}</small></p>
-                                    <p class="mb-1">NPWP: {{ $paketKegiatan->negosiasi?->vendor?->npwp ?? '-' }}</p>
-                                    <p class="mb-1">Alamat: {{ $paketKegiatan->negosiasi?->vendor?->alamat ?? '-' }}
-                                    </p>
-                                    <p class="mb-1">Telepon: {{ $paketKegiatan->negosiasi?->vendor?->telepon ?? '-' }}
-                                    </p>
-                                    <p class="mb-1">Direktur:
-                                        {{ $paketKegiatan->negosiasi?->vendor?->nama_direktur ?? '-' }}</p>
+                                    <table class="no-border"
+                                        style="width: 100%; font-family: Arial, sans-serif; font-size: 10pt; border: none; border-collapse: collapse;">
+                                        <tr>
+                                            <td style="width: 30%;"><strong>Nama Perusahaan</strong></td>
+                                            <td style="width: 70%;">
+                                                {{ $paketKegiatan->negosiasi?->vendor?->nama_perusahaan ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>NIB</strong></td>
+                                            <td>{{ $paketKegiatan->negosiasi?->vendor?->nib ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>NPWP</strong></td>
+                                            <td>{{ $paketKegiatan->negosiasi?->vendor?->npwp ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Alamat</strong></td>
+                                            <td>{{ $paketKegiatan->negosiasi?->vendor?->alamat ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Telepon</strong></td>
+                                            <td>{{ $paketKegiatan->negosiasi?->vendor?->telepon ?? '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Direktur</strong></td>
+                                            <td>{{ $paketKegiatan->negosiasi?->vendor?->nama_direktur ?? '-' }}</td>
+                                        </tr>
+                                    </table>
+
                                     <a href="{{ route('penyedia.vendor-profile', $paketKegiatan->negosiasi?->vendor?->id) }}"
                                         class="mt-2 btn btn-sm btn-outline-primary">
                                         <i class="fas fa-user"></i> Lihat Profil Lengkap
                                     </a>
                                 </div>
+
                             </div>
                         </div>
                     </div>
 
+
                     <!-- Upload Dokumen dan Tutup/Batal Kegiatan -->
-                    <div class="mb-4 shadow-sm card border-top border-primary">
-                        <div class="text-white card-header bg-primary">
+                    <div class="mb-4 shadow-md card border-top border-primary">
+                        <div class="text-white card-header bg-secondary">
                             <i class="fas fa-upload"></i> Upload Dokumen Pelaporan Akhir
                         </div>
                         <div class="card-body">
@@ -73,9 +97,9 @@
                                 @if ($paketKegiatan->paket_kegiatan === 'PAKET_KEGIATAN_ST_02')
                                     <div class="row">
                                         @foreach ([
-        'laporan_hasil_pemeriksaan' => 'Laporan Hasil Pemeriksaan',
-        'bast_penyedia' => 'BAST Penyedia',
-        'bast_kades' => 'BAST Kepala Desa',
+        'laporan-hasil-pemeriksaan' => 'Laporan Hasil Pemeriksaan',
+        'bast-dari-penyedia-kepada-kasi' => 'BAST Penyedia',
+        'bast-dari-kasi-kepada-kades' => 'BAST Kepala Desa',
     ] as $field => $label)
                                             <div class="mb-3 col-md-4">
                                                 <label for="{{ $field }}"
@@ -83,10 +107,10 @@
                                                 <div class="input-group">
                                                     <input type="file" wire:model="{{ $field }}"
                                                         class="form-control">
-                                                    <button type="button" class="btn btn-outline-secondary"
-                                                        wire:click="generateDummy('{{ $field }}')">
+                                                    <a href="{{ route('generator.penyedia.' . $field) }}"
+                                                        target="_blank" class="btn btn-outline-info">
                                                         <i class="fas fa-magic"></i>
-                                                    </button>
+                                                    </a>
                                                 </div>
                                                 @error($field)
                                                     <small class="text-danger">{{ $message }}</small>
@@ -127,19 +151,22 @@
                 <!-- Right Side -->
                 <div class="col-md-4">
                     <div class="mb-4 shadow-sm card">
-                        <div class="bg-white card-header">
+                        <div class="bg-secondary card-header">
                             <strong>Informasi Proyek</strong>
                         </div>
                         <div class="card-body">
                             <p><strong>Nama
                                     Kegiatan:</strong><br>{{ $paketKegiatan->paketPekerjaan->nama_kegiatan ?? '-' }}
                             </p>
-                            <p><strong>Status:</strong><br>{{ $paketKegiatan->statusKegiatan->code_nm ?? '-' }}</p>
+                            <p><strong>Status:</strong><br>
+                                <span class="badge badge-info">
+                                    {{ $paketKegiatan->statusKegiatan->code_nm ?? '-' }}</span>
+                            </p>
                         </div>
                     </div>
 
                     <div class="shadow-sm card">
-                        <div class="bg-white card-header">
+                        <div class="bg-secondary card-header">
                             <strong><i class="fas fa-file-alt"></i> Dokumen Tersedia</strong>
                         </div>
                         <div class="list-group list-group-flush">
@@ -168,7 +195,7 @@
                                     {{ $label }}
                                     @if ($file)
                                         <a href="{{ route('helper.show-picture', ['path' => $file]) }}" target="_blank"
-                                            class="badge bg-success">Lihat</a>
+                                            class="badge bg-primary">Lihat</a>
                                     @else
                                         <span class="badge bg-secondary">-</span>
                                     @endif
