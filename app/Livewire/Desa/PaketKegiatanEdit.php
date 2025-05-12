@@ -104,7 +104,16 @@ class PaketKegiatanEdit extends Component
             ->where('use_st', true)
             ->update(['use_st' => false]);
 
-        PaketPekerjaanRinci::whereIn('id', $this->selectedRincian)->update(['use_st' => true]);
+            PaketPekerjaanRinci::where('paket_pekerjaan_id', $this->paketPekerjaan->id)
+            ->whereIn('id', function ($query) {
+                $query->select('paket_pekerjaan_rinci_id')->from('paket_kegiatan_rincis');
+            })->update(['use_st' => true]);
+
+        // Set false untuk yang tidak dipakai
+        PaketPekerjaanRinci::where('paket_pekerjaan_id', $this->paketPekerjaan->id)
+            ->whereNotIn('id', function ($query) {
+                $query->select('paket_pekerjaan_rinci_id')->from('paket_kegiatan_rincis');
+            })->update(['use_st' => false]);
 
         session()->flash('message', 'Dokumen berhasil diperbarui.');
         $route = route('desa.paket-kegiatan', ['paketPekerjaanId' => $this->paketPekerjaan->id]);

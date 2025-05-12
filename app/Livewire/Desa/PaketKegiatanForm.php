@@ -29,6 +29,7 @@ class PaketKegiatanForm extends Component
         $this->paketTypes = ComCode::paketTypes();
 
         $this->rincianList = PaketPekerjaanRinci::where('paket_pekerjaan_id', $paketPekerjaanId)
+        ->where('use_st', false)
 
             ->get()
             ->toArray();
@@ -71,7 +72,17 @@ class PaketKegiatanForm extends Component
         }
 
         // Tandai rincian sebagai sudah digunakan
-        PaketPekerjaanRinci::whereIn('id', $this->selectedRincian)->update(['use_st' => true]);
+       // Set true untuk yang dipakai
+        PaketPekerjaanRinci::where('paket_pekerjaan_id', $this->paketPekerjaan->id)
+        ->whereIn('id', function ($query) {
+            $query->select('paket_pekerjaan_rinci_id')->from('paket_kegiatan_rincis');
+        })->update(['use_st' => true]);
+
+        // Set false untuk yang tidak dipakai
+        PaketPekerjaanRinci::where('paket_pekerjaan_id', $this->paketPekerjaan->id)
+        ->whereNotIn('id', function ($query) {
+            $query->select('paket_pekerjaan_rinci_id')->from('paket_kegiatan_rincis');
+        })->update(['use_st' => false]);
 
 
 

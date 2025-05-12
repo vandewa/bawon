@@ -125,7 +125,7 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th>Pilih</th>
-                                            <th>No</th>
+                                            <th>Kode Rincian</th>
                                             <th>Uraian</th>
                                             <th>Jumlah</th>
                                             <th>Satuan</th>
@@ -154,7 +154,7 @@
                                                     <input type="checkbox" wire:model.live="selectedRincian"
                                                         value="{{ $rinci->id }}">
                                                 </td>
-                                                <td>{{ $i + 1 }}</td>
+                                                <td>{{ $rinci->kd_rincian }}</td>
                                                 <td>{{ $rinci->uraian }}</td>
                                                 <td>{{ number_format($rinci->jml_satuan_pak, 0, ',', '.') }}</td>
                                                 <td>{{ $rinci->satuan }}</td>

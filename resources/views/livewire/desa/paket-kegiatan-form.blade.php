@@ -38,9 +38,12 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label><strong>Jumlah Anggaran</strong></label>
-                                <input type="number" class="form-control" wire:model="jumlah_anggaran" readonly
-                                    style="background-color: #f8f9fa;">
-                                <small class="form-text text-muted">Otomatis dihitung dari rincian yang dipilih.</small>
+                                <p class="form-control">
+                                    {{ number_format($jumlah_anggaran, 0, ',', '.') }}
+                                </p>
+                                <p class="text-muted small fst-italic">
+                                    {{ ucwords(terbilang($jumlah_anggaran)) }}
+                                </p>
                                 @error('jumlah_anggaran')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -56,37 +59,31 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th style="width: 40px;"></th>
-                                            <th>No</th>
+                                            <th>KD Rincian</th>
                                             <th>Uraian</th>
                                             <th>Jumlah</th>
                                             <th>Satuan</th>
                                             <th>Harga</th>
                                             <th>Total</th>
-                                            <th>Status</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse ($rincianList as $i => $rinci)
-                                            <tr class="{{ $rinci['use_st'] ? 'table-secondary text-muted' : '' }}">
+                                            @continue($rinci['use_st'])
+                                            <tr>
                                                 <td class="text-center align-middle">
                                                     <input type="checkbox" wire:model.live="selectedRincian"
-                                                        value="{{ $rinci['id'] }}"
-                                                        {{ $rinci['use_st'] ? 'disabled' : '' }}>
+                                                        value="{{ $rinci['id'] }}">
                                                 </td>
-                                                <td>{{ $i + 1 }}</td>
+                                                <td>{{ $rinci['kd_rincian'] }}</td>
                                                 <td>{{ $rinci['uraian'] }}</td>
                                                 <td>{{ number_format($rinci['jml_satuan_pak'], 0, ',', '.') }}</td>
                                                 <td>{{ $rinci['satuan'] }}</td>
                                                 <td>{{ number_format($rinci['hrg_satuan_pak'], 0, ',', '.') }}</td>
                                                 <td><strong>{{ number_format($rinci['anggaran_stlh_pak'], 0, ',', '.') }}</strong>
                                                 </td>
-                                                <td>
-                                                    @if ($rinci['use_st'])
-                                                        <span class="badge badge-secondary">Sudah dibelanjakan</span>
-                                                    @else
-                                                        <span class="badge badge-success">Tersedia</span>
-                                                    @endif
-                                                </td>
+
                                             </tr>
                                         @empty
                                             <tr>
@@ -94,6 +91,7 @@
                                                     tersedia.</td>
                                             </tr>
                                         @endforelse
+
                                     </tbody>
                                 </table>
                             </div>
