@@ -18,5 +18,9 @@ class PaketPekerjaan extends Model
     {
         return $this->hasMany(PaketKegiatan::class);
     }
+    public function rincian()
+    {
+        return $this->hasMany(PaketPekerjaanRinci::class);
+    }
 
 }

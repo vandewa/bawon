@@ -41,8 +41,9 @@
 
                             <div class="form-group col-md-6">
                                 <label><strong>Jumlah Anggaran</strong></label>
-                                <input type="number" class="form-control" wire:model.live="jumlah_anggaran"
-                                    placeholder="Contoh: 15000000">
+                                <input type="number" class="form-control bg-light" wire:model="jumlah_anggaran"
+                                    readonly>
+                                <small class="form-text text-muted">Otomatis dijumlah dari rincian yang dipilih.</small>
                                 @error('jumlah_anggaran')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -62,7 +63,6 @@
                                 'spek_teknis' => 'spesifikasi-teknis',
                                 'kak' => 'kak',
                                 'jadwal_pelaksanaan' => 'jadwal-pelaksanaan',
-
                                 'hps' => 'hps',
                             ];
 
@@ -114,6 +114,67 @@
                                 </div>
                             @endforeach
                         </div>
+
+                        {{-- Tabel Rincian --}}
+                        <div class="mt-4 card">
+                            <div class="card-header bg-light">
+                                <strong>Rincian Anggaran Terkait</strong>
+                            </div>
+                            <div class="p-0 card-body">
+                                <table class="table mb-0 table-sm table-hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th>Pilih</th>
+                                            <th>No</th>
+                                            <th>Uraian</th>
+                                            <th>Jumlah</th>
+                                            <th>Satuan</th>
+                                            <th>Harga</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($paketPekerjaan->rincian as $i => $rinci)
+                                            @php
+                                                $terkait = $rinci
+                                                    ->kegiatanRinci()
+                                                    ->where('paket_kegiatan_id', $paketKegiatan->id)
+                                                    ->exists();
+                                                $dipakaiDiKegiatanLain = $rinci
+                                                    ->kegiatanRinci()
+                                                    ->where('paket_kegiatan_id', '!=', $paketKegiatan->id)
+                                                    ->exists();
+                                            @endphp
+
+                                            @continue($dipakaiDiKegiatanLain && !$terkait)
+
+                                            <tr>
+                                                <td class="text-center">
+                                                    <input type="checkbox" wire:model.live="selectedRincian"
+                                                        value="{{ $rinci->id }}">
+                                                </td>
+                                                <td>{{ $i + 1 }}</td>
+                                                <td>{{ $rinci->uraian }}</td>
+                                                <td>{{ number_format($rinci->jml_satuan_pak, 0, ',', '.') }}</td>
+                                                <td>{{ $rinci->satuan }}</td>
+                                                <td>{{ number_format($rinci->hrg_satuan_pak, 0, ',', '.') }}</td>
+                                                <td><strong>{{ number_format($rinci->anggaran_stlh_pak, 0, ',', '.') }}</strong>
+                                                </td>
+                                                <td>
+                                                    @if ($terkait)
+                                                        <span class="badge badge-info">Digunakan di kegiatan ini</span>
+                                                    @else
+                                                        <span class="badge badge-secondary">Belum digunakan</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="card-footer bg-light d-flex justify-content-end">

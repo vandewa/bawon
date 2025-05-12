@@ -2,37 +2,50 @@
 
 namespace App\Livewire\Desa;
 
-use App\Models\ComCode;
 use Livewire\Component;
-use App\Models\PaketKegiatan;
 use Livewire\WithFileUploads;
+use App\Models\ComCode;
+use App\Models\PaketKegiatan;
 use App\Models\PaketPekerjaan;
+use App\Models\PaketPekerjaanRinci;
+use App\Models\PaketKegiatanRinci;
 
 class PaketKegiatanForm extends Component
 {
     use WithFileUploads;
 
     public $paketPekerjaan;
-    public $jumlah_anggaran;
+    public $jumlah_anggaran = 0;
     public $spek_teknis, $kak, $jadwal_pelaksanaan, $rencana_kerja, $hps;
     public $paket_type;
     public $paketTypes = [];
+
+    public $rincianList = [];
+    public $selectedRincian = [];
 
     public function mount($paketPekerjaanId)
     {
         $this->paketPekerjaan = PaketPekerjaan::findOrFail($paketPekerjaanId);
         $this->paketTypes = ComCode::paketTypes();
 
-        // Set default paket_type jika belum ada
-        $this->paket_type = $this->paketKegiatan->paket_type ?? null;
+        $this->rincianList = PaketPekerjaanRinci::where('paket_pekerjaan_id', $paketPekerjaanId)
 
+            ->get()
+            ->toArray();
+    }
+
+    public function updatedSelectedRincian()
+    {
+        $this->jumlah_anggaran = collect($this->rincianList)
+            ->whereIn('id', $this->selectedRincian)
+            ->sum('anggaran_stlh_pak');
     }
 
     public function save()
     {
         $this->validate([
-            'jumlah_anggaran' => 'required|numeric|max:' . $this->paketPekerjaan->pagu_pak,
             'paket_type' => 'required',
+            'selectedRincian' => 'required|array|min:1',
             'spek_teknis' => 'nullable|file|mimes:pdf,doc,docx',
             'kak' => 'nullable|file|mimes:pdf,doc,docx',
             'jadwal_pelaksanaan' => 'nullable|file|mimes:pdf,doc,docx',
@@ -40,29 +53,35 @@ class PaketKegiatanForm extends Component
             'hps' => 'nullable|file|mimes:pdf,doc,docx',
         ]);
 
+        $jumlah = collect($this->rincianList)
+            ->whereIn('id', $this->selectedRincian)
+            ->sum('anggaran_stlh_pak');
+
         $kegiatan = new PaketKegiatan();
         $kegiatan->paket_pekerjaan_id = $this->paketPekerjaan->id;
         $kegiatan->paket_type = $this->paket_type;
-        $kegiatan->jumlah_anggaran = $this->jumlah_anggaran;
-
-        // Upload dokumen
-        $kegiatan->spek_teknis = $this->spek_teknis?->store('dokumen/spek_teknis');
-        $kegiatan->kak = $this->kak?->store('dokumen/kak');
-        $kegiatan->jadwal_pelaksanaan = $this->jadwal_pelaksanaan?->store('dokumen/jadwal');
-        $kegiatan->rencana_kerja = $this->rencana_kerja?->store('dokumen/rencana');
-        $kegiatan->hps = $this->hps?->store('dokumen/hps');
+        $kegiatan->jumlah_anggaran = $jumlah;
 
         $kegiatan->save();
+        foreach ($this->selectedRincian as $rinciId) {
+            PaketKegiatanRinci::create([
+                'paket_kegiatan_id' => $kegiatan->id,
+                'paket_pekerjaan_rinci_id' => $rinciId,
+            ]);
+        }
+
+        // Tandai rincian sebagai sudah digunakan
+        PaketPekerjaanRinci::whereIn('id', $this->selectedRincian)->update(['use_st' => true]);
+
+
 
         $this->js(<<<'JS'
         Swal.fire({
             title: 'Berhasil!',
-            text: 'Dokumen berhasil di simpan',
+            text: 'Dokumen berhasil disimpan.',
             icon: 'success',
-          })
+        })
         JS);
-
-        // return redirect()->route('desa.paket-kegiatan', $kegiatan->paket_pekerjaan_id);
 
         session()->flash('message', 'Dokumen berhasil disimpan.');
         return redirect()->route('desa.paket-kegiatan.persiapan.edit', $kegiatan->id);

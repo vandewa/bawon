@@ -3,10 +3,12 @@
 namespace App\Livewire\Desa;
 
 use App\Models\ComCode;
-use App\Models\PaketKegiatan;
-use App\Models\PaketPekerjaan;
 use Livewire\Component;
+use App\Models\PaketKegiatan;
 use Livewire\WithFileUploads;
+use App\Models\PaketPekerjaan;
+use App\Models\PaketKegiatanRinci;
+use App\Models\PaketPekerjaanRinci;
 use Illuminate\Support\Facades\Storage;
 
 class PaketKegiatanEdit extends Component
@@ -17,6 +19,9 @@ class PaketKegiatanEdit extends Component
     public $paketPekerjaan;
     public $jumlah_anggaran;
     public $paket_type;
+
+    public $selectedRincian = [];
+
     public $spek_teknis, $kak, $jadwal_pelaksanaan, $rencana_kerja, $hps;
 
     public $paketTypes = [];
@@ -33,6 +38,13 @@ class PaketKegiatanEdit extends Component
         $this->jumlah_anggaran = $this->paketKegiatan->jumlah_anggaran;
         $this->paket_type = $this->paketKegiatan->paket_type;
         $this->paketTypes = ComCode::paketTypes();
+        $this->selectedRincian = $this->paketKegiatan->rincian()->pluck('paket_pekerjaan_rinci_id')->toArray();
+
+    }
+    public function updatedSelectedRincian()
+    {
+        $this->jumlah_anggaran = \App\Models\PaketPekerjaanRinci::whereIn('id', $this->selectedRincian)
+            ->sum('anggaran_stlh_pak');
     }
 
     public function update()
@@ -77,6 +89,22 @@ class PaketKegiatanEdit extends Component
         }
 
         $this->paketKegiatan->save();
+
+        $this->paketKegiatan->rincian()->delete(); // hapus semua relasi dulu
+
+        foreach ($this->selectedRincian as $rinciId) {
+            PaketKegiatanRinci::create([
+                'paket_kegiatan_id' => $this->paketKegiatan->id,
+                'paket_pekerjaan_rinci_id' => $rinciId,
+            ]);
+        }
+
+        // Reset semua ke false dulu, lalu aktifkan yang terpilih
+        $this->paketPekerjaan->rincian()
+            ->where('use_st', true)
+            ->update(['use_st' => false]);
+
+        PaketPekerjaanRinci::whereIn('id', $this->selectedRincian)->update(['use_st' => true]);
 
         session()->flash('message', 'Dokumen berhasil diperbarui.');
         $route = route('desa.paket-kegiatan', ['paketPekerjaanId' => $this->paketPekerjaan->id]);
