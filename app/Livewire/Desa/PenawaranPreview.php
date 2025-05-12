@@ -15,7 +15,7 @@ class PenawaranPreview extends Component
     {
         $this->penawaranId = $penawaranId;
         // Fetch penawaran data
-        $this->penawaran = Penawaran::with('vendor','evaluasi')->findOrFail($this->penawaranId);
+        $this->penawaran = Penawaran::with('vendor','evaluasi', 'statusPenawaran')->findOrFail($this->penawaranId);
     }
     public function render()
     {

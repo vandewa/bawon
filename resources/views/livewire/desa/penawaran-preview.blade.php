@@ -1,6 +1,6 @@
 <div>
     <x-slot name="header">
-        <div class="row mb-1">
+        <div class="mb-1 row">
             <div class="col-sm-6">
                 <h3 class="m-0">Preview Penawaran</h3>
             </div>
@@ -26,7 +26,7 @@
                                         <div class="mb-3">
                                             <a href="{{ route('desa.penawaran.paket', $penawaran->paket_kegiatan_id) }}"
                                                 class="btn btn-info">
-                                                <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar Penawaran
+                                                <i class="mr-2 fas fa-arrow-left"></i>Kembali ke Daftar Penawaran
                                             </a>
                                         </div>
                                         <div class="card card-info card-outline card-tabs">
@@ -35,22 +35,22 @@
                                                     role="tabpanel" aria-labelledby="custom-tabs-six-riwayat-rm-tab">
                                                     <div class="card-body">
                                                         <!-- Penawaran Details -->
-                                                        <div class="row mb-4">
+                                                        <div class="mb-4 row">
                                                             <div class="col-md-6">
                                                                 <strong>Nama Vendor:</strong>
                                                                 <p>{{ $penawaran->vendor->nama_perusahaan }}</p>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <strong>Harga Penawaran:</strong>
-                                                                <p>Rp{{ number_format($penawaran->harga_penawaran) }}
+                                                                <p>Rp {{ number_format($penawaran->nilai) }}
                                                                 </p>
                                                             </div>
                                                         </div>
 
-                                                        <div class="row mb-4">
+                                                        <div class="mb-4 row">
                                                             <div class="col-md-6">
                                                                 <strong>Status Penawaran:</strong>
-                                                                <p>{{ $penawaran->penawaran_st }}</p>
+                                                                <p>{{ $penawaran->statusPenawaran->code_nm }}</p>
                                                             </div>
                                                             <div class="col-md-6">
                                                                 <strong>Evaluasi Administrasi:</strong>
@@ -59,7 +59,7 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="row mb-4">
+                                                        <div class="mb-4 row">
                                                             <div class="col-md-6">
                                                                 <strong>Evaluasi Teknis:</strong>
                                                                 <p>{{ $penawaran->evaluasi->spesifikasi_hasil ?? '-' }}
