@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Desa;
 
+use App\Models\Tpk;
 use App\Models\ComCode;
 use Livewire\Component;
 use App\Models\PaketKegiatan;
@@ -27,6 +28,9 @@ class PaketKegiatanEdit extends Component
 
     public $paketTypes = [];
 
+    public $tpk_id;
+    public $tpks = [];
+
     public function mount($id)
     {
         $this->paketKegiatan = PaketKegiatan::with('paketPekerjaan')->findOrFail($id);
@@ -39,8 +43,14 @@ class PaketKegiatanEdit extends Component
         $this->jumlah_anggaran = $this->paketKegiatan->jumlah_anggaran;
         $this->paket_type = $this->paketKegiatan->paket_type;
         $this->paketTypes = ComCode::paketTypes();
+        $this->tpk_id = $this->paketKegiatan->tpk_id;
         $this->selectedRincian = $this->paketKegiatan->rincian()->pluck('paket_pekerjaan_rinci_id')->toArray();
         $this->quantities = $this->paketKegiatan->rincian->pluck('quantity', 'paket_pekerjaan_rinci_id')->toArray();
+
+        $this->tpks = Tpk::with(['aparatur', 'jenis'])
+        ->where('tahun', $this->paketPekerjaan->tahun)
+        ->where('desa_id', $this->paketPekerjaan->desa_id) // pastikan ada desa_id di relasi
+        ->get();
     }
 
     public function updatedSelectedRincian()
@@ -69,6 +79,7 @@ class PaketKegiatanEdit extends Component
     public function update()
 {
     $this->validate([
+        'tpk_id' => 'required|exists:tpks,id',
         'jumlah_anggaran' => 'required|numeric|max:' . $this->paketPekerjaan->pagu_pak,
         'paket_type' => 'required',
         'spek_teknis' => 'nullable|file|mimes:pdf,doc,docx',
@@ -96,6 +107,7 @@ class PaketKegiatanEdit extends Component
     }
 
     $this->paketKegiatan->jumlah_anggaran = $this->jumlah_anggaran;
+    $this->paketKegiatan->tpk_id = $this->tpk_id;
     $this->paketKegiatan->paket_type = $this->paket_type;
 
     if ($this->spek_teknis) {

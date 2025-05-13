@@ -2,13 +2,14 @@
 
 namespace App\Livewire;
 
-use App\Models\Negoisasi;
-use Livewire\Component;
-use App\Models\PaketKegiatan;
-use App\Models\NegosiasiLog;
-use App\Models\Penawaran;
 use App\Models\Vendor;
+use Livewire\Component;
+use App\Models\Negoisasi;
+use App\Models\Penawaran;
+use App\Models\NegosiasiLog;
+use App\Models\PaketKegiatan;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\DB;
 
 class NegosiasiPage extends Component
 {
@@ -33,6 +34,9 @@ class NegosiasiPage extends Component
     public $showModal = false;
     public $lastSenderId;
     public $logIdDisetujui;
+    public $logSudahDisetujui = false;
+
+    public $logItems = [];
 
     protected $rules = [
         'penawaran' => 'required|numeric',
@@ -47,7 +51,10 @@ class NegosiasiPage extends Component
         $this->loadNegosiasiData(); // Memuat data negosiasi berdasarkan paket_kegiatan_id
         $this->loadNegosiasiLogs(); // Memuat log negosiasi
         $this->loadKegiatanAndVendor(); // Memuat detail kegiatan dan vendor
+        $this->loadLogItemsDariLogSebelumnya();
     }
+
+
 
     public function loadNegosiasiData()
     {
@@ -64,14 +71,57 @@ class NegosiasiPage extends Component
             $this->baNegoisasiPath = $this->negosiasi->ba_negoisasi ?? null;
 
         }
+        $rincianList = $this->paketKegiatan->rincian; // pastikan relasi `rincian` ada di model PaketKegiatan
+
+
     }
+
+    public function loadLogItemsDariLogSebelumnya()
+    {
+        $lastOpponentLog = NegosiasiLog::with('items.rincian.rincian')
+        ->where('negoisasi_id', $this->negosiasi_id)
+        ->where('user_id', '!=', auth()->id())
+        ->orderByDesc('created_at')
+        ->first();
+
+
+
+    if ($lastOpponentLog && $lastOpponentLog->items()->exists()) {
+
+        $this->logItems = $lastOpponentLog->items->map(function ($item) {
+
+            return [
+                'paket_kegiatan_rinci_id' => $item->paket_kegiatan_rinci_id,
+                'uraian' => $item->rincian->rincian->uraian ?? '-',
+                'quantity' => $item->rincian->quantity ?? 1,
+                'penawaran' => $item->penawaran ?? 0, // harga satuan terakhir
+                'catatan' => null,
+            ];
+        })->toArray();
+    } else {
+        // fallback jika belum ada log lawan, bisa dari rincian awal kegiatan
+        $this->logItems = $this->paketKegiatan->rincian->map(function ($item) {
+            return [
+                'paket_kegiatan_rinci_id' => $item->id,
+                'uraian' => $item->rincian->rincian->uraian,
+                'quantity' => $item->quantity ?? 1,
+                'penawaran' => 0,
+                'catatan' => null,
+            ];
+        })->toArray();
+    }
+}
+
 
     public function loadNegosiasiLogs()
     {
         if ($this->negosiasi_id) {
-            $this->negosiasiLogs = NegosiasiLog::where('negoisasi_id', $this->negosiasi_id)
+            $this->negosiasiLogs = NegosiasiLog::with('user')
+                ->where('negoisasi_id', $this->negosiasi_id)
                 ->orderBy('created_at', 'desc')
                 ->get();
+
+            $this->logSudahDisetujui = $this->negosiasiLogs->contains('status_st', true);
         }
     }
 
@@ -85,24 +135,62 @@ class NegosiasiPage extends Component
     }
 
     public function saveNegosiasi()
-    {
-        $this->validate();
+{
+    // Hitung total keseluruhan untuk log utama
+    $this->penawaran = collect($this->logItems)->sum(function ($item) {
+        return ($item['penawaran'] ?? 0) * ($item['quantity'] ?? 1);
+    });
 
-        $negosiasiLog = NegosiasiLog::create([
+    $this->validate();
+
+    DB::beginTransaction();
+
+    try {
+        // Simpan log utama
+        $log = NegosiasiLog::create([
             'negoisasi_id' => $this->negosiasi_id,
-            'penawaran' => $this->penawaran,
+            'penawaran' => $this->penawaran, // total = harga satuan × qty
             'keterangan' => $this->keterangan,
             'user_id' => auth()->id(),
         ]);
 
-        $this->loadNegosiasiLogs();
-        $this->loadNegosiasiData();
+        // Simpan semua item (harga satuan saja yang disimpan)
+        foreach ($this->logItems as $item) {
+            $log->items()->create([
+                'paket_kegiatan_rinci_id' => $item['paket_kegiatan_rinci_id'],
+                'penawaran' => $item['penawaran'], // harga satuan disimpan
+                'catatan' => $item['catatan'],
+            ]);
+        }
 
-        session()->flash('message', 'Negosiasi telah diajukan');
+        DB::commit();
+
+        $this->loadNegosiasiData();
+        $this->loadNegosiasiLogs();
+        session()->flash('message', 'Negosiasi telah diajukan.');
+
+        $this->reset('keterangan', 'penawaran'); // reset form utama (logItems tetap)
+    } catch (\Throwable $e) {
+        DB::rollBack();
+        report($e);
+        session()->flash('error', 'Gagal menyimpan negosiasi.');
     }
+}
+
 
     public function openModal()
     {
+        // Ambil log yang sudah disetujui
+            $logDisetujui = NegosiasiLog::where('negoisasi_id', $this->negosiasi_id)
+            ->where('status_st', true)
+            ->orderByDesc('created_at')
+            ->first();
+
+        if ($logDisetujui) {
+            $this->nilaiDisepakati = $logDisetujui->penawaran;
+        }
+
+        $this->showModal = true;
         $this->showModal = true;
     }
 

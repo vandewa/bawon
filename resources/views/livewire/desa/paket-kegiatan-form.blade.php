@@ -24,30 +24,50 @@
                     </div>
                     <div class="card-body">
                         <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label><strong>Jenis Paket</strong></label>
-                                <select class="form-control" wire:model.live="paket_type">
-                                    <option value="">-- Pilih Jenis Paket --</option>
-                                    @foreach ($paketTypes as $code => $label)
-                                        <option value="{{ $code }}">{{ $label }}</option>
-                                    @endforeach
-                                </select>
-                                @error('paket_type')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><strong>Jenis Paket</strong></label>
+                                    <select class="form-control" wire:model.live="paket_type">
+                                        <option value="">-- Pilih Jenis Paket --</option>
+                                        @foreach ($paketTypes as $code => $label)
+                                            <option value="{{ $code }}">{{ $label }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('paket_type')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label><strong>TPK (Tahun {{ $paketPekerjaan->tahun }})</strong></label>
+                                    <select class="form-control" wire:model="tpk_id">
+                                        <option value="">-- Pilih TPK --</option>
+                                        @foreach ($tpks as $tpk)
+                                            <option value="{{ $tpk->id }}"> {{ $tpk->aparatur->nama ?? '-' }} -
+                                                {{ $tpk->jenis->code_nm }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('tpk_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                             </div>
-                            <div class="form-group col-md-6">
-                                <label><strong>Jumlah Anggaran</strong></label>
-                                <p class="form-control">
-                                    {{ number_format($jumlah_anggaran, 0, ',', '.') }}
-                                </p>
-                                <p class="text-muted small fst-italic">
-                                    {{ ucwords(terbilang($jumlah_anggaran)) }}
-                                </p>
-                                @error('jumlah_anggaran')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label><strong>Jumlah Anggaran</strong></label>
+                                    <p class="form-control">
+                                        {{ number_format($jumlah_anggaran, 0, ',', '.') }}
+                                    </p>
+                                    <p class="text-muted small fst-italic">
+                                        {{ ucwords(terbilang($jumlah_anggaran)) }}
+                                    </p>
+                                    @error('jumlah_anggaran')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
                             </div>
+
+
                         </div>
 
                         <div class="mt-4 card">
@@ -82,7 +102,8 @@
                                             <tr>
                                                 <td class="text-center align-middle">
                                                     <input type="checkbox" wire:model.live="selectedRincian"
-                                                        value="{{ $rinci['id'] }}" {{ $isDisabled ? 'disabled' : '' }}>
+                                                        value="{{ $rinci['id'] }}"
+                                                        {{ $isDisabled ? 'disabled' : '' }}>
                                                 </td>
                                                 <td>{{ $rinci['kd_rincian'] }}</td>
                                                 <td>{{ $rinci['uraian'] }}</td>

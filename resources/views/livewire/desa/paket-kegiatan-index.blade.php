@@ -46,6 +46,7 @@
                                                     <th>#</th>
                                                     <th>Jenis Paket</th>
                                                     <th>Jumlah Anggaran</th>
+                                                    <th>TPK</th>
                                                     <th>Nilai Kesepakatan</th>
                                                     <th>Status</th>
                                                     <th>Kelengkapan Dokumen</th> <!-- Kolom baru -->
@@ -66,6 +67,8 @@
                                                         <td>{{ $item->paketType->code_nm }}</td>
                                                         <td>Rp {{ number_format($item->jumlah_anggaran, 0, ',', '.') }}
                                                         </td>
+                                                        <td>{{ $item->tpk->aparatur->nama ?? '-' }} -
+                                                            {{ $item->tpk->jenis->code_nm ?? '-' }}</td>
                                                         <td>Rp
                                                             {{ number_format($item->nilai_kesepakatan ?? 0, 0, ',', '.') }}
                                                         </td>

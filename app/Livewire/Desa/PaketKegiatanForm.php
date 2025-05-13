@@ -9,6 +9,7 @@ use App\Models\PaketKegiatan;
 use App\Models\PaketPekerjaan;
 use App\Models\PaketPekerjaanRinci;
 use App\Models\PaketKegiatanRinci;
+use App\Models\Tpk;
 
 class PaketKegiatanForm extends Component
 {
@@ -23,6 +24,8 @@ class PaketKegiatanForm extends Component
 
     public $rincianList = [];
     public $selectedRincian = [];
+    public $tpk_id;
+    public $tpks = [];
 
     public function mount($paketPekerjaanId)
     {
@@ -36,6 +39,11 @@ class PaketKegiatanForm extends Component
             foreach ($this->rincianList as $rinci) {
                 $this->quantities[$rinci['id']] = 0;
             }
+
+            $this->tpks = Tpk::with(['aparatur', 'jenis'])
+            ->where('tahun', $this->paketPekerjaan->tahun)
+            ->where('desa_id', $this->paketPekerjaan->desa_id) // pastikan ada desa_id di relasi
+            ->get();
     }
 
     public function updatedSelectedRincian()
@@ -51,6 +59,7 @@ class PaketKegiatanForm extends Component
     public function save()
     {
         $this->validate([
+            'tpk_id' => 'required|exists:tpks,id',
             'paket_type' => 'required',
             'selectedRincian' => 'required|array|min:1',
             'spek_teknis' => 'nullable|file|mimes:pdf,doc,docx',
@@ -69,6 +78,7 @@ class PaketKegiatanForm extends Component
 
         $kegiatan = new PaketKegiatan();
         $kegiatan->paket_pekerjaan_id = $this->paketPekerjaan->id;
+        $kegiatan->tpk_id = $this->tpk_id;
         $kegiatan->paket_type = $this->paket_type;
         $kegiatan->jumlah_anggaran = $jumlah;
 

@@ -111,9 +111,18 @@
                             </div>
 
 
-                            <div class="mt-3 form-group">
-                                <button type="submit" class="btn btn-primary">Simpan</button>
-                                <button type="button" class="btn btn-secondary" wire:click="closeModal">Batal</button>
+                            <div class="mt-3 form-group d-flex justify-content-between">
+                                <div>
+                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        wire:click="closeModal">Batal</button>
+                                </div>
+
+                                <!-- Tombol Generate -->
+                                <a href="#" target="_blank"
+                                    class="btn btn-outline-success d-flex align-items-center">
+                                    <i class="mr-1 fas fa-file-download"></i> Generate BA Evaluasi
+                                </a>
                             </div>
                         </form>
                     </div>

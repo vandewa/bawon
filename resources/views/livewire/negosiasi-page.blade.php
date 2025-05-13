@@ -139,7 +139,7 @@
                         <div class="col-md-4">
                             <div class="mb-4 card border-primary shadow-primary">
                                 <div class="card-body">
-                                    <h5>Detail Vendor</h5>
+                                    <h5>Detail Penyedia </h5>
                                     @if ($vendor)
                                         <dl class="row">
                                             <dt class="col-sm-5">Nama</dt>
@@ -176,92 +176,254 @@
                             <h5>Riwayat Negosiasi</h5>
                             <div class="chat-history">
                                 @foreach ($negosiasiLogs as $log)
-                                    <div class="mb-2 card"
-                                        style="border-left: 5px solid {{ $log->user_id == auth()->id() ? '#17a2b8' : '#6c757d' }};">
-                                        <div class="card-header">
-                                            <div class="d-flex justify-content-between">
-                                                <strong>{{ $log->user->name ?? 'Admin' }}</strong>
-                                                <span
-                                                    class="text-muted">{{ $log->created_at->format('H:i d-m-Y') }}</span>
-                                            </div>
+                                    @php
+                                        $isMine = $log->user_id == auth()->id();
+                                        $canApprove =
+                                            !$log->status_st &&
+                                            $loop->first &&
+                                            $log->user_id !== auth()->id() &&
+                                            $negosiasiStatus != 'NEGOSIASI_ST_02';
+                                    @endphp
+
+                                    <div class="mb-2 border shadow-sm card"
+                                        style="border-left: 5px solid {{ $isMine ? '#17a2b8' : '#6c757d' }};">
+                                        <div
+                                            class="px-3 py-2 card-header d-flex justify-content-between align-items-center">
+                                            <strong>{{ $log->user->name ?? 'Admin' }}</strong>
+                                            <small class="text-muted">
+                                                {{ \Carbon\Carbon::parse($log->created_at)->translatedFormat('d F Y, H:i') }}
+                                            </small>
                                         </div>
                                         <div class="card-body">
-                                            <div class="chat-message">
-                                                <p><strong>Penawaran:</strong> Rp
-                                                    {{ number_format($log->penawaran, 2, ',', '.') }}</p>
-                                                <p><strong>Status Log:</strong>
-                                                    @if ($log->status_st)
-                                                        <span class="badge bg-success">Disetujui</span>
-                                                    @else
-                                                        <span class="badge bg-secondary">Belum Disetujui</span>
-                                                    @endif
-                                                </p>
-                                                <p><strong>Keterangan:</strong> {{ $log->keterangan ?? '-' }}</p>
-                                                @if ($log->ba_negoisasi)
-                                                    <p><a href="{{ asset('storage/' . $log->ba_negoisasi) }}"
-                                                            target="_blank">Lihat BA</a></p>
-                                                @endif
+                                            <p class="mb-1">
+                                                <strong>Penawaran:</strong>
+                                                <span class="text-primary">Rp
+                                                    {{ number_format($log->penawaran, 2, ',', '.') }}</span>
+                                            </p>
 
-                                                @if ($loop->first && !$log->status_st && $negosiasiStatus != 'NEGOSIASI_ST_02' && $log->user_id != auth()->id())
-                                                    <button wire:click="konfirmasiSetujuiLog({{ $log->id }})"
-                                                        class="btn btn-success btn-sm">
-                                                        <i class="fas fa-check"></i> Setujui
-                                                    </button>
+                                            <p class="mb-1">
+                                                <strong>Status Log:</strong>
+                                                @if ($log->status_st)
+                                                    <span class="badge bg-success">Disetujui</span>
+                                                @else
+                                                    <span class="badge bg-secondary">Belum Disetujui</span>
                                                 @endif
-                                            </div>
+                                            </p>
+
+                                            <p class="mb-1">
+                                                <strong>Keterangan:</strong> {{ $log->keterangan ?? '-' }}
+                                            </p>
+                                            @if ($log->items->count())
+                                                <div class="mt-3">
+                                                    <h5 class="text-muted">Rincian Item:</h5>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-sm table-bordered">
+                                                            <thead class="thead-light">
+                                                                <tr>
+                                                                    <th style="width:5%">#</th>
+                                                                    <th>Uraian</th>
+                                                                    <th style="width:10%">Volume</th>
+                                                                    <th style="width:10%">Satuan</th>
+                                                                    <th style="width:15%" class="text-end">Harga Satuan
+                                                                        (Rp)</th>
+                                                                    <th style="width:15%" class="text-end">Total (Rp)
+                                                                    </th>
+                                                                    <th>Catatan</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach ($log->items as $i => $item)
+                                                                    @php
+                                                                        $qty = $item->rincian->quantity ?? 1;
+                                                                        $satuan =
+                                                                            $item->rincian->rincian->satuan ?? '-';
+                                                                        $uraian =
+                                                                            $item->rincian->rincian->uraian ?? '-';
+                                                                        $harga = $item->penawaran ?? 0;
+                                                                        $total = $harga * $qty;
+                                                                    @endphp
+                                                                    <tr>
+                                                                        <td>{{ $i + 1 }}</td>
+                                                                        <td>{{ $uraian }}</td>
+                                                                        <td class="text-center">{{ $qty }}
+                                                                        </td>
+                                                                        <td class="text-center">{{ $satuan }}
+                                                                        </td>
+                                                                        <td class="text-end">Rp
+                                                                            {{ number_format($harga, 2, ',', '.') }}
+                                                                        </td>
+                                                                        <td class="text-end">Rp
+                                                                            {{ number_format($total, 2, ',', '.') }}
+                                                                        </td>
+                                                                        <td>{{ $item->catatan ?? '-' }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                            @if ($log->ba_negoisasi)
+                                                <p class="mb-1">
+                                                    <strong>BA Negosiasi:</strong>
+                                                    <a href="{{ asset('storage/' . $log->ba_negoisasi) }}"
+                                                        target="_blank" class="text-info">
+                                                        <i class="fas fa-file-alt"></i> Lihat BA
+                                                    </a>
+                                                </p>
+                                            @endif
+
+                                            @if ($canApprove)
+                                                <button wire:click="konfirmasiSetujuiLog({{ $log->id }})"
+                                                    class="mt-2 btn btn-success btn-sm">
+                                                    <i class="fas fa-check"></i> Setujui
+                                                </button>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
 
 
 
+
                             </div>
 
                             <!-- Form Input Negosiasi -->
-                            <form wire:submit.prevent="saveNegosiasi" class="mt-4">
-                                <div class="form-group">
-                                    <label for="penawaran">Penawaran</label>
-                                    <input type="number" wire:model="penawaran" class="form-control" id="penawaran"
-                                        {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}
-                                        required>
-                                    @error('penawaran')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
+
+                            <div class="mt-4 shadow-sm card border-info">
+                                <div class="text-white card-header bg-info">
+                                    <h5 class="mb-0"><i class="fas fa-comments-dollar"></i> Form Negosiasi</h5>
                                 </div>
+                                <div class="card-body">
 
-                                <div class="form-group">
-                                    <label for="keterangan">Keterangan</label>
-                                    <textarea wire:model="keterangan" class="form-control" id="keterangan"
-                                        {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}></textarea>
-                                    @error('keterangan')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                                    <form wire:submit.prevent="saveNegosiasi">
+                                        <!-- Penawaran Otomatis -->
+                                        @if (!$logSudahDisetujui)
+                                            <div class="form-group">
+                                                <label for="penawaran">Penawaran Total (otomatis dari item)</label>
+                                                <input type="number" wire:model="penawaran" class="form-control"
+                                                    id="penawaran" readonly style="background-color: #f8f9fa;">
+                                                @error('penawaran')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
 
-                                <div class="gap-2 mt-3 d-flex justify-content-start">
-                                    <!-- Simpan Negosiasi Log Button -->
-                                    <button type="submit" class="btn btn-primary mr-2"
-                                        {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
-                                        <i class="fas fa-save"></i> Simpan Negosiasi Log
-                                    </button>
+                                            <!-- Keterangan -->
+                                            <div class="form-group">
+                                                <label for="keterangan">Keterangan</label>
+                                                <textarea wire:model="keterangan" class="form-control" id="keterangan"
+                                                    {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}></textarea>
+                                                @error('keterangan')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
 
-                                    <!-- Upload BA Negosiasi Button -->
-                                    @role(['desa', 'dinsos', 'superadministrator'])
-                                        @if ($negosiasiStatus != 'NEGOSIASI_ST_02' && $negosiasiLogs->contains('status_st', true))
-                                            <button type="button" class="btn btn-success" wire:click="openModal">
-                                                <i class="fas fa-upload"></i> Upload Berita Acara Negosiasi
-                                            </button>
+                                            <!-- Tabel Negosiasi per Item -->
+                                            <div class="mt-4">
+                                                <h5>Negosiasi per Item Rincian:</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0 table-bordered table-sm">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th style="width:5%">#</th>
+                                                                <th>Uraian</th>
+                                                                <th style="width:10%">Qty</th>
+                                                                <th style="width:15%">Harga Satuan (Rp)</th>
+                                                                <th style="width:15%">Total (Rp)</th>
+                                                                <th>Catatan</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($logItems as $index => $item)
+                                                                @php
+                                                                    $qty = $item['quantity'] ?: 1;
+                                                                    $hargaSatuan = $item['penawaran'] ?? 0;
+                                                                    $total = $hargaSatuan * $qty;
+                                                                @endphp
+                                                                <tr>
+                                                                    <td>{{ $loop->iteration }}</td>
+                                                                    <td>{{ $item['uraian'] }}</td>
+
+                                                                    {{-- Quantity --}}
+                                                                    <td>
+                                                                        <input type="number"
+                                                                            class="form-control form-control-sm bg-light"
+                                                                            value="{{ $qty }}" readonly
+                                                                            tabindex="-1">
+                                                                    </td>
+
+                                                                    {{-- Harga Satuan --}}
+                                                                    <td>
+                                                                        <input type="number"
+                                                                            class="form-control form-control-sm"
+                                                                            wire:model.defer="logItems.{{ $index }}.penawaran"
+                                                                            {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
+                                                                    </td>
+
+                                                                    {{-- Total Penawaran --}}
+                                                                    <td>
+                                                                        <input type="text"
+                                                                            class="form-control form-control-sm bg-light"
+                                                                            value="Rp {{ number_format($total, 0, ',', '.') }}"
+                                                                            readonly tabindex="-1">
+                                                                    </td>
+
+                                                                    {{-- Catatan --}}
+                                                                    <td>
+                                                                        <input type="text"
+                                                                            class="form-control form-control-sm"
+                                                                            wire:model.defer="logItems.{{ $index }}.catatan"
+                                                                            {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+
+
+                                                        <tfoot>
+                                                            <tr class="bg-light">
+                                                                <th colspan="2" class="text-end">Total Penawaran
+                                                                </th>
+                                                                <th colspan="2">
+                                                                    Rp
+                                                                    {{ number_format(array_sum(array_column($logItems, 'penawaran')), 2, ',', '.') }}
+                                                                </th>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         @endif
-                                    @endrole
+
+                                        <!-- Tombol -->
+                                        <div class="gap-2 mt-4 d-flex justify-content-start">
+                                            <button type="submit" class="btn btn-primary"
+                                                {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
+                                                <i class="fas fa-save"></i> Simpan Negosiasi Log
+                                            </button>
+
+                                            @role(['desa', 'dinsos', 'superadministrator'])
+                                                @if ($negosiasiStatus != 'NEGOSIASI_ST_02' && $negosiasiLogs->contains('status_st', true))
+                                                    <button type="button" class="btn btn-success"
+                                                        wire:click="openModal">
+                                                        <i class="fas fa-upload"></i> Upload Berita Acara Negosiasi
+                                                    </button>
+                                                @endif
+                                            @endrole
+                                        </div>
+
+                                        @if ($lastSenderId == auth()->id())
+                                            <p class="mt-2 text-danger">Menunggu balasan pihak lain sebelum dapat
+                                                mengisi negosiasi baru.</p>
+                                        @endif
+                                    </form>
                                 </div>
+                            </div>
 
 
 
-                                @if ($lastSenderId == auth()->id())
-                                    <p class="mt-2 text-danger">Menunggu balasan pihak lain sebelum dapat mengisi
-                                        negosiasi baru.</p>
-                                @endif
-                            </form>
                         </div>
                     </div>
 
@@ -307,20 +469,20 @@
                                                 @enderror
                                             </div>
 
-                                            <div wire:loading wire:target="ba_negoisasi" class="text-info mt-1">
+                                            <div wire:loading wire:target="ba_negoisasi" class="mt-1 text-info">
                                                 <i class="fas fa-spinner fa-spin"></i> Mengunggah file...
                                             </div>
 
-                                            <div class="mt-3 form-group d-flex justify-content-start gap-3">
+                                            <div class="gap-3 mt-3 form-group d-flex justify-content-start">
                                                 <!-- Unggah BA Button -->
                                                 <button type="submit"
-                                                    class="btn btn-primary d-flex align-items-center mr-1">
+                                                    class="mr-1 btn btn-primary d-flex align-items-center">
                                                     <i class="mr-1 fas fa-upload"></i> Upload
                                                 </button>
 
                                                 <!-- Batal Button -->
                                                 <button type="button"
-                                                    class="btn btn-secondary d-flex align-items-center mr-1"
+                                                    class="mr-1 btn btn-secondary d-flex align-items-center"
                                                     wire:click="closeModal">
                                                     <i class="mr-1 fas fa-times"></i> Batal
                                                 </button>
@@ -328,7 +490,7 @@
                                                 <!-- Generate BA Button -->
                                                 <a href="{{ route('generator.penyedia.berita-acara-hasil-negosiasi') }}"
                                                     target="_blank"
-                                                    class="btn btn-outline-success d-flex align-items-center ml-auto">
+                                                    class="ml-auto btn btn-outline-success d-flex align-items-center">
                                                     <i class="mr-1 fas fa-file-download"></i> Generate Berita Acara
                                                 </a>
                                             </div>
