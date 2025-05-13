@@ -2,12 +2,12 @@
     <x-slot name="header">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Data Kualifikasi Bidang Usaha</h1>
+                <h1 class="m-0">Data Klasifikasi Bidang Usaha</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Master</a></li>
-                    <li class="breadcrumb-item active">Kualifikasi Bidang Usaha</li>
+                    <li class="breadcrumb-item active">Klasifikasi Bidang Usaha</li>
                 </ol>
             </div>
         </div>
@@ -62,7 +62,7 @@
                     <!-- Right column for data table -->
                     <div class="card card-info card-outline">
                         <div class="card-header">
-                            <div class="card-title">Data Kualifikasi Bidang Usaha</div>
+                            <div class="card-title">Data Klasifikasi Bidang Usaha</div>
                         </div>
                         <div class="card-body">
                             <!-- Search Input -->

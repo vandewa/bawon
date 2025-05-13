@@ -75,6 +75,7 @@
                               {{ Request::segment(2) == 'role' ? 'menu-is-opening menu-open' : '' }}
                               {{ Request::segment(2) == 'role-index' ? 'menu-is-opening menu-open' : '' }}
                               {{ Request::segment(2) == 'user-index' ? 'menu-is-opening menu-open' : '' }}
+                              {{ Request::segment(2) == 'tag' ? 'menu-is-opening menu-open' : '' }}
                             ">
                               <a href="#"
                                   class="nav-link
@@ -83,6 +84,7 @@
                                     {{ Request::segment(2) == 'role-index' ? 'active' : '' }}
                                     {{ Request::segment(2) == 'user-index' ? 'active' : '' }}
                                     {{ Request::segment(2) == 'user' ? 'active' : '' }}
+                                    {{ Request::segment(2) == 'tag' ? 'active' : '' }}
                                    ">
                                   <i class="nav-icon fa-solid fas fa-database"></i>
                                   <p>
@@ -133,7 +135,7 @@
                                           @else
                                               <i class="ml-2 far fa-circle nav-icon"></i>
                                           @endif
-                                          <p>Kualifikasi Bidang Usaha</p>
+                                          <p>Klasifikasi Bidang Usaha</p>
                                       </a>
                                   </li>
 
