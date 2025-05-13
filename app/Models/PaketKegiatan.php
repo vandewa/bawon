@@ -43,6 +43,10 @@ class PaketKegiatan extends Model
     {
         return $this->hasMany(PaketKegiatanRinci::class);
     }
+    public function tpk()
+    {
+        return $this->belongsTo(Tpk::class);
+    }
 
 
 }

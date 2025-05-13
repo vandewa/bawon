@@ -133,7 +133,7 @@ public function changeStatusToSt02()
     public function render()
     {
         $this->paketPekerjaan = PaketPekerjaan::with(['desa', 'paketKegiatans' => function($a){
-            $a->with(['paketKegiatan', 'paketType']);
+            $a->with(['paketKegiatan', 'paketType', 'tpk.jenis']);
         }])->findOrFail($this->paketPekerjaanId);
         $this->paketKegiatans = $this->paketPekerjaan->paketKegiatans;
 
