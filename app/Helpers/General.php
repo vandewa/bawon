@@ -2,6 +2,7 @@
 
 use App\Models\Penawaran;
 use App\Models\Pengajuan;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 function genNo()
@@ -144,3 +145,12 @@ if (!function_exists('badgePenawaran')) {
     }
 
 }
+if (!function_exists('ambilUserIdVendor')) {
+    function ambilUserIdVendor($id)
+    {
+        return User::where('vendor_id', $id)->first()->id;
+    }
+}
+
+
+

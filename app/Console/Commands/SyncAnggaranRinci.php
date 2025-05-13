@@ -13,82 +13,105 @@ class SyncAnggaranRinci extends Command
     protected $description = 'Sinkronisasi data Ta_AnggaranRinci dari MSSQL ke MySQL (hanya KdPosting terbesar)';
 
     public function handle()
-    {
-        $this->info('🚀 Mulai sinkronisasi data rincian...');
+{
+    $this->info('🚀 Mulai sinkronisasi data rincian unik terbaru...');
 
-        // Ambil nilai KdPosting terbesar
-        $maxKdPosting = DB::connection('sqlsrv')->table('Ta_AnggaranRinci')->max('KdPosting');
+    $limit = 500;
+    $offset = 0;
+    $chunkCount = 0;
+    $totalInserted = 0;
 
-        DB::connection('sqlsrv')->table('Ta_AnggaranRinci')
-            ->leftJoin('Ref_Rek4', 'Ta_AnggaranRinci.Kd_Rincian', '=', 'Ref_Rek4.Obyek')
-            ->select(
-                'Ta_AnggaranRinci.KdPosting',
-                'Ta_AnggaranRinci.Tahun',
-                'Ta_AnggaranRinci.Kd_Desa',
-                'Ta_AnggaranRinci.Kd_Keg',
-                'Ta_AnggaranRinci.Kd_Rincian',
-                'Ref_Rek4.nama_obyek',
-                'Ta_AnggaranRinci.Kd_SubRinci',
-                'Ta_AnggaranRinci.No_Urut',
-                'Ta_AnggaranRinci.Uraian',
-                'Ta_AnggaranRinci.SumberDana',
-                'Ta_AnggaranRinci.JmlSatuanPAK',
-                'Ta_AnggaranRinci.Satuan',
-                'Ta_AnggaranRinci.HrgSatuanPAK',
-                'Ta_AnggaranRinci.AnggaranStlhPAK'
+    do {
+        $results = DB::connection('sqlsrv')->select("
+            WITH Ranked AS (
+                SELECT
+                    a.KdPosting,
+                    a.Tahun,
+                    a.Kd_Desa,
+                    a.Kd_Keg,
+                    a.Kd_Rincian,
+                    r.nama_obyek,
+                    a.Kd_SubRinci,
+                    a.No_Urut,
+                    a.Uraian,
+                    a.SumberDana,
+                    a.JmlSatuanPAK,
+                    a.Satuan,
+                    a.HrgSatuanPAK,
+                    a.AnggaranStlhPAK,
+                    ROW_NUMBER() OVER (
+                        PARTITION BY
+                            a.Tahun, a.Kd_Desa, a.Kd_Keg,
+                            a.Kd_Rincian, a.Kd_SubRinci, a.No_Urut
+                        ORDER BY a.KdPosting DESC
+                    ) AS rn
+                FROM Ta_AnggaranRinci a
+                LEFT JOIN Ref_Rek4 r ON a.Kd_Rincian = r.Obyek
             )
-            ->where('Ta_AnggaranRinci.KdPosting', $maxKdPosting)
-            ->orderBy('Ta_AnggaranRinci.Kd_Rincian')
-            ->orderBy('Ta_AnggaranRinci.Kd_SubRinci')
-            ->orderBy('Ta_AnggaranRinci.No_Urut')
-            ->chunk(500, function ($rincianList) {
-                foreach ($rincianList as $rincian) {
-                    $paket = PaketPekerjaan::where('kd_keg', $rincian->Kd_Keg)
-                        ->where('tahun', $rincian->Tahun)
-                        ->where('kd_desa', $rincian->Kd_Desa)
-                        ->first();
+            SELECT *
+            FROM Ranked
+            WHERE rn = 1
+            ORDER BY Kd_Keg, Kd_Rincian
+            OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
+        ", [$offset, $limit]);
 
-                    if (!$paket) {
-                        continue;
-                    }
+        $processedInChunk = 0;
 
-                    $existing = PaketPekerjaanRinci::where('paket_pekerjaan_id', $paket->id)
-                        ->where('kd_rincian', $rincian->Kd_Rincian)
-                        ->where('kd_subrinci', $rincian->Kd_SubRinci)
-                        ->where('no_urut', $rincian->No_Urut)
-                        ->first();
+        foreach ($results as $rincian) {
+            $paket = PaketPekerjaan::where('kd_keg', $rincian->Kd_Keg)
+                ->where('tahun', $rincian->Tahun)
+                ->where('kd_desa', $rincian->Kd_Desa)
+                ->first();
 
-                    if ($existing && $existing->use_st) {
-                        continue;
-                    }
+            if (!$paket) {
+                continue;
+            }
 
-                    $data = [
-                        'paket_pekerjaan_id' => $paket->id,
-                        'kd_posting' => $rincian->KdPosting,
-                        'tahun' => $rincian->Tahun,
-                        'kd_desa' => $rincian->Kd_Desa,
-                        'kd_keg' => $rincian->Kd_Keg,
-                        'kd_rincian' => $rincian->Kd_Rincian,
-                        'nama_obyek' => $rincian->nama_obyek,
-                        'kd_subrinci' => $rincian->Kd_SubRinci,
-                        'no_urut' => $rincian->No_Urut,
-                        'uraian' => $rincian->Uraian,
-                        'sumber_dana' => $rincian->SumberDana,
-                        'jml_satuan_pak' => $rincian->JmlSatuanPAK,
-                        'satuan' => $rincian->Satuan,
-                        'hrg_satuan_pak' => $rincian->HrgSatuanPAK,
-                        'anggaran_stlh_pak' => $rincian->AnggaranStlhPAK,
-                    ];
+            $existing = PaketPekerjaanRinci::where('paket_pekerjaan_id', $paket->id)
+                ->where('kd_rincian', $rincian->Kd_Rincian)
+                ->where('kd_subrinci', $rincian->Kd_SubRinci)
+                ->where('no_urut', $rincian->No_Urut)
+                ->first();
 
-                    if ($existing) {
-                        $existing->update($data);
-                    } else {
-                        $data['use_st'] = false;
-                        PaketPekerjaanRinci::create($data);
-                    }
-                }
-            });
+            if ($existing && $existing->use_st) {
+                continue;
+            }
 
-        $this->info("✅ Sinkronisasi selesai. (KdPosting: $maxKdPosting)");
-    }
+            $data = [
+                'paket_pekerjaan_id' => $paket->id,
+                'kd_posting' => $rincian->KdPosting,
+                'tahun' => $rincian->Tahun,
+                'kd_desa' => $rincian->Kd_Desa,
+                'kd_keg' => $rincian->Kd_Keg,
+                'kd_rincian' => $rincian->Kd_Rincian,
+                'nama_obyek' => $rincian->nama_obyek,
+                'kd_subrinci' => $rincian->Kd_SubRinci,
+                'no_urut' => $rincian->No_Urut,
+                'uraian' => $rincian->Uraian,
+                'sumber_dana' => $rincian->SumberDana,
+                'jml_satuan_pak' => $rincian->JmlSatuanPAK,
+                'satuan' => $rincian->Satuan,
+                'hrg_satuan_pak' => $rincian->HrgSatuanPAK,
+                'anggaran_stlh_pak' => $rincian->AnggaranStlhPAK,
+            ];
+
+            if ($existing) {
+                $existing->update($data);
+            } else {
+                $data['use_st'] = false;
+                PaketPekerjaanRinci::create($data);
+                $processedInChunk++;
+            }
+        }
+
+        $totalInserted += $processedInChunk;
+        $chunkCount++;
+        $this->info("📦 Chunk {$chunkCount} diproses. Tambahan data baru: {$processedInChunk}");
+
+        $offset += $limit;
+    } while (count($results) > 0);
+
+    $this->info("✅ Sinkronisasi selesai. Total data baru disalin: {$totalInserted}, total chunk: {$chunkCount}");
+}
+
 }

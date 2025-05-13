@@ -15,8 +15,13 @@ class Vendor extends Model
         return $this->belongsToMany(Tag::class, 'tag_vendor');
     }
     public function photos()
-{
-    return $this->hasMany(VendorPhoto::class);
-}
+    {
+        return $this->hasMany(VendorPhoto::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
 }

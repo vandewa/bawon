@@ -5,11 +5,14 @@
                 <div
                     class="card card-outline {{ $penawaran->penawaran_st == 'PENAWARAN_ST_02' ? 'card-success' : 'card-info' }}">
                     <div class="text-center card-header">
-                        <h3 class="mb-0 card-title">Penawaran #{{ $loop->iteration }}</h3>
+                        <h3 class="mb-0 card-title">Penawaran #{{ $penawaran->iteration }}</h3>
                     </div>
                     <div class="card-body">
                         <h5 class="text-center">{{ $penawaran->vendor->nama_perusahaan }}</h5>
-                        <p class="text-center text-muted">{{ $penawaran->vendor->nib }}</p>
+
+                        <h5 class="text-center text-muted">
+                            Rp {{ number_format($penawaran->nilai, 0, ',', '.') }}
+                        </h5>
                         <ul class="list-unstyled">
                             <li>
                                 <strong>Status Penawaran:</strong>
@@ -32,6 +35,15 @@
                             </li>
                             <li><strong>Keterangan:</strong>
                                 <p>{{ $penawaran->keterangan }}</p>
+
+                                @if ($penawaran->dok_penawaran)
+                                    <a href="{{ route('helper.show-picture', ['path' => $penawaran->dok_penawaran]) }}"
+                                        target="_blank">
+                                        📄 Lihat Dokumen
+                                    </a>
+                                @else
+                                    <span class="mt-2 badge badge-secondary">Tidak ada dokumen</span>
+                                @endif
                             </li>
                         </ul>
                     </div>

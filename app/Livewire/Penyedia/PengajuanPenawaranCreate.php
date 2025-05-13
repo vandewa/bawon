@@ -52,13 +52,13 @@ class PengajuanPenawaranCreate extends Component
         $this->penawaran->keterangan = $this->keterangan;
 
         if ($this->bukti_setor_pajak) {
-            $this->penawaran->bukti_setor_pajak = $this->bukti_setor_pajak->store('penawaran/bukti_setor', 'public');
+            $this->penawaran->bukti_setor_pajak = $this->bukti_setor_pajak->store('penawaran/bukti_setor');
         }
         if ($this->dok_penawaran) {
-            $this->penawaran->dok_penawaran = $this->dok_penawaran->store('penawaran/dok_penawaran', 'public');
+            $this->penawaran->dok_penawaran = $this->dok_penawaran->store('penawaran/dok_penawaran');
         }
         if ($this->dok_kebenaran_usaha) {
-            $this->penawaran->dok_kebenaran_usaha = $this->dok_kebenaran_usaha->store('penawaran/dok_kebenaran', 'public');
+            $this->penawaran->dok_kebenaran_usaha = $this->dok_kebenaran_usaha->store('penawaran/dok_kebenaran');
         }
 
         $this->penawaran->save();
