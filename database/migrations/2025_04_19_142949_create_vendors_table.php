@@ -26,9 +26,6 @@ return new class extends Migration {
             $table->string('kabupaten')->nullable();
             $table->string('kode_pos')->nullable();
             $table->string('rekening_perusahaan')->nullable();
-            $table->date('masa_berlaku_nib')->nullable();
-            $table->string('instansi_pemberi_nib')->nullable();
-            $table->string('website')->nullable();
 
             // Dokumen legalitas
             $table->string('akta_pendirian')->nullable();

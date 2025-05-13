@@ -4,6 +4,7 @@ namespace App\Livewire\Desa;
 
 use App\Models\Vendor;
 use Livewire\Component;
+use App\Jobs\kirimPesan;
 use App\Models\Negoisasi;
 use App\Models\Penawaran;
 use App\Models\PaketKegiatan;
@@ -55,7 +56,7 @@ class PenawaranPaket extends Component
     {
         $this->validate([
             'vendorId' => 'required|exists:vendors,id',
-          'batasAkhir' => 'required|date|after:today',
+            'batasAkhir' => 'required|date|after:today',
             'suratUndangan' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
@@ -176,18 +177,26 @@ class PenawaranPaket extends Component
                 }
             })
         JS);
+
+
+        // kirim pesan whatsapp
+        $pesan = 'tes';
+        $telepon = '089604484626';
+
+        kirimPesan::dispatch($pesan, $telepon);
+
     }
 
 
 
-public function kirimUndangan()
-{
-    Penawaran::where('paket_kegiatan_id', $this->paketKegiatan->id)
-        ->update(['kirim_st' => true]);
+    public function kirimUndangan()
+    {
+        Penawaran::where('paket_kegiatan_id', $this->paketKegiatan->id)
+            ->update(['kirim_st' => true]);
 
-    $this->loadPenawarans(); // Refresh tabel
+        $this->loadPenawarans(); // Refresh tabel
 
-    $route = route('desa.penawaran.pelaksanaan.index');
+        $route = route('desa.penawaran.pelaksanaan.index');
 
         $this->js(<<<JS
             Swal.fire({
@@ -199,7 +208,7 @@ public function kirimUndangan()
                 window.location.href = "$route";
             });
         JS);
-}
+    }
 
 
     public function preview($path)

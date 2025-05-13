@@ -12,8 +12,7 @@ return new class extends Migration {
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_kbli')->nullable();
-            $table->string('nama')->unique();
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }

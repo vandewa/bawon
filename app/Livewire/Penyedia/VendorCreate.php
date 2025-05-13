@@ -51,10 +51,14 @@ class VendorCreate extends Component
         'website' => '',
         'latitude' => null,
         'longitude' => null,
+        'bank_st' => '',
+        'no_rekening' => '',
+        'atas_nama_rekening' => '',
+
     ];
 
     // Properties for document uploads
-    public $akta_pendirian, $nib_file, $npwp_file, $siup, $izin_usaha_lain, $ktp_direktur;
+    public $akta_pendirian, $nib_file, $npwp_file, $siup, $izin_usaha_lain, $ktp_direktur, $dok_kebenaran_usaha_file, $bukti_setor_pajak_file;
 
     public $klasifikasiUsaha = [];
 
@@ -77,6 +81,9 @@ class VendorCreate extends Component
         'vendor.website' => 'nullable|string|max:255',
         'vendor.latitude' => 'nullable|numeric',
         'vendor.longitude' => 'nullable|numeric',
+        'vendor.bank_st' => 'nullable|string|max:255',
+        'vendor.no_rekening' => 'nullable|numeric',
+        'vendor.atas_nama_rekening' => 'nullable|string|max:255',
         'foto_vendor.*' => 'image|max:2048',
         'akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'nib_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -84,6 +91,8 @@ class VendorCreate extends Component
         'siup' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'izin_usaha_lain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'ktp_direktur' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'dok_kebenaran_usaha_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'bukti_setor_pajak_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'user.name' => 'required|string|max:255',
         'user.email' => 'required|email|max:255',
         'user.password' => 'required|string|min:6|same:user.password_confirmation',
@@ -174,7 +183,9 @@ class VendorCreate extends Component
             'npwp_file',
             'siup',
             'izin_usaha_lain',
-            'ktp_direktur'
+            'ktp_direktur',
+            'dok_kebenaran_usaha_file',
+            'bukti_setor_pajak_file',
         ];
 
         foreach ($documentFields as $field) {
@@ -255,11 +266,13 @@ class VendorCreate extends Component
         $kualifikasi = ComCode::where('code_group', 'KUALIFIKASI_ST')->get();
         $jenisUsaha = ComCode::where('code_group', 'JENIS_USAHA_ST')->get();
         $klasifikasi = Tag::all();
+        $bank = ComCode::where('code_group', 'BANK_ST')->get();
 
         return view('livewire.penyedia.vendor-create', [
             'listKualifikasi' => $kualifikasi,
             'listJenisUsaha' => $jenisUsaha,
             'listKlasifikasi' => $klasifikasi,
+            'listBank' => $bank,
         ]);
     }
 }
