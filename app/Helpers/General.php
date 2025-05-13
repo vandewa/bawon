@@ -3,6 +3,7 @@
 use App\Models\Penawaran;
 use App\Models\Pengajuan;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 function genNo()
@@ -61,31 +62,31 @@ if (!function_exists('terbilang')) {
             'tujuh',
             'delapan',
             'sembilan',
-            'sepuluh',
-            'sebelas'
+            'sepuluh ',
+            'sebelas '
         ];
         $hasil = '';
 
         if ($angka < 12) {
             $hasil = ' ' . $baca[$angka];
         } elseif ($angka < 20) {
-            $hasil = terbilang($angka - 10) . ' belas';
+            $hasil = terbilang($angka - 10) . ' belas ';
         } elseif ($angka < 100) {
-            $hasil = terbilang($angka / 10) . ' puluh' . terbilang($angka % 10);
+            $hasil = terbilang($angka / 10) . ' puluh ' . terbilang($angka % 10);
         } elseif ($angka < 200) {
-            $hasil = ' seratus' . terbilang($angka - 100);
+            $hasil = ' seratus ' . terbilang($angka - 100);
         } elseif ($angka < 1000) {
-            $hasil = terbilang($angka / 100) . ' ratus' . terbilang($angka % 100);
+            $hasil = terbilang($angka / 100) . ' ratus ' . terbilang($angka % 100);
         } elseif ($angka < 2000) {
             $hasil = ' seribu' . terbilang($angka - 1000);
         } elseif ($angka < 1000000) {
-            $hasil = terbilang($angka / 1000) . ' ribu' . terbilang($angka % 1000);
+            $hasil = terbilang($angka / 1000) . ' ribu ' . terbilang($angka % 1000);
         } elseif ($angka < 1000000000) {
-            $hasil = terbilang($angka / 1000000) . ' juta' . terbilang($angka % 1000000);
+            $hasil = terbilang($angka / 1000000) . ' juta ' . terbilang($angka % 1000000);
         } elseif ($angka < 1000000000000) {
-            $hasil = terbilang($angka / 1000000000) . ' miliar' . terbilang($angka % 1000000000);
+            $hasil = terbilang($angka / 1000000000) . ' miliar ' . terbilang($angka % 1000000000);
         } elseif ($angka < 1000000000000000) {
-            $hasil = terbilang($angka / 1000000000000) . ' triliun' . terbilang($angka % 1000000000000);
+            $hasil = terbilang($angka / 1000000000000) . ' triliun ' . terbilang($angka % 1000000000000);
         }
 
         return trim($hasil);
@@ -155,3 +156,11 @@ if (!function_exists('jenisKlasifikasi')) {
     }
 
 }
+
+if (!function_exists('ambilUserIdVendor')) {
+    function ambilUserIdVendor($id)
+    {
+        return User::where('vendor_id', $id)->first()->id;
+    }
+}
+

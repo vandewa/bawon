@@ -161,7 +161,7 @@
                                                                                     'PAKET_TYPE_02';
                                                                             @endphp
 
-                                                                            @if (!$langsungKontrak and $paket->negosiasi->negosiasi_st ?? null != 'NEGOSIASI_ST_02')
+                                                                            @if (!$langsungKontrak && $paket->negosiasi && $paket->negosiasi->negosiasi_st !== 'NEGOSIASI_ST_02')
                                                                                 <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $paket->id) }}"
                                                                                     class="mb-1 btn btn-sm btn-info">
                                                                                     <i class="fa fa-handshake"></i>
@@ -274,7 +274,7 @@
 
                         {{-- Tombol Simpan dan Batal --}}
                         <div class="gap-2 d-flex">
-                            <button type="submit" class="btn btn-success mr-2" wire:loading.attr="disabled">
+                            <button type="submit" class="mr-2 btn btn-success" wire:loading.attr="disabled">
                                 <span wire:loading.remove wire:target="uploadSuratPerjanjian">
                                     <i class="fa fa-save"></i> Simpan
                                 </span>

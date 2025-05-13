@@ -1,94 +1,115 @@
 <div>
     <form wire:submit.prevent="simpanEvaluasi">
-        <!-- Evaluasi Administrasi -->
-        <div class="form-group">
-            <label for="suratKebenaranAda">Surat Pernyataan Kebenaran Usaha</label>
-            <select wire:model="suratKebenaranAda" class="form-control">
-                <option value="">Pilih Isian</option> <!-- Default option -->
-                <option value="1">Ada</option>
-                <option value="0">Tidak Ada</option>
-            </select>
-            @error('suratKebenaranAda')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="form-group">
-            <label for="suratKebenaranHasil">Hasil Evaluasi</label>
-            <input type="text" wire:model="suratKebenaranHasil" class="form-control"
-                placeholder="Menenuhi/Tidak Memenuhi">
-            @error('suratKebenaranHasil')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+
+        {{-- Evaluasi: Surat Pernyataan Kebenaran Usaha --}}
+        <div class="mb-3 form-row">
+            <div class="col-md-6">
+                <label>Surat Kebenaran Usaha</label>
+                <select wire:model="suratKebenaranAda" class="form-control">
+                    <option value="">Pilih Isian</option>
+                    <option value="1">Ada</option>
+                    <option value="0">Tidak Ada</option>
+                </select>
+                @error('suratKebenaranAda')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+            <div class="col-md-6">
+                <label>Hasil Evaluasi</label>
+                <select wire:model="suratKebenaranHasil" class="form-control">
+                    <option value="">Pilih Hasil</option>
+                    <option value="Memenuhi">Memenuhi</option>
+                    <option value="Tidak Memenuhi">Tidak Memenuhi</option>
+                </select>
+                @error('suratKebenaranHasil')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
         </div>
 
-        <!-- Evaluasi Teknis -->
-        <div class="form-group">
-            <label for="spesifikasiAda">Spesifikasi Teknis</label>
-            <select wire:model="spesifikasiAda" class="form-control">
-                <option value="">Pilih Isian</option> <!-- Default option -->
-                <option value="1">Ada</option>
-                <option value="0">Tidak Ada</option>
-            </select>
-            @error('spesifikasiAda')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="form-group">
-            <label for="spesifikasiHasil">Hasil Evaluasi</label>
-            <input type="text" wire:model="spesifikasiHasil" class="form-control" placeholder="Sesuai/Tidak Sesuai">
-            @error('spesifikasiHasil')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="jadwalAda">Jadwal Pelaksanaan Pekerjaan</label>
-            <select wire:model="jadwalAda" class="form-control">
-                <option value="">Pilih Isian</option> <!-- Default option -->
-                <option value="1">Ada</option>
-                <option value="0">Tidak Ada</option>
-            </select>
-            @error('jadwalAda')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="form-group">
-            <label for="jadwalHasil">Hasil Evaluasi</label>
-            <input type="text" wire:model="jadwalHasil" class="form-control" placeholder="Sesuai/Tidak Sesuai">
-            @error('jadwalHasil')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+        {{-- Evaluasi: Spesifikasi Teknis --}}
+        <div class="mb-3 form-row">
+            <div class="col-md-6">
+                <label>Spesifikasi Teknis</label>
+                <select wire:model="spesifikasiAda" class="form-control">
+                    <option value="">Pilih Isian</option>
+                    <option value="1">Ada</option>
+                    <option value="0">Tidak Ada</option>
+                </select>
+                @error('spesifikasiAda')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+            <div class="col-md-6">
+                <label>Hasil Evaluasi</label>
+                <select wire:model="spesifikasiHasil" class="form-control">
+                    <option value="">Pilih Hasil</option>
+                    <option value="Sesuai">Sesuai</option>
+                    <option value="Tidak Sesuai">Tidak Sesuai</option>
+                </select>
+                @error('spesifikasiHasil')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
         </div>
 
-        <!-- Evaluasi Harga -->
-        <div class="form-group">
-            <label for="hargaAda">Harga</label>
-            <select wire:model="hargaAda" class="form-control">
-                <option value="">Pilih Isian</option> <!-- Default option -->
-                <option value="1">Ada</option>
-                <option value="0">Tidak Ada</option>
-            </select>
-            @error('hargaAda')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
-        <div class="form-group">
-            <label for="hargaHasil">Hasil Evaluasi</label>
-            <input type="text" wire:model="hargaHasil" class="form-control"
-                placeholder="Lulus/Tidak Lulus, % dari HPS">
-            @error('hargaHasil')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+        {{-- Evaluasi: Jadwal Pelaksanaan --}}
+        <div class="mb-3 form-row">
+            <div class="col-md-6">
+                <label>Jadwal Pelaksanaan</label>
+                <select wire:model="jadwalAda" class="form-control">
+                    <option value="">Pilih Isian</option>
+                    <option value="1">Ada</option>
+                    <option value="0">Tidak Ada</option>
+                </select>
+                @error('jadwalAda')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+            <div class="col-md-6">
+                <label>Hasil Evaluasi</label>
+                <select wire:model="jadwalHasil" class="form-control">
+                    <option value="">Pilih Hasil</option>
+                    <option value="Sesuai">Sesuai</option>
+                    <option value="Tidak Sesuai">Tidak Sesuai</option>
+                </select>
+                @error('jadwalHasil')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
         </div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn btn-primary">Simpan Evaluasi</button>
+        {{-- Evaluasi: Harga --}}
+        <div class="mb-3 form-row">
+            <div class="col-md-6">
+                <label>Harga</label>
+                <select wire:model="hargaAda" class="form-control">
+                    <option value="">Pilih Isian</option>
+                    <option value="1">Ada</option>
+                    <option value="0">Tidak Ada</option>
+                </select>
+                @error('hargaAda')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+            <div class="col-md-6">
+                <label>Hasil Evaluasi</label>
+                <input type="text" wire:model="hargaHasil" class="form-control"
+                    placeholder="Lulus/Tidak Lulus, % dari HPS">
+                @error('hargaHasil')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+        </div>
+
+        {{-- Submit --}}
+        <button type="submit" class="mt-2 btn btn-primary">Simpan Evaluasi</button>
+
+        {{-- Flash Message --}}
+        @if (session()->has('message'))
+            <div class="mt-3 alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
     </form>
-
-    <!-- Success Message -->
-    @if (session()->has('message'))
-        <div class="alert alert-success mt-3">
-            {{ session('message') }}
-        </div>
-    @endif
 </div>

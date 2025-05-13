@@ -5,8 +5,9 @@ namespace App\Livewire\Desa;
 use Livewire\Component;
 
 
-use App\Models\PaketPekerjaan;
 use App\Models\PaketKegiatan;
+use App\Models\PaketPekerjaan;
+use App\Models\PaketPekerjaanRinci;
 
 class PaketKegiatanIndex extends Component
 {
@@ -52,19 +53,29 @@ class PaketKegiatanIndex extends Component
 
         if (!$kegiatan) return;
 
-        // Misal validasi relasi (jika diperlukan)
-        // if ($kegiatan->detail()->exists()) {
-        //     $this->js(<<<'JS'
-        //         Swal.fire({
-        //             title: 'Gagal!',
-        //             text: 'Tidak dapat dihapus karena memiliki data terkait.',
-        //             icon: 'error'
-        //         });
-        //     JS);
-        //     return;
-        // }
+        // Ambil rincian yang terkait sebelum menghapus
+        $rincianList = $kegiatan->rincian()->get();
 
+        foreach ($rincianList as $rinci) {
+            // Kurangi quantity di PaketPekerjaanRinci
+            PaketPekerjaanRinci::where('id', $rinci->paket_pekerjaan_rinci_id)
+                ->decrement('quantity', $rinci->quantity);
+        }
+
+        // Ambil ID rincian untuk reset use_st
+        $rincianIds = $rincianList->pluck('paket_pekerjaan_rinci_id')->toArray();
+
+        // Hapus relasi dari paket_kegiatan_rincis
+        $kegiatan->rincian()->delete();
+
+        // Reset use_st ke false
+        if (!empty($rincianIds)) {
+            PaketPekerjaanRinci::whereIn('id', $rincianIds)->update(['use_st' => false]);
+        }
+
+        // Hapus paket_kegiatan
         $kegiatan->delete();
+
         $this->reset('idHapus');
 
         $this->js(<<<'JS'
@@ -75,6 +86,7 @@ class PaketKegiatanIndex extends Component
             });
         JS);
     }
+
 
     public function confirmChangeStatus($id)
 {

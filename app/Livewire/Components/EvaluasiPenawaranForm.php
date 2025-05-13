@@ -30,6 +30,8 @@ class EvaluasiPenawaranForm extends Component
             $this->jadwalHasil = $evaluasi->jadwal_hasil;
             $this->hargaAda = $evaluasi->harga_ada;
             $this->hargaHasil = $evaluasi->harga_hasil;
+        } else {
+            
         }
     }
 

@@ -28,4 +28,9 @@ class Penawaran extends Model
         return $this->belongsTo(\App\Models\ComCode::class, 'penawaran_st', 'com_cd');
     }
 
+    public function items()
+{
+    return $this->hasMany(PenawaranItem::class);
+}
+
 }

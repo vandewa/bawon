@@ -164,15 +164,77 @@
                                 <label>Keterangan Tambahan</label>
                                 <textarea class="form-control" rows="3" wire:model="keterangan"></textarea>
                             </div>
-                        </div>
 
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled"
-                                wire:target="bukti_setor_pajak,dok_penawaran,dok_kebenaran_usaha">
-                                Simpan Pengajuan
-                            </button>
-                            <a href="{{ route('penyedia.penawaran-index') }}" class="btn btn-secondary">Kembali</a>
-                        </div>
+                            <h5 class="mb-3">📦 Penawaran per Item</h5>
+
+                            <table class="table table-bordered table-striped">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th style="width: 5%">#</th>
+                                        <th>Uraian</th>
+                                        <th class="text-center" style="width: 10%">Qty</th>
+                                        <th class="text-center" style="width: 15%">Satuan</th>
+                                        <th class="text-center" style="width: 20%">Harga Satuan (Rp)</th>
+                                        <th class="text-center" style="width: 20%">Subtotal (Rp)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($penawaran->paketKegiatan->rincian as $index => $rinci)
+                                        @php
+
+                                            $pekerjaan = $rinci->rincian;
+                                            $qty = $rinci->quantity;
+                                            $harga = $penawaranItems[$rinci->id] ?? 0;
+                                            $subtotal = $qty * $harga;
+                                        @endphp
+                                        <tr>
+                                            <td class="text-center">{{ $index + 1 }}</td>
+                                            <td>{{ $pekerjaan->uraian ?? '—' }}</td>
+                                            <td class="text-center">{{ $qty }}</td>
+                                            <td class="text-center">{{ $pekerjaan->satuan ?? '-' }}</td>
+                                            <td>
+                                                <input type="number" step="any" min="0"
+                                                    class="text-right form-control"
+                                                    wire:model.live.debounce.250ms
+="penawaranItems.{{ $rinci->id }}"
+                                                    placeholder="0.00">
+                                                @error("penawaranItems.$rinci->id")
+                                                    <small class="text-danger">{{ $message }}</small>
+                                                @enderror
+                                            </td>
+                                            <td class="text-right">
+                                                Rp {{ number_format($subtotal, 0, ',', '.') }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                @if (!empty($penawaranItems))
+                                    <tfoot>
+                                        @php
+                                            $total = 0;
+                                            foreach ($penawaranItems as $rinciId => $harga) {
+                                                $rinci = $penawaran->paketKegiatan->rincian->firstWhere('id', $rinciId);
+                                                $qty = $rinci?->quantity ?? 0;
+                                                $total += $harga * $qty;
+                                            }
+                                        @endphp
+                                        <tr>
+                                            <th colspan="5" class="text-right">Total Penawaran</th>
+                                            <th class="text-right">Rp {{ number_format($total, 0, ',', '.') }}</th>
+                                        </tr>
+                                    </tfoot>
+                                @endif
+                            </table>
+
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary" wire:loading.attr="disabled"
+                                    wire:target="bukti_setor_pajak,dok_penawaran,dok_kebenaran_usaha">
+                                    Simpan Pengajuan
+                                </button>
+                                <a href="{{ route('penyedia.penawaran-index') }}"
+                                    class="btn btn-secondary">Kembali</a>
+                            </div>
                     </form>
                 </div>
             @else
