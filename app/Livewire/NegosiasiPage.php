@@ -180,6 +180,17 @@ class NegosiasiPage extends Component
 
     public function openModal()
     {
+        // Ambil log yang sudah disetujui
+            $logDisetujui = NegosiasiLog::where('negoisasi_id', $this->negosiasi_id)
+            ->where('status_st', true)
+            ->orderByDesc('created_at')
+            ->first();
+
+        if ($logDisetujui) {
+            $this->nilaiDisepakati = $logDisetujui->penawaran;
+        }
+
+        $this->showModal = true;
         $this->showModal = true;
     }
 
