@@ -54,9 +54,9 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'token_wa' => env('TOKEN_WA', 'NapiBiJLWttR0G9zggmrd9590ToyXS4au4gan7PazBIvlvyCWiNVEQW8p10iOz2Y'),
+    'token_wa' => env('TOKEN_WA', 'OdfOFcRU828BYMhkLMFe8mP8IyAyKypt40S6M3YgV5Yr4qc4H6kjgjw.WTN9DDTC'),
 
-    'wa_url' => env('WA_URL', 'https://kudus.wablas.com/api'),
+    'wa_url' => env('WA_URL', 'https://jogja.wablas.com/api'),
 
     /*
     |--------------------------------------------------------------------------

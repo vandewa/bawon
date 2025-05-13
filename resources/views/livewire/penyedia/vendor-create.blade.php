@@ -6,7 +6,7 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="{{ route('penyedia.vendor-index') }}">Vendor</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('penyedia.vendor-index') }}">Penyedia</a></li>
                     <li class="breadcrumb-item active">Tambah</li>
                 </ol>
             </div>
@@ -23,7 +23,7 @@
                 <div class="mb-3 card card-primary">
                     <div class="card-header d-flex align-items-center">
                         <i class="mr-2 fas fa-building"></i>
-                        <h5 class="m-0 card-title">Data Vendor</h5>
+                        <h5 class="m-0 card-title">Data Penyedia</h5>
                     </div>
                     <div class="p-3 card-body">
 
@@ -113,6 +113,43 @@
                                         class="form-control @error('vendor.website') is-invalid @enderror"
                                         wire:model.defer="vendor.website">
                                     @error('vendor.website')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="p-3 mb-4 border rounded">
+                            <legend class="w-auto font-weight-bold">Rekening</legend>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Atas Nama Rekening</label>
+                                    <input type="text"
+                                        class="form-control @error('vendor.atas_nama_rekening') is-invalid @enderror"
+                                        wire:model.defer="vendor.atas_nama_rekening">
+                                    @error('vendor.atas_nama_rekening')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Nomor Rekening</label>
+                                    <input type="number"
+                                        class="form-control @error('vendor.no_rekening') is-invalid @enderror"
+                                        wire:model.defer="vendor.no_rekening">
+                                    @error('vendor.no_rekening')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Bank</label>
+                                    <select class="form-control @error('vendor.bank_st') is-invalid @enderror"
+                                        wire:model.defer="vendor.bank_st">
+                                        <option value="">Pilih Bank</option>
+                                        @foreach ($listBank as $bank)
+                                            <option value="{{ $bank->com_cd }}">{{ $bank->code_nm }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('vendor.bank_st')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
@@ -293,6 +330,8 @@
         'siup' => 'SIUP / Izin Usaha',
         'izin_usaha_lain' => 'Izin Usaha Lain',
         'ktp_direktur' => 'KTP Direktur',
+        'dok_kebenaran_usaha_file' => 'Dokumen Kebenaran Usaha',
+        'bukti_setor_pajak_file' => 'Bukti Setor Pajak',
     ] as $field => $label)
                                     <div class="form-group col-md-6">
                                         <label>{{ $label }}</label>
@@ -464,6 +503,6 @@
     </script>
 
     <script
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvC1Y_TXjCN5au-UqPsFtq2VKXAbtNzFs&callback=initMap&libraries=places"
+        src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap&libraries=places"
         async defer></script>
 @endpush

@@ -10,11 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('tag_vendor', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('vendor_id')->constrained()->onDelete('cascade');
-            $table->foreignId('tag_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+        Schema::table('tags', function (Blueprint $table) {
+            $table->string('kode_kbli')->nullable();
+            $table->string('nama')->unique();
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('tag_vendors');
+        Schema::table('tags', function (Blueprint $table) {
+            //
+        });
     }
 };

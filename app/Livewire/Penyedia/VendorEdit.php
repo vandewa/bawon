@@ -2,165 +2,300 @@
 
 namespace App\Livewire\Penyedia;
 
-use App\Models\Vendor;
+use App\Models\ComCode;
+use App\Models\Tag;
+use App\Models\TagVendor;
 use App\Models\User;
-use App\Models\VendorPhoto;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Vendor;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 
 class VendorEdit extends Component
 {
     use WithFileUploads;
 
     public $vendorId;
-    public $vendor = [];
-    public $user = [];
-    public $userExists = false;
-
     public $foto_vendor = [];
-    public $single_foto;
+    public $foto;
+    public $userExists;
 
-    public $akta_pendirian, $nib_file, $npwp_file, $siup, $izin_usaha_lain, $ktp_direktur;
+    // Properties for coordinates
+    public $latitude;
+    public $longitude;
 
-    public function mount($id)
+    public $user = [
+        'id' => null,
+        'name' => '',
+        'email' => '',
+        'password' => '',
+        'password_confirmation' => '',
+    ];
+
+    public $vendor = [
+        'nama_perusahaan' => '',
+        'nib' => '',
+        'npwp' => '',
+        'alamat' => '',
+        'email' => '',
+        'telepon' => '',
+        'nama_direktur' => '',
+        'jenis_usaha' => '',
+        'klasifikasi' => '',
+        'kualifikasi' => '',
+        'provinsi' => '',
+        'kabupaten' => '',
+        'kode_pos' => '',
+        'masa_berlaku_nib' => '',
+        'instansi_pemberi_nib' => '',
+        'website' => '',
+        'latitude' => null,
+        'longitude' => null,
+        'bank_st' => '',
+        'no_rekening' => '',
+        'atas_nama_rekening' => '',
+    ];
+
+    // Properties for document uploads
+    public $akta_pendirian, $nib_file, $npwp_file, $siup, $izin_usaha_lain, $ktp_direktur, $dok_kebenaran_usaha_file, $bukti_setor_pajak_file;
+
+    public $klasifikasiUsaha = [];
+
+    protected $rules = [
+        'vendor.nama_perusahaan' => 'required|string|max:255',
+        'vendor.nib' => 'required|string|max:100',
+        'vendor.npwp' => 'nullable|string|max:100',
+        'vendor.alamat' => 'required|string|max:255',
+        'vendor.email' => 'nullable|email',
+        'vendor.telepon' => 'nullable|string|max:20',
+        'vendor.nama_direktur' => 'required|string|max:255',
+        'vendor.jenis_usaha' => 'nullable|string|max:255',
+        'vendor.klasifikasi' => 'nullable|string|max:255',
+        'vendor.kualifikasi' => 'nullable|string|max:255',
+        'vendor.provinsi' => 'nullable|string|max:100',
+        'vendor.kabupaten' => 'nullable|string|max:100',
+        'vendor.kode_pos' => 'nullable|string|max:10',
+        'vendor.masa_berlaku_nib' => 'nullable|date',
+        'vendor.instansi_pemberi_nib' => 'nullable|string|max:255',
+        'vendor.website' => 'nullable|string|max:255',
+        'vendor.latitude' => 'nullable|numeric',
+        'vendor.longitude' => 'nullable|numeric',
+        'vendor.bank_st' => 'nullable|string|max:255',
+        'vendor.no_rekening' => 'nullable|numeric',
+        'vendor.atas_nama_rekening' => 'nullable|string|max:255',
+        'foto_vendor.*' => 'image|max:2048',
+        'akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'nib_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'npwp_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'siup' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'izin_usaha_lain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'ktp_direktur' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'dok_kebenaran_usaha_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'bukti_setor_pajak_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'user.name' => 'required|string|max:255',
+        'user.email' => 'required|email|max:255',
+        'user.password' => 'nullable|string|min:6|same:user.password_confirmation',
+        'user.password_confirmation' => 'nullable|string|min:6',
+    ];
+
+    public function mount($vendorId)
     {
-        $vendor = Vendor::with('photos')->findOrFail($id);
-        $this->vendorId = $vendor->id;
-        $this->vendor = $vendor->only([
-            'nama_perusahaan', 'nib', 'npwp', 'alamat', 'email', 'telepon',
-            'nama_direktur', 'jenis_usaha', 'klasifikasi', 'kualifikasi',
-            'provinsi', 'kabupaten', 'kode_pos', 'rekening_perusahaan',
-            'akta_pendirian', 'nib_file', 'npwp_file', 'siup', 'izin_usaha_lain',
-            'ktp_direktur', 'latitude', 'longitude'
-        ]);
+        $this->vendorId = $vendorId;
+        $vendor = Vendor::findOrFail($vendorId);
+        $this->vendor = $vendor->toArray();
 
-        $this->foto_vendor = [];
-
-        $user = User::where('vendor_id', $vendor->id)->first();
+        // Load user data if exists
+        $user = User::where('vendor_id', $vendorId)->first();
         if ($user) {
             $this->userExists = true;
             $this->user = [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'password' => '',
+                'password_confirmation' => '',
+            ];
+        }
+
+        // Load klasifikasi usaha
+        $tagVendors = TagVendor::where('vendor_id', $vendorId)->get();
+        foreach ($tagVendors as $tagVendor) {
+            $klasifikasiName = Tag::find($tagVendor->tag_id)->nama ?? 'Unknown';
+            $this->klasifikasiUsaha[] = [
+                'nama' => $tagVendor->tag_id,
+                'nama_text' => $klasifikasiName,
+                'foto' => $tagVendor->photo_path,
+                'long' => $tagVendor->longitude,
+                'lat' => $tagVendor->latitude,
             ];
         }
     }
 
-    public function addDroppedFile($file)
+    public function updated($propertyName)
     {
-        $this->foto_vendor[] = $file;
-    }
-
-    public function removeFotoVendor($index)
-    {
-        unset($this->foto_vendor[$index]);
-        $this->foto_vendor = array_values($this->foto_vendor);
-    }
-
-    public function deleteExistingPhoto($photoId)
-    {
-        $photo = VendorPhoto::find($photoId);
-        if ($photo && $photo->vendor_id == $this->vendorId) {
-            Storage::disk('public')->delete($photo->photo_path);
-            $photo->delete();
-        }
+        $this->validateOnly($propertyName);
     }
 
     public function save()
     {
-        $this->validate([
-            'vendor.nama_perusahaan' => 'required|string|max:255',
-            'vendor.nib' => 'required|string|max:100',
-            'vendor.npwp' => 'nullable|string|max:100',
-            'vendor.alamat' => 'required|string|max:255',
-            'vendor.email' => 'nullable|email',
-            'vendor.telepon' => 'nullable|string|max:20',
-            'vendor.nama_direktur' => 'required|string|max:255',
-            'vendor.jenis_usaha' => 'nullable|string|max:255',
-            'vendor.klasifikasi' => 'nullable|string|max:255',
-            'vendor.kualifikasi' => 'nullable|string|max:255',
-            'vendor.provinsi' => 'nullable|string|max:100',
-            'vendor.kabupaten' => 'nullable|string|max:100',
-            'vendor.kode_pos' => 'nullable|string|max:10',
-            'vendor.latitude' => 'nullable|numeric',
-            'vendor.longitude' => 'nullable|numeric',
-            'foto_vendor.*' => 'image|max:2048',
-            'akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'nib_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'npwp_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'siup' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'izin_usaha_lain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'ktp_direktur' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'user.name' => 'required|string|max:255',
-    'user.email' => [
-        'required',
-        'email',
-        'max:255',
-        Rule::unique('users', 'email')->ignore($this->user['id'] ?? null),
-    ],
-    'user.password' => $this->userExists
-        ? 'nullable|string|min:6' // update → boleh kosong
-        : 'required|string|min:6', // create → wajib diisi
+        // Dynamic validation for email uniqueness
+        $rules = array_merge($this->rules, [
+            'user.email' => [
+                'required',
+                'email',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($this->user['id']),
+            ],
         ]);
 
-        $vendor = Vendor::findOrFail($this->vendorId);
-
-        foreach ([
-            'akta_pendirian', 'nib_file', 'npwp_file', 'siup', 'izin_usaha_lain', 'ktp_direktur'
-        ] as $field) {
-            if ($this->$field) {
-                $path = $this->$field->store('vendor/dokumen');
-                $vendor->$field = $path;
-            }
+        // Remove password validation if not updated
+        if (empty($this->user['password'])) {
+            unset($rules['user.password']);
+            unset($rules['user.password_confirmation']);
         }
 
+        $this->validate($rules);
+
+        // Update vendor record
+        $vendor = Vendor::findOrFail($this->vendorId);
         $vendor->update($this->vendor);
 
-        if (!empty($this->user['email'])) {
-            if ($this->userExists) {
-                // Update user yang sudah ada
-                $user = User::findOrFail($this->user['id']);
-                $user->name = $this->user['name'];
-                $user->email = $this->user['email'];
-
-                if (!empty($this->user['password'])) {
-                    $user->password = Hash::make($this->user['password']);
-                }
-
-                $user->save();
-            } else {
-                // Buat user baru
-                $user = User::create([
-                    'name' => $this->user['name'],
-                    'email' => $this->user['email'],
-                    'password' => Hash::make($this->user['password'] ?? 'password123'), // fallback jika password tidak diisi
+        // Update or create klasifikasi usaha
+        if (!empty($this->klasifikasiUsaha)) {
+            // Delete existing TagVendor records
+            TagVendor::where('vendor_id', $vendor->id)->delete();
+            foreach ($this->klasifikasiUsaha as $klasifikasi) {
+                TagVendor::create([
                     'vendor_id' => $vendor->id,
+                    'tag_id' => $klasifikasi['nama'],
+                    'latitude' => $klasifikasi['lat'],
+                    'longitude' => $klasifikasi['long'],
+                    'photo_path' => $klasifikasi['foto'],
                 ]);
-
-                $user->syncRoles(['vendor']);
             }
         }
 
-        if ($this->foto_vendor && is_array($this->foto_vendor)) {
-            foreach ($this->foto_vendor as $foto) {
-                $path = $foto->store('vendor/foto', 'public');
-                VendorPhoto::create([
-                    'vendor_id' => $vendor->id,
-                    'photo_path' => $path,
-                ]);
+        // Process document uploads
+        $this->processDocumentUploads($vendor);
+
+        // Update or create user
+        if (!empty($this->user['email'])) {
+            $userData = [
+                'name' => $this->user['name'],
+                'email' => $this->user['email'],
+                'vendor_id' => $vendor->id,
+            ];
+            if (!empty($this->user['password'])) {
+                $userData['password'] = Hash::make($this->user['password']);
             }
+            $user = User::updateOrCreate(
+                ['id' => $this->user['id']],
+                $userData
+            );
+            $user->syncRoles(['vendor']);
         }
 
         session()->flash('message', 'Vendor berhasil diperbarui.');
         return redirect()->route('penyedia.vendor-index');
     }
 
+    private function processDocumentUploads($vendor)
+    {
+        $documentFields = [
+            'akta_pendirian',
+            'nib_file',
+            'npwp_file',
+            'siup',
+            'izin_usaha_lain',
+            'ktp_direktur',
+            'dok_kebenaran_usaha_file',
+            'bukti_setor_pajak_file',
+        ];
+
+        foreach ($documentFields as $field) {
+            if ($this->$field) {
+                // Delete old file if exists
+                if ($vendor->$field) {
+                    Storage::disk('public')->delete($vendor->$field);
+                }
+                $path = $this->$field->store('vendor/dokumen', 'public');
+                $vendor->$field = $path;
+            }
+        }
+
+        $vendor->save();
+    }
+
+    public function simpanKlasifikasiUsaha()
+    {
+        $this->validate([
+            'vendor.klasifikasi' => 'required',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'foto' => 'nullable|image|max:2048',
+        ], [
+            'vendor.klasifikasi.required' => 'Klasifikasi bidang usaha harus dipilih',
+            'latitude.required' => 'Lokasi (latitude) harus ditentukan',
+            'longitude.required' => 'Lokasi (longitude) harus ditentukan',
+            'foto.image' => 'File harus berupa gambar',
+        ]);
+
+        $foto_path = null;
+        if ($this->foto) {
+            $foto_path = $this->foto->store('vendor/foto', 'public');
+        }
+
+        $klasifikasiName = Tag::find($this->vendor['klasifikasi'])->nama ?? $this->vendor['klasifikasi'];
+
+        $this->klasifikasiUsaha[] = [
+            'nama' => $this->vendor['klasifikasi'],
+            'nama_text' => $klasifikasiName,
+            'foto' => $foto_path,
+            'long' => $this->longitude,
+            'lat' => $this->latitude,
+        ];
+
+        $this->resetKlasifikasi();
+        $this->dispatch('render-map');
+    }
+
+    public function resetKlasifikasi()
+    {
+        $this->vendor['klasifikasi'] = null;
+        $this->foto = null;
+        $this->latitude = null;
+        $this->longitude = null;
+    }
+
+    public function deleteKlasifikasi($index)
+    {
+        if (isset($this->klasifikasiUsaha[$index]['foto']) && $this->klasifikasiUsaha[$index]['foto']) {
+            Storage::disk('public')->delete($this->klasifikasiUsaha[$index]['foto']);
+        }
+
+        unset($this->klasifikasiUsaha[$index]);
+        $this->klasifikasiUsaha = array_values($this->klasifikasiUsaha);
+    }
+
+    public function getKlasifikasiName($id)
+    {
+        return Tag::find($id)->nama ?? 'Unknown';
+    }
+
     public function render()
     {
-        return view('livewire.penyedia.vendor-edit');
+        $kualifikasi = ComCode::where('code_group', 'KUALIFIKASI_ST')->get();
+        $jenisUsaha = ComCode::where('code_group', 'JENIS_USAHA_ST')->get();
+        $klasifikasi = Tag::all();
+        $bank = ComCode::where('code_group', 'BANK_ST')->get();
+
+        return view('livewire.penyedia.vendor-edit', [
+            'listKualifikasi' => $kualifikasi,
+            'listJenisUsaha' => $jenisUsaha,
+            'listKlasifikasi' => $klasifikasi,
+            'listBank' => $bank,
+        ]);
     }
 }
