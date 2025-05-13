@@ -34,6 +34,8 @@ class NegosiasiPage extends Component
     public $lastSenderId;
     public $logIdDisetujui;
 
+    public $logItems = [];
+
     protected $rules = [
         'penawaran' => 'required|numeric',
         'keterangan' => 'nullable|string',
@@ -64,6 +66,17 @@ class NegosiasiPage extends Component
             $this->baNegoisasiPath = $this->negosiasi->ba_negoisasi ?? null;
 
         }
+        $rincianList = $this->paketKegiatan->rincian; // pastikan relasi `rincian` ada di model PaketKegiatan
+
+        $this->logItems = $rincianList->map(function ($item) {
+            return [
+                'paket_kegiatan_rinci_id' => $item->id,
+                'uraian' => $item->uraian,
+                'quantity' => $item->quantity ?? 1, // tampilkan quantity asli dari rincian
+                'penawaran' => 0,
+                'catatan' => null,
+            ];
+        })->toArray();
     }
 
     public function loadNegosiasiLogs()
