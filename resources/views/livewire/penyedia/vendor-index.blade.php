@@ -57,7 +57,7 @@
                                     <td class="px-3 py-2 align-middle">{{ $vendor->nama_perusahaan }}</td>
                                     <td class="px-3 py-2 align-middle">{{ $vendor->nib }}</td>
                                     <td class="px-3 py-2 align-middle">{{ $vendor->nama_direktur }}</td>
-                                    <td class="px-3 py-2 align-middle">{{ $vendor->jenis_usaha }}</td>
+                                    <td class="px-3 py-2 align-middle">{{ $vendor->jenisUsaha->code_nm ?? '' }}</td>
                                     <td class="px-3 py-2 text-center align-middle text-nowrap">
                                         <a href="{{ route('penyedia.vendor-profile', $vendor->id) }}') }}"
                                             class="btn btn-sm btn-info mb-1">

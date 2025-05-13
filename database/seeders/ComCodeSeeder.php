@@ -35,6 +35,10 @@ class ComCodeSeeder extends Seeder
             ['com_cd' => 'PENAWARAN_ST_03', 'code_nm' => 'Ditolak', 'code_group' => 'PENAWARAN_ST'],
             ['com_cd' => 'NEGOSIASI_ST_01', 'code_nm' => 'Berlangsung', 'code_group' => 'NEGOSIASI_ST'],
             ['com_cd' => 'NEGOSIASI_ST_02', 'code_nm' => 'Selesai', 'code_group' => 'NEGOSIASI_ST'],
+            ['com_cd' => 'KUALIFIKASI_ST_01', 'code_nm' => 'Kecil', 'code_group' => 'KUALIFIKASI_ST'],
+            ['com_cd' => 'KUALIFIKASI_ST_02', 'code_nm' => 'Non Kecil', 'code_group' => 'KUALIFIKASI_ST'],
+            ['com_cd' => 'JENIS_USAHA_ST_01', 'code_nm' => 'Jasa', 'code_group' => 'JENIS_USAHA_ST'],
+            ['com_cd' => 'JENIS_USAHA_ST_02', 'code_nm' => 'Perdagangan', 'code_group' => 'JENIS_USAHA_ST'],
 
 
         ];

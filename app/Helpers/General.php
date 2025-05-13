@@ -2,6 +2,7 @@
 
 use App\Models\Penawaran;
 use App\Models\Pengajuan;
+use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
 
 function genNo()
@@ -141,6 +142,16 @@ if (!function_exists('badgePenawaran')) {
             ->orWhere('dok_kebenaran_usaha', null)
             ->where('vendor_id', auth()->user()->vendor_id)
             ->count();
+    }
+
+}
+
+if (!function_exists('jenisKlasifikasi')) {
+    function jenisKlasifikasi($id)
+    {
+        $a = Tag::find($id);
+
+        return $a->kode_kbli . ' - ' . $a->nama;
     }
 
 }

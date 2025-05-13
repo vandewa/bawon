@@ -14,9 +14,13 @@ class Vendor extends Model
     {
         return $this->belongsToMany(Tag::class, 'tag_vendor');
     }
+    public function jenisUsaha()
+    {
+        return $this->belongsTo(ComCode::class, 'jenis_usaha');
+    }
     public function photos()
-{
-    return $this->hasMany(VendorPhoto::class);
-}
+    {
+        return $this->hasMany(VendorPhoto::class);
+    }
 
 }

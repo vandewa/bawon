@@ -123,6 +123,19 @@
                                           <p>Role</p>
                                       </a>
                                   </li>
+                                  <li class="nav-item">
+                                      <a href="{{ route('master.tag') }}"
+                                          class="nav-link
+                                            {{ Request::segment(2) == 'tag' ? 'active' : '' }}
+                                        ">
+                                          @if (Request::segment(2) == 'tag')
+                                              <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                          @else
+                                              <i class="ml-2 far fa-circle nav-icon"></i>
+                                          @endif
+                                          <p>Kualifikasi Bidang Usaha</p>
+                                      </a>
+                                  </li>
 
                               </ul>
                           </li>

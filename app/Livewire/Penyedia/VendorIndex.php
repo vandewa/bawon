@@ -24,9 +24,11 @@ class VendorIndex extends Component
 
     public function render()
     {
-        $vendors = Vendor::query()
-            ->where('nama_perusahaan', 'like', "%{$this->search}%")
-            ->orWhere('nib', 'like', "%{$this->search}%")
+        $vendors = Vendor::with(['jenisUsaha'])
+            ->where(function ($query) {
+                $query->where('nama_perusahaan', 'like', "%{$this->search}%")
+                    ->orWhere('nib', 'like', "%{$this->search}%");
+            })
             ->orderBy('nama_perusahaan')
             ->paginate(10);
 
@@ -34,13 +36,13 @@ class VendorIndex extends Component
     }
 
     public function showDetail($id)
-{
-    $this->vendorId = $id;
-    $this->isEdit = false;
-    $this->showModal = true;
-    $vendor = \App\Models\Vendor::findOrFail($id);
-    $this->fill($vendor->toArray());
-}
+    {
+        $this->vendorId = $id;
+        $this->isEdit = false;
+        $this->showModal = true;
+        $vendor = \App\Models\Vendor::findOrFail($id);
+        $this->fill($vendor->toArray());
+    }
 
     public function create()
     {
@@ -74,17 +76,24 @@ class VendorIndex extends Component
         ]);
 
         $data = $this->only([
-            'nama_perusahaan', 'nib', 'npwp', 'alamat', 'email', 'telepon',
-            'nama_direktur', 'jenis_usaha', 'klasifikasi', 'kualifikasi',
-            'provinsi', 'kabupaten', 'kode_pos'
+            'nama_perusahaan',
+            'nib',
+            'npwp',
+            'alamat',
+            'email',
+            'telepon',
+            'nama_direktur',
+            'jenis_usaha',
+            'klasifikasi',
+            'kualifikasi',
+            'provinsi',
+            'kabupaten',
+            'kode_pos'
         ]);
 
         $vendor = Vendor::updateOrCreate(['id' => $this->vendorId], $data);
 
-        foreach ([
-            'akta_pendirian', 'nib_file', 'npwp_file', 'siup', 'izin_usaha_lain',
-            'ktp_direktur', 'rekening_perusahaan'
-        ] as $field) {
+        foreach (['akta_pendirian', 'nib_file', 'npwp_file', 'siup', 'izin_usaha_lain', 'ktp_direktur', 'rekening_perusahaan'] as $field) {
             if ($this->$field) {
                 $vendor->$field = $this->$field->store("dokumen/vendor/$field");
             }
@@ -132,10 +141,30 @@ class VendorIndex extends Component
     public function resetForm()
     {
         $this->reset([
-            'vendorId', 'nama_perusahaan', 'nib', 'npwp', 'alamat', 'email', 'telepon',
-            'nama_direktur', 'jenis_usaha', 'klasifikasi', 'kualifikasi',
-            'provinsi', 'kabupaten', 'kode_pos', 'akta_pendirian', 'nib_file', 'npwp_file',
-            'siup', 'izin_usaha_lain', 'ktp_direktur', 'rekening_perusahaan', 'isEdit', 'showModal', 'idHapus'
+            'vendorId',
+            'nama_perusahaan',
+            'nib',
+            'npwp',
+            'alamat',
+            'email',
+            'telepon',
+            'nama_direktur',
+            'jenis_usaha',
+            'klasifikasi',
+            'kualifikasi',
+            'provinsi',
+            'kabupaten',
+            'kode_pos',
+            'akta_pendirian',
+            'nib_file',
+            'npwp_file',
+            'siup',
+            'izin_usaha_lain',
+            'ktp_direktur',
+            'rekening_perusahaan',
+            'isEdit',
+            'showModal',
+            'idHapus'
         ]);
     }
 }

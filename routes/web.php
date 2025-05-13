@@ -65,6 +65,7 @@ use App\Livewire\Generator\Penyedia\LaporanHasilPemeriksaanOlehKasiKaur as Penye
 use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan as SwakelolaHasilPembahasanKegiatanPersiapanPengadaan;
 
 use App\Livewire\Generator\Desa\Tpk as GeneratorTpk;
+use App\Livewire\Master\Tag;
 use App\Livewire\Penyedia\LelangIndex;
 use App\Livewire\Penyedia\PengajuanLelangCreate;
 
@@ -152,6 +153,7 @@ Route::middleware([
         Route::get('user/{id?}', User::class)->name('user');
         Route::get('role/{id?}', Role::class)->name('role');
         Route::get('role-index', RoleIndex::class)->name('role.index');
+        Route::get('tag/{id?}', Tag::class)->name('tag');
 
 
     });
