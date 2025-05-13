@@ -3,13 +3,13 @@
         <div class="mb-1 row">
             <div class="col-sm-6 d-flex align-items-center">
                 <h3 class="m-0">
-                    <i class="fas fa-industry mr-2"></i> Data Vendor / Penyedia
+                    <i class="fas fa-industry mr-2"></i> Data Penyedia
                 </h3>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item active">
-                        <i class="fas fa-building"></i> Vendor
+                        <i class="fas fa-building"></i> Penyedia
                     </li>
                 </ol>
             </div>
@@ -33,7 +33,7 @@
                     </div>
                     <div>
                         <a href="{{ route('penyedia.vendor-create') }}" class="btn btn-info">
-                            <i class="fas fa-plus-circle"></i> Tambah Vendor
+                            <i class="fas fa-plus-circle"></i> Tambah Penyedia
                         </a>
                     </div>
                 </div>
