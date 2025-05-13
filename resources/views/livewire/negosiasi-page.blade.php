@@ -190,8 +190,9 @@
                                         <div
                                             class="px-3 py-2 card-header d-flex justify-content-between align-items-center">
                                             <strong>{{ $log->user->name ?? 'Admin' }}</strong>
-                                            <small
-                                                class="text-muted">{{ $log->created_at->format('H:i d-m-Y') }}</small>
+                                            <small class="text-muted">
+                                                {{ \Carbon\Carbon::parse($log->created_at)->translatedFormat('d F Y, H:i') }}
+                                            </small>
                                         </div>
                                         <div class="card-body">
                                             <p class="mb-1">
@@ -221,23 +222,45 @@
                                                                 <tr>
                                                                     <th style="width:5%">#</th>
                                                                     <th>Uraian</th>
-                                                                    <th class="text-end">Penawaran (Rp)</th>
+                                                                    <th style="width:10%">Volume</th>
+                                                                    <th style="width:10%">Satuan</th>
+                                                                    <th style="width:15%" class="text-end">Harga Satuan
+                                                                        (Rp)</th>
+                                                                    <th style="width:15%" class="text-end">Total (Rp)
+                                                                    </th>
                                                                     <th>Catatan</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 @foreach ($log->items as $i => $item)
+                                                                    @php
+                                                                        $qty = $item->rincian->quantity ?? 1;
+                                                                        $satuan =
+                                                                            $item->rincian->rincian->satuan ?? '-';
+                                                                        $uraian =
+                                                                            $item->rincian->rincian->uraian ?? '-';
+                                                                        $harga = $item->penawaran ?? 0;
+                                                                        $total = $harga * $qty;
+                                                                    @endphp
                                                                     <tr>
                                                                         <td>{{ $i + 1 }}</td>
-                                                                        <td>{{ $item->rincian->uraian ?? '-' }}</td>
-                                                                        <td class="text-end">
-                                                                            {{ number_format($item->penawaran, 2, ',', '.') }}
+                                                                        <td>{{ $uraian }}</td>
+                                                                        <td class="text-center">{{ $qty }}
+                                                                        </td>
+                                                                        <td class="text-center">{{ $satuan }}
+                                                                        </td>
+                                                                        <td class="text-end">Rp
+                                                                            {{ number_format($harga, 2, ',', '.') }}
+                                                                        </td>
+                                                                        <td class="text-end">Rp
+                                                                            {{ number_format($total, 2, ',', '.') }}
                                                                         </td>
                                                                         <td>{{ $item->catatan ?? '-' }}</td>
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
                                                         </table>
+
                                                     </div>
                                                 </div>
                                             @endif
@@ -268,85 +291,111 @@
                             </div>
 
                             <!-- Form Input Negosiasi -->
+
                             <div class="mt-4 shadow-sm card border-info">
                                 <div class="text-white card-header bg-info">
                                     <h5 class="mb-0"><i class="fas fa-comments-dollar"></i> Form Negosiasi</h5>
                                 </div>
                                 <div class="card-body">
+
                                     <form wire:submit.prevent="saveNegosiasi">
                                         <!-- Penawaran Otomatis -->
-                                        <div class="form-group">
-                                            <label for="penawaran">Penawaran Total (otomatis dari item)</label>
-                                            <input type="number" wire:model="penawaran" class="form-control"
-                                                id="penawaran" readonly style="background-color: #f8f9fa;">
-                                            @error('penawaran')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-
-                                        <!-- Keterangan -->
-                                        <div class="form-group">
-                                            <label for="keterangan">Keterangan</label>
-                                            <textarea wire:model="keterangan" class="form-control" id="keterangan"
-                                                {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}></textarea>
-                                            @error('keterangan')
-                                                <span class="text-danger">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-
-                                        <!-- Tabel Negosiasi per Item -->
-                                        <div class="mt-4">
-                                            <h5>Negosiasi per Item Rincian:</h5>
-                                            <div class="table-responsive">
-                                                <table class="table mb-0 table-bordered table-sm">
-                                                    <thead class="thead-light">
-                                                        <tr>
-                                                            <th style="width:5%">#</th>
-                                                            <th>Uraian</th>
-                                                            <th style="width:10%">Qty</th>
-                                                            <th style="width:20%">Penawaran (Rp)</th>
-                                                            <th>Catatan</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($logItems as $index => $item)
-                                                            <tr>
-                                                                <td>{{ $loop->iteration }}</td>
-                                                                <td>{{ $item['uraian'] }}</td>
-                                                                <td>
-                                                                    <input type="number"
-                                                                        class="form-control form-control-sm bg-light"
-                                                                        value="{{ $item['quantity'] }}" readonly
-                                                                        tabindex="-1">
-                                                                </td>
-                                                                <td>
-                                                                    <input type="number"
-                                                                        class="form-control form-control-sm"
-                                                                        wire:model.defer="logItems.{{ $index }}.penawaran"
-                                                                        {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
-                                                                </td>
-                                                                <td>
-                                                                    <input type="text"
-                                                                        class="form-control form-control-sm"
-                                                                        wire:model.defer="logItems.{{ $index }}.catatan"
-                                                                        {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-
-                                                    <tfoot>
-                                                        <tr class="bg-light">
-                                                            <th colspan="2" class="text-end">Total Penawaran</th>
-                                                            <th colspan="2">
-                                                                Rp
-                                                                {{ number_format(array_sum(array_column($logItems, 'penawaran')), 2, ',', '.') }}
-                                                            </th>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
+                                        @if (!$logSudahDisetujui)
+                                            <div class="form-group">
+                                                <label for="penawaran">Penawaran Total (otomatis dari item)</label>
+                                                <input type="number" wire:model="penawaran" class="form-control"
+                                                    id="penawaran" readonly style="background-color: #f8f9fa;">
+                                                @error('penawaran')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
                                             </div>
-                                        </div>
+
+                                            <!-- Keterangan -->
+                                            <div class="form-group">
+                                                <label for="keterangan">Keterangan</label>
+                                                <textarea wire:model="keterangan" class="form-control" id="keterangan"
+                                                    {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}></textarea>
+                                                @error('keterangan')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            <!-- Tabel Negosiasi per Item -->
+                                            <div class="mt-4">
+                                                <h5>Negosiasi per Item Rincian:</h5>
+                                                <div class="table-responsive">
+                                                    <table class="table mb-0 table-bordered table-sm">
+                                                        <thead class="thead-light">
+                                                            <tr>
+                                                                <th style="width:5%">#</th>
+                                                                <th>Uraian</th>
+                                                                <th style="width:10%">Qty</th>
+                                                                <th style="width:15%">Harga Satuan (Rp)</th>
+                                                                <th style="width:15%">Total (Rp)</th>
+                                                                <th>Catatan</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($logItems as $index => $item)
+                                                                @php
+                                                                    $qty = $item['quantity'] ?: 1;
+                                                                    $hargaSatuan = $item['penawaran'] ?? 0;
+                                                                    $total = $hargaSatuan * $qty;
+                                                                @endphp
+                                                                <tr>
+                                                                    <td>{{ $loop->iteration }}</td>
+                                                                    <td>{{ $item['uraian'] }}</td>
+
+                                                                    {{-- Quantity --}}
+                                                                    <td>
+                                                                        <input type="number"
+                                                                            class="form-control form-control-sm bg-light"
+                                                                            value="{{ $qty }}" readonly
+                                                                            tabindex="-1">
+                                                                    </td>
+
+                                                                    {{-- Harga Satuan --}}
+                                                                    <td>
+                                                                        <input type="number"
+                                                                            class="form-control form-control-sm"
+                                                                            wire:model.defer="logItems.{{ $index }}.penawaran"
+                                                                            {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
+                                                                    </td>
+
+                                                                    {{-- Total Penawaran --}}
+                                                                    <td>
+                                                                        <input type="text"
+                                                                            class="form-control form-control-sm bg-light"
+                                                                            value="Rp {{ number_format($total, 0, ',', '.') }}"
+                                                                            readonly tabindex="-1">
+                                                                    </td>
+
+                                                                    {{-- Catatan --}}
+                                                                    <td>
+                                                                        <input type="text"
+                                                                            class="form-control form-control-sm"
+                                                                            wire:model.defer="logItems.{{ $index }}.catatan"
+                                                                            {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+
+
+                                                        <tfoot>
+                                                            <tr class="bg-light">
+                                                                <th colspan="2" class="text-end">Total Penawaran
+                                                                </th>
+                                                                <th colspan="2">
+                                                                    Rp
+                                                                    {{ number_format(array_sum(array_column($logItems, 'penawaran')), 2, ',', '.') }}
+                                                                </th>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        @endif
 
                                         <!-- Tombol -->
                                         <div class="gap-2 mt-4 d-flex justify-content-start">
@@ -372,6 +421,8 @@
                                     </form>
                                 </div>
                             </div>
+
+
 
                         </div>
                     </div>
