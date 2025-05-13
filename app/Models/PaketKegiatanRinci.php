@@ -10,4 +10,9 @@ class PaketKegiatanRinci extends Model
     use HasFactory;
     protected $guarded = [];
 
+    public function paketKegiatan()
+    {
+        return $this->belongsTo(PaketKegiatan::class);
+    }
+
 }

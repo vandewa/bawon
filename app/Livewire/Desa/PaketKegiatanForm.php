@@ -19,6 +19,7 @@ class PaketKegiatanForm extends Component
     public $spek_teknis, $kak, $jadwal_pelaksanaan, $rencana_kerja, $hps;
     public $paket_type;
     public $paketTypes = [];
+    public $quantities = [];
 
     public $rincianList = [];
     public $selectedRincian = [];
@@ -29,17 +30,22 @@ class PaketKegiatanForm extends Component
         $this->paketTypes = ComCode::paketTypes();
 
         $this->rincianList = PaketPekerjaanRinci::where('paket_pekerjaan_id', $paketPekerjaanId)
-        ->where('use_st', false)
-
             ->get()
             ->toArray();
+
+            foreach ($this->rincianList as $rinci) {
+                $this->quantities[$rinci['id']] = 1;
+            }
     }
 
     public function updatedSelectedRincian()
     {
         $this->jumlah_anggaran = collect($this->rincianList)
-            ->whereIn('id', $this->selectedRincian)
-            ->sum('anggaran_stlh_pak');
+        ->filter(fn($item) => in_array($item['id'], $this->selectedRincian))
+        ->sum(function ($item) {
+            $qty = $this->quantities[$item['id']] ?? 1;
+            return $item['anggaran_stlh_pak'] * $qty;
+        });
     }
 
     public function save()
@@ -65,24 +71,33 @@ class PaketKegiatanForm extends Component
 
         $kegiatan->save();
         foreach ($this->selectedRincian as $rinciId) {
+            $rinci = collect($this->rincianList)->firstWhere('id', $rinciId);
+            $qty = $this->quantities[$rinciId] ?? 1;
+
+            $used = $rinci['quantity'] ?? 0;
+            $available = $rinci['jml_satuan_pak'] - $used;
+
+            if ($qty > $available) {
+                $this->addError('quantities.' . $rinciId, 'Jumlah melebihi sisa tersedia.');
+                return;
+            }
+
             PaketKegiatanRinci::create([
                 'paket_kegiatan_id' => $kegiatan->id,
                 'paket_pekerjaan_rinci_id' => $rinciId,
+                'quantity' => $qty,
             ]);
+
+           // Hitung ulang total quantity dari tabel anak
+            $total = PaketKegiatanRinci::whereHas('paketKegiatan', function ($q) {
+                $q->where('paket_pekerjaan_id', $this->paketPekerjaan->id);
+            })
+            ->where('paket_pekerjaan_rinci_id', $rinciId)
+            ->sum('quantity');
+
+            PaketPekerjaanRinci::where('id', $rinciId)->update(['quantity' => $total]);
         }
 
-        // Tandai rincian sebagai sudah digunakan
-       // Set true untuk yang dipakai
-        PaketPekerjaanRinci::where('paket_pekerjaan_id', $this->paketPekerjaan->id)
-        ->whereIn('id', function ($query) {
-            $query->select('paket_pekerjaan_rinci_id')->from('paket_kegiatan_rincis');
-        })->update(['use_st' => true]);
-
-        // Set false untuk yang tidak dipakai
-        PaketPekerjaanRinci::where('paket_pekerjaan_id', $this->paketPekerjaan->id)
-        ->whereNotIn('id', function ($query) {
-            $query->select('paket_pekerjaan_rinci_id')->from('paket_kegiatan_rincis');
-        })->update(['use_st' => false]);
 
 
 

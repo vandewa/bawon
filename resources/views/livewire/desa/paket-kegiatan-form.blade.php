@@ -61,6 +61,8 @@
                                             <th style="width: 40px;"></th>
                                             <th>KD Rincian</th>
                                             <th>Uraian</th>
+                                            <th>Jumlah Awal</th>
+                                            <th>Jumlah Dibelanjakan</th>
                                             <th>Jumlah</th>
                                             <th>Satuan</th>
                                             <th>Harga</th>
@@ -70,20 +72,36 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($rincianList as $i => $rinci)
-                                            @continue($rinci['use_st'])
+                                            @php
+                                                $usedQty = $rinci['quantity'] ?? 0;
+                                                $sisaQty = $rinci['jml_satuan_pak'] - $usedQty;
+                                                $isDisabled = $sisaQty <= 0;
+                                            @endphp
+
                                             <tr>
                                                 <td class="text-center align-middle">
                                                     <input type="checkbox" wire:model.live="selectedRincian"
-                                                        value="{{ $rinci['id'] }}">
+                                                        value="{{ $rinci['id'] }}" {{ $isDisabled ? 'disabled' : '' }}>
                                                 </td>
                                                 <td>{{ $rinci['kd_rincian'] }}</td>
                                                 <td>{{ $rinci['uraian'] }}</td>
-                                                <td>{{ number_format($rinci['jml_satuan_pak'], 0, ',', '.') }}</td>
+                                                <td>{{ $rinci['jml_satuan_pak'] }}</td>
+                                                <td>{{ $rinci['quantity'] ?? 0 }}</td>
+                                                <td>
+                                                    <input type="number" min="1" max="{{ $sisaQty }}"
+                                                        wire:model.live="quantities.{{ $rinci['id'] }}"
+                                                        class="form-control form-control-sm" style="width: 80px;"
+                                                        {{ in_array($rinci['id'], $selectedRincian) ? '' : 'disabled' }}>
+                                                </td>
                                                 <td>{{ $rinci['satuan'] }}</td>
                                                 <td>{{ number_format($rinci['hrg_satuan_pak'], 0, ',', '.') }}</td>
-                                                <td><strong>{{ number_format($rinci['anggaran_stlh_pak'], 0, ',', '.') }}</strong>
+                                                <td>
+                                                    @php
+                                                        $qty = $quantities[$rinci['id']] ?? 1;
+                                                        $total = $rinci['anggaran_stlh_pak'] * $qty;
+                                                    @endphp
+                                                    <strong>{{ number_format($total, 0, ',', '.') }}</strong>
                                                 </td>
-
                                             </tr>
                                         @empty
                                             <tr>
