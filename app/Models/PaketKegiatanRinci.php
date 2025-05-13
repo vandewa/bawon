@@ -14,5 +14,9 @@ class PaketKegiatanRinci extends Model
     {
         return $this->belongsTo(PaketKegiatan::class);
     }
+    public function rincian()
+    {
+        return $this->belongsTo(PaketPekerjaanRinci::class, 'paket_pekerjaan_rinci_id');
+    }
 
 }

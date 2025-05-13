@@ -53,8 +53,17 @@ class PaketKegiatanIndex extends Component
 
         if (!$kegiatan) return;
 
-        // Ambil ID rincian yang terkait sebelum menghapus
-        $rincianIds = $kegiatan->rincian()->pluck('paket_pekerjaan_rinci_id')->toArray();
+        // Ambil rincian yang terkait sebelum menghapus
+        $rincianList = $kegiatan->rincian()->get();
+
+        foreach ($rincianList as $rinci) {
+            // Kurangi quantity di PaketPekerjaanRinci
+            PaketPekerjaanRinci::where('id', $rinci->paket_pekerjaan_rinci_id)
+                ->decrement('quantity', $rinci->quantity);
+        }
+
+        // Ambil ID rincian untuk reset use_st
+        $rincianIds = $rincianList->pluck('paket_pekerjaan_rinci_id')->toArray();
 
         // Hapus relasi dari paket_kegiatan_rincis
         $kegiatan->rincian()->delete();

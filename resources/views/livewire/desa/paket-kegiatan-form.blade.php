@@ -66,7 +66,8 @@
                                             <th>Jumlah</th>
                                             <th>Satuan</th>
                                             <th>Harga</th>
-                                            <th>Total</th>
+                                            <th>Total Anggaran</th>
+                                            <th>Total Belanja</th>
 
                                         </tr>
                                     </thead>
@@ -95,10 +96,11 @@
                                                 </td>
                                                 <td>{{ $rinci['satuan'] }}</td>
                                                 <td>{{ number_format($rinci['hrg_satuan_pak'], 0, ',', '.') }}</td>
+                                                <td>{{ number_format($rinci['anggaran_stlh_pak'], 0, ',', '.') }}</td>
                                                 <td>
                                                     @php
-                                                        $qty = $quantities[$rinci['id']] ?? 1;
-                                                        $total = $rinci['anggaran_stlh_pak'] * $qty;
+                                                        $qty = $quantities[$rinci['id']] ?? 0;
+                                                        $total = $rinci['hrg_satuan_pak'] * $qty;
                                                     @endphp
                                                     <strong>{{ number_format($total, 0, ',', '.') }}</strong>
                                                 </td>

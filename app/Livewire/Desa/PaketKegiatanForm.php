@@ -34,7 +34,7 @@ class PaketKegiatanForm extends Component
             ->toArray();
 
             foreach ($this->rincianList as $rinci) {
-                $this->quantities[$rinci['id']] = 1;
+                $this->quantities[$rinci['id']] = 0;
             }
     }
 
@@ -44,7 +44,7 @@ class PaketKegiatanForm extends Component
         ->filter(fn($item) => in_array($item['id'], $this->selectedRincian))
         ->sum(function ($item) {
             $qty = $this->quantities[$item['id']] ?? 1;
-            return $item['anggaran_stlh_pak'] * $qty;
+            return $item['hrg_satuan_pak'] * $qty;
         });
     }
 
@@ -61,8 +61,11 @@ class PaketKegiatanForm extends Component
         ]);
 
         $jumlah = collect($this->rincianList)
-            ->whereIn('id', $this->selectedRincian)
-            ->sum('anggaran_stlh_pak');
+        ->filter(fn($item) => in_array($item['id'], $this->selectedRincian))
+        ->sum(function ($item) {
+            $qty = $this->quantities[$item['id']] ?? 1;
+            return $item['hrg_satuan_pak'] * $qty;
+        });
 
         $kegiatan = new PaketKegiatan();
         $kegiatan->paket_pekerjaan_id = $this->paketPekerjaan->id;

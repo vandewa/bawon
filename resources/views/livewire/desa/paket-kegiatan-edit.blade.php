@@ -41,7 +41,7 @@
 
                             <div class="form-group col-md-6">
                                 <label><strong>Jumlah Anggaran</strong></label>
-                                <input type="number" class="form-control bg-light" wire:model="jumlah_anggaran"
+                                <input type="number" class="form-control bg-light" wire:model.live="jumlah_anggaran"
                                     readonly>
                                 <small class="form-text text-muted">Otomatis dijumlah dari rincian yang dipilih.</small>
                                 @error('jumlah_anggaran')
@@ -131,6 +131,8 @@
                                             <th>Satuan</th>
                                             <th>Harga</th>
                                             <th>Total</th>
+                                            <th>Jumlah Dibelanjakan</th>
+                                            <th>Qty</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
@@ -145,6 +147,15 @@
                                                     ->kegiatanRinci()
                                                     ->where('paket_kegiatan_id', '!=', $paketKegiatan->id)
                                                     ->exists();
+
+                                                $jumlahDibelanjakan = \App\Models\PaketKegiatanRinci::where(
+                                                    'paket_pekerjaan_rinci_id',
+                                                    $rinci->id,
+                                                )
+                                                    ->where('paket_kegiatan_id', '!=', $paketKegiatan->id)
+                                                    ->sum('quantity');
+
+                                                $sisaTersedia = $rinci->jml_satuan_pak - $jumlahDibelanjakan;
                                             @endphp
 
                                             @continue($dipakaiDiKegiatanLain && !$terkait)
@@ -161,6 +172,17 @@
                                                 <td>{{ number_format($rinci->hrg_satuan_pak, 0, ',', '.') }}</td>
                                                 <td><strong>{{ number_format($rinci->anggaran_stlh_pak, 0, ',', '.') }}</strong>
                                                 </td>
+                                                <td>{{ number_format($jumlahDibelanjakan, 0, ',', '.') }}</td>
+                                                <td>
+                                                    @if (in_array($rinci->id, $selectedRincian))
+                                                        <input type="number" class="form-control form-control-sm"
+                                                            wire:model.live="quantities.{{ $rinci->id }}"
+                                                            min="1" max="{{ $sisaTersedia }}">
+                                                        @error('quantities.' . $rinci->id)
+                                                            <small class="text-danger">{{ $message }}</small>
+                                                        @enderror
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     @if ($terkait)
                                                         <span class="badge badge-info">Digunakan di kegiatan ini</span>
@@ -174,6 +196,7 @@
                                 </table>
                             </div>
                         </div>
+
 
                     </div>
 
