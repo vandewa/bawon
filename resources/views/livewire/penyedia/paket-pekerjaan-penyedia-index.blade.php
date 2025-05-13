@@ -84,8 +84,10 @@
                                                         <li>
                                                             @if ($item->bukti_setor_pajak)
                                                                 <i class="fas fa-check-circle text-success"></i>
-                                                                <a href="{{ Storage::url($item->bukti_setor_pajak) }}"
-                                                                    target="_blank">Bukti Setor Pajak</a>
+                                                                <a href="{{ route('helper.show-picture', ['path' => $item->bukti_setor_pajak]) }}"
+                                                                    target="_blank">
+                                                                    Bukti Setor Pajak
+                                                                </a>
                                                             @else
                                                                 <i class="fas fa-times-circle text-danger"></i> Bukti
                                                                 Setor Pajak
@@ -94,8 +96,10 @@
                                                         <li>
                                                             @if ($item->dok_penawaran)
                                                                 <i class="fas fa-check-circle text-success"></i>
-                                                                <a href="{{ Storage::url($item->dok_penawaran) }}"
-                                                                    target="_blank">Dokumen Penawaran</a>
+                                                                <a href="{{ route('helper.show-picture', ['path' => $item->dok_penawaran]) }}"
+                                                                    target="_blank">
+                                                                    Dokumen Penawaran
+                                                                </a>
                                                             @else
                                                                 <i class="fas fa-times-circle text-danger"></i> Dokumen
                                                                 Penawaran
@@ -104,14 +108,92 @@
                                                         <li>
                                                             @if ($item->dok_kebenaran_usaha)
                                                                 <i class="fas fa-check-circle text-success"></i>
-                                                                <a href="{{ Storage::url($item->dok_kebenaran_usaha) }}"
-                                                                    target="_blank">Dok Kebenaran Usaha</a>
+                                                                <a href="{{ route('helper.show-picture', ['path' => $item->dok_kebenaran_usaha]) }}"
+                                                                    target="_blank">
+                                                                    Dok Kebenaran Usaha
+                                                                </a>
                                                             @else
                                                                 <i class="fas fa-times-circle text-danger"></i> Dok
                                                                 Kebenaran Usaha
                                                             @endif
                                                         </li>
+                                                        <li>
+                                                            @if ($item->paketKegiatan?->ba_evaluasi_penawaran)
+                                                                <i class="fas fa-check-circle text-success"></i>
+                                                                <a href="{{ route('helper.show-picture', ['path' => $item->paketKegiatan->ba_evaluasi_penawaran]) }}"
+                                                                    target="_blank">
+                                                                    BA Evaluasi Penawaran
+                                                                </a>
+                                                            @else
+                                                                <i class="fas fa-times-circle text-danger"></i> BA
+                                                                Evaluasi Penawaran
+                                                            @endif
+                                                        </li>
+
+                                                        @if ($item->statusPenawaran?->com_cd == 'PENAWARAN_ST_02')
+                                                            <li>
+                                                                @if ($item->paketKegiatan?->negosiasi?->ba_negoisasi)
+                                                                    <i class="fas fa-check-circle text-success"></i>
+                                                                    <a href="{{ route('helper.show-picture', ['path' => $item->paketKegiatan->negosiasi->ba_negoisasi]) }}"
+                                                                        target="_blank">
+                                                                        BA Negosiasi
+                                                                    </a>
+                                                                @else
+                                                                    <i class="fas fa-times-circle text-danger"></i> BA
+                                                                    Negosiasi
+                                                                @endif
+                                                            </li>
+                                                            <li>
+                                                                @if ($item->paketKegiatan?->spk)
+                                                                    <i class="fas fa-check-circle text-success"></i>
+                                                                    <a href="{{ route('helper.show-picture', ['path' => $item->paketKegiatan->spk]) }}"
+                                                                        target="_blank">
+                                                                        SPK
+                                                                    </a>
+                                                                @else
+                                                                    <i class="fas fa-times-circle text-danger"></i> SPK
+                                                                @endif
+                                                            </li>
+                                                            <li>
+                                                                @if ($item->paketKegiatan?->surat_perjanjian)
+                                                                    <i class="fas fa-check-circle text-success"></i>
+                                                                    <a href="{{ route('helper.show-picture', ['path' => $item->paketKegiatan->surat_perjanjian]) }}"
+                                                                        target="_blank">
+                                                                        Surat Perjanjian
+                                                                    </a>
+                                                                @else
+                                                                    <i class="fas fa-times-circle text-danger"></i>
+                                                                    Surat Perjanjian
+                                                                @endif
+                                                            </li>
+                                                            <li>
+                                                                @if ($item->paketKegiatan?->laporan_hasil_pemeriksaan)
+                                                                    <i class="fas fa-check-circle text-success"></i>
+                                                                    <a href="{{ route('helper.show-picture', ['path' => $item->paketKegiatan->laporan_hasil_pemeriksaan]) }}"
+                                                                        target="_blank">
+                                                                        Laporan Hasil Pemeriksaan
+                                                                    </a>
+                                                                @else
+                                                                    <i class="fas fa-times-circle text-danger"></i>
+                                                                    Laporan Hasil Pemeriksaan
+                                                                @endif
+                                                            </li>
+                                                            <li>
+                                                                @if ($item->paketKegiatan?->bast_penyedia)
+                                                                    <i class="fas fa-check-circle text-success"></i>
+                                                                    <a href="{{ route('helper.show-picture', ['path' => $item->paketKegiatan->bast_penyedia]) }}"
+                                                                        target="_blank">
+                                                                        BAST Penyedia
+                                                                    </a>
+                                                                @else
+                                                                    <i class="fas fa-times-circle text-danger"></i> BAST
+                                                                    Penyedia
+                                                                @endif
+                                                            </li>
+                                                        @endif
                                                     </ul>
+
+
                                                 </td>
                                                 <td class="px-3 py-2 align-middle">
                                                     @if ($item->statusPenawaran)
@@ -130,20 +212,22 @@
                                                     @endif
                                                 </td>
                                                 <td class="px-3 py-2 text-center align-middle">
-                                                    <div class="d-flex justify-content-center gap-3">
+                                                    <div class="gap-3 d-flex justify-content-center">
                                                         <!-- Tombol Upload/Edit -->
-                                                        <a href="{{ route('penyedia.penawaran.create', $item->id) }}"
-                                                            class="btn btn-outline-secondary btn-sm d-flex align-items-center mr-1">
-                                                            <i class="mr-1 fas fa-upload"></i> Upload/Edit
-                                                        </a>
-
+                                                        @if ($item->statusPenawaran?->com_cd == 'PENAWARAN_ST_01')
+                                                            <a href="{{ route('penyedia.penawaran.create', $item->id) }}"
+                                                                class="mr-1 btn btn-outline-secondary btn-sm d-flex align-items-center">
+                                                                <i class="mr-1 fas fa-upload"></i> Upload/Edit
+                                                            </a>
+                                                        @endif
                                                         <!-- Tombol Negosiasi (conditional) -->
                                                         @if (
                                                             $item->paketKegiatan->negosiasi &&
                                                                 $item->paketKegiatan->paket_type != 'PAKET_TYPE_02' &&
-                                                                $item->statusPenawaran?->com_cd == 'PENAWARAN_ST_02')
+                                                                $item->statusPenawaran?->com_cd == 'PENAWARAN_ST_02' &&
+                                                                $item->paketKegiatan->negosiasi->negosiasi_st != 'NEGOSIASI_ST_02')
                                                             <a href="{{ route('desa.penawaran.pelaksanaan.negosiasi', $item->paketKegiatan->id) }}"
-                                                                class="btn btn-outline-info btn-sm d-flex align-items-center mr-1">
+                                                                class="mr-1 btn btn-outline-info btn-sm d-flex align-items-center">
                                                                 <i class="mr-1 fas fa-handshake"></i> Negosiasi
                                                             </a>
                                                         @endif

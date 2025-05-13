@@ -227,6 +227,19 @@ class NegosiasiPage extends Component
 
     $this->reset('ba_negoisasi', 'nilaiDisepakati');
     $this->closeModal();
+
+    $route = route('desa.penawaran.pelaksanaan.index');
+
+    $this->js(<<<JS
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'BA Negosiasi dan Nilai Kesepakatan berhasil diupload.',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = "$route";
+        });
+    JS);
 }
 
 
