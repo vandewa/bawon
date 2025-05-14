@@ -15,6 +15,6 @@ class Desa extends Model
         return $this->hasMany(PaketPekerjaan::class, 'desa_id');
     }
     public function user() {
-        return $this->hasOne(User::class, 'user_id');
+        return $this->hasOne(User::class, 'desa_id');
     }
 }

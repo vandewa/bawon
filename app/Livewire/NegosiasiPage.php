@@ -319,10 +319,11 @@ public function setujuiLog()
         $a->with(['paketKegiatan.paketPekerjaan.desa.user','vendor']);
     }])->findOrFail($this->logIdDisetujui);
 
+
     if (auth()->user()->hasRole('vendor')) {
         $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
         $nilai = number_format($log->penawaran, 0, ',', '.');
-        $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa ?? null;
+        $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa->user ?? null;
     if ($desa && $desa->whatsapp) {
         $namaDesa = $desa->nama ?? 'Desa';
         $pesanDesa = "Halo {$namaDesa},\n\nPenawaran Anda telah disetujui melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
@@ -334,7 +335,8 @@ public function setujuiLog()
 
         $pesan = "Halo {$namaVendor},\n\nPenawaran Anda telah disetujui melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
         $telepon = $log->negosiasi->vendor->telepon ?? null;
-        if(!$telepon){
+
+        if($telepon){
             kirimPesan::dispatch($telepon, $pesan);
         }
 
