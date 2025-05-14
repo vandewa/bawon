@@ -18,6 +18,10 @@ class Negoisasi extends Model
     {
         return $this->belongsTo(Vendor::class);
     }
+    public function paketKegiatan()
+    {
+        return $this->belongsTo(PaketKegiatan::class);
+    }
 
-    
+
 }

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Vendor;
 use Livewire\Component;
+use App\Jobs\kirimPesan;
 use App\Models\Negoisasi;
 use App\Models\Penawaran;
 use App\Models\NegosiasiLog;
@@ -103,8 +104,8 @@ class NegosiasiPage extends Component
         $this->logItems = $this->paketKegiatan->rincian->map(function ($item) {
             return [
                 'paket_kegiatan_rinci_id' => $item->id,
-                'uraian' => $item->rincian->rincian->uraian,
-                'quantity' => $item->quantity ?? 1,
+                'uraian' => $item->rincian->rincian->uraian?? '-',
+                'quantity' => $item->quantity ?? 0,
                 'penawaran' => 0,
                 'catatan' => null,
             ];
@@ -153,6 +154,8 @@ class NegosiasiPage extends Component
             'keterangan' => $this->keterangan,
             'user_id' => auth()->id(),
         ]);
+
+        $this->kirimWaNego($log->id);
 
         // Simpan semua item (harga satuan saja yang disimpan)
         foreach ($this->logItems as $item) {
@@ -265,9 +268,61 @@ public function konfirmasiSetujuiLog($id)
         })
     JS);
 }
+
+public function kirimWaNego($id){
+    $log = NegosiasiLog::with(['negosiasi' => function($a){
+        $a->with(['paketKegiatan.paketPekerjaan.desa','vendor']);
+    }])->findOrFail($id);
+
+    if (auth()->user()->hasRole('vendor')) {
+        $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
+        $nilai = number_format($log->penawaran, 0, ',', '.');
+        $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa ?? null;
+    if ($desa && $desa->telp) {
+        $namaDesa = $desa->nama ?? 'Desa';
+        $pesanDesa = "Halo {$namaDesa},\n\nPenyedia telah melakukan penawaran melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\.";
+        kirimPesan::dispatch($pesanDesa, $desa->telp);
+    }
+    } else {
+        $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
+        $nilai = number_format($log->penawaran, 0, ',', '.');
+
+        $pesan = "Halo {$namaVendor},\n\Desa telah melakukan penawaran melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\n.";
+        $telepon = $log->negosiasi->vendor->telepon ?? null;
+        if(!$telepon){
+            kirimPesan::dispatch($pesan, $telepon);
+        }
+
+    }
+}
 public function setujuiLog()
 {
-    $log = NegosiasiLog::findOrFail($this->logIdDisetujui);
+    $log = NegosiasiLog::with(['negosiasi' => function($a){
+        $a->with(['paketKegiatan.paketPekerjaan.desa','vendor']);
+    }])->findOrFail($this->logIdDisetujui);
+
+    if (auth()->user()->hasRole('vendor')) {
+        $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
+        $nilai = number_format($log->penawaran, 0, ',', '.');
+        $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa ?? null;
+    if ($desa && $desa->telp) {
+        $namaDesa = $desa->nama ?? 'Desa';
+        $pesanDesa = "Halo {$namaDesa},\n\nPenawaran Anda telah disetujui melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
+        kirimPesan::dispatch($pesanDesa, $desa->telp);
+    }
+    } else {
+        $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
+        $nilai = number_format($log->penawaran, 0, ',', '.');
+
+        $pesan = "Halo {$namaVendor},\n\nPenawaran Anda telah disetujui melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
+        $telepon = $log->negosiasi->vendor->telepon ?? null;
+        if(!$telepon){
+            kirimPesan::dispatch($pesan, $telepon);
+        }
+
+    }
+
+
 
     if ($log->status_st) {
         session()->flash('message', 'Log sudah disetujui sebelumnya.');
