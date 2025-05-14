@@ -181,10 +181,9 @@
                                 <tbody>
                                     @foreach ($penawaran->paketKegiatan->rincian as $index => $rinci)
                                         @php
-
                                             $pekerjaan = $rinci->rincian;
-                                            $qty = $rinci->quantity;
-                                            $harga = $penawaranItems[$rinci->id] ?? 0;
+                                            $qty = (float) $rinci->quantity;
+                                            $harga = (float) ($penawaranItems[$rinci->id] ?? 0);
                                             $subtotal = $qty * $harga;
                                         @endphp
                                         <tr>
@@ -214,7 +213,8 @@
                                             $total = 0;
                                             foreach ($penawaranItems as $rinciId => $harga) {
                                                 $rinci = $penawaran->paketKegiatan->rincian->firstWhere('id', $rinciId);
-                                                $qty = $rinci?->quantity ?? 0;
+                                                $qty = (float) ($rinci?->quantity ?? 0);
+                                                $harga = (float) $harga; // atau (float) jika harganya desimal
                                                 $total += $harga * $qty;
                                             }
                                         @endphp

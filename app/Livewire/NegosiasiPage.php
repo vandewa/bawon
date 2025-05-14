@@ -229,6 +229,7 @@ class NegosiasiPage extends Component
     PaketKegiatan::where('id', $this->paket_kegiatan_id)->update([
         'nilai_kesepakatan' => $this->nilaiDisepakati,
     ]);
+    DB::commit();
     } catch (\Throwable $e) {
         DB::rollBack();
         report($e);
@@ -315,17 +316,17 @@ public function kirimWaNego($id){
 public function setujuiLog()
 {
     $log = NegosiasiLog::with(['negosiasi' => function($a){
-        $a->with(['paketKegiatan.paketPekerjaan.desa','vendor']);
+        $a->with(['paketKegiatan.paketPekerjaan.desa.user','vendor']);
     }])->findOrFail($this->logIdDisetujui);
 
     if (auth()->user()->hasRole('vendor')) {
         $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
         $nilai = number_format($log->penawaran, 0, ',', '.');
         $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa ?? null;
-    if ($desa && $desa->telp) {
+    if ($desa && $desa->whatsapp) {
         $namaDesa = $desa->nama ?? 'Desa';
         $pesanDesa = "Halo {$namaDesa},\n\nPenawaran Anda telah disetujui melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
-        kirimPesan::dispatch( $desa->telp, $pesanDesa);
+        kirimPesan::dispatch( $desa->whatsapp, $pesanDesa);
     }
     } else {
         $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';

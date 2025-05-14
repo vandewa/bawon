@@ -86,6 +86,7 @@ class PengajuanPenawaranCreate extends Component
         }
 
         $this->penawaran->update(['nilai' => $total]);
+        DB::commit();
 
         session()->flash('message', 'Penawaran berhasil diperbarui.');
     } catch (\Throwable $e) {
@@ -112,10 +113,16 @@ class PengajuanPenawaranCreate extends Component
         $this->nilai = 0;
 
         foreach ($this->penawaranItems as $rinciId => $harga) {
+
             $rinci = $this->penawaran->paketKegiatan->rincian->firstWhere('id', $rinciId);
+
             if ($rinci) {
-                $this->nilai += $harga * $rinci->quantity;
+                $harga = (float) $harga;
+                $qty = (float) $rinci->quantity;
+
+                $this->nilai += $harga * $qty;
             }
+
         }
         return view('livewire.penyedia.pengajuan-penawaran-create');
     }

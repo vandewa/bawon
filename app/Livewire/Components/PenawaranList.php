@@ -3,11 +3,12 @@
 namespace App\Livewire\Components;
 
 use Livewire\Component;
-use Livewire\WithFileUploads;
-use App\Models\Penawaran;
+use App\Jobs\kirimPesan;
 use App\Models\Negoisasi;
-use App\Models\PaketKegiatan;
+use App\Models\Penawaran;
 use App\Models\NegosiasiLog;
+use App\Models\PaketKegiatan;
+use Livewire\WithFileUploads;
 use App\Models\NegosiasiLogItem;
 use Illuminate\Support\Facades\DB;
 
@@ -100,7 +101,24 @@ class PenawaranList extends Component
                 session()->flash('error', 'Terjadi kesalahan. Silakan coba lagi.');
                 report($e);
             }
+            $a = Penawaran::with(['vendor', 'paketKegiatan.paketPekerjaan'])->where('paket_kegiatan_id', $penawaran->paketKegiatan->id)->get();
 
+            // kirim pesan whatsapp
+            foreach ($a as $penawaran) {
+               $vendor = $penawaran->vendor ?? null;
+               $namaVendor = $penawaran->vendor->nama_perusahaan ?? 'Penyedia';
+               $nilai = number_format($penawaran->nilai, 0, ',', '.');
+               $desa = $this->paketKegiatan->paketPekerjaan->desa ?? null;
+               if ( $vendor && $vendor->telepon) {
+                   $namaPaket = $penawaran->paketKegiatan->paketPekerjaan->nama_kegiatan ?? 'Kegiatan Pengadaan';
+
+                   $pesan = "Yth. *{$namaVendor}*,\n\nEvaluasi penawaran telah dilakukan terkait kegiatan: *{$namaPaket}*.\n\nMohon agar dapat melakukan pengecekan melalui aplikasi.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nHormat kami,\nTim Pengadaan Desa";
+
+                   $telepon = $penawaran->vendor->telepon ?? '089604484626'; // fallback jika belum ada
+
+                   kirimPesan::dispatch($telepon, $pesan);
+               }
+           }
     }
 
     public function render()

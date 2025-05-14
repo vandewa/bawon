@@ -33,7 +33,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table overflow-hidden rounded shadow table-hover table-borderless">
+                                <table class="table table-striped ">
                                     <thead style="background-color: #404040; color: white;">
                                         <tr>
                                             <th class="px-3 py-2">Desa</th>
@@ -49,9 +49,7 @@
                                     </thead>
                                     <tbody>
                                         @forelse ($posts as $item)
-                                            <tr style="transition: background-color 0.2s;"
-                                                onmouseover="this.style.background='#f0f9ff'"
-                                                onmouseout="this.style.background='white'">
+                                            <tr>
                                                 <td class="px-3 py-2 align-middle">
                                                     {{ $item->paketKegiatan->paketPekerjaan->desa->name ?? '-' }}
                                                 </td>
@@ -81,6 +79,18 @@
                                                 </td>
                                                 <td class="px-3 py-2 align-middle">
                                                     <ul class="mb-0 list-unstyled">
+                                                        <li>
+                                                            @if ($item->surat_undangan)
+                                                                <i class="fas fa-check-circle text-success"></i>
+                                                                <a href="{{ route('helper.show-picture', ['path' => $item->surat_undangan]) }}"
+                                                                    target="_blank">
+                                                                    Surat Undangan
+                                                                </a>
+                                                            @else
+                                                                <i class="fas fa-times-circle text-danger"></i> Surat
+                                                                Undangan
+                                                            @endif
+                                                        </li>
                                                         <li>
                                                             @if ($item->bukti_setor_pajak)
                                                                 <i class="fas fa-check-circle text-success"></i>
