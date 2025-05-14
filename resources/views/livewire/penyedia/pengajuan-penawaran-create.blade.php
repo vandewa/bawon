@@ -234,7 +234,7 @@
                                 </button>
                                 <a href="{{ route('penyedia.penawaran-index') }}"
                                     class="btn btn-secondary">Kembali</a>
-                                <a href="{{ route('penyedia.penawaran-index') }}" class="btn btn-info">Generate
+                                <a href="{{ asset('surat_penawaran.docx') }}" class="btn btn-info">Generate
                                     Penawaran</a>
                             </div>
                     </form>
