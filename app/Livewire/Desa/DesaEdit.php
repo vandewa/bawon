@@ -27,6 +27,7 @@ class DesaEdit extends Component
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
+                'whatsapp' => $user->whatsapp,
             ];
         }
     }
@@ -49,6 +50,7 @@ class DesaEdit extends Component
             'user.name' => 'nullable|string',
             'user.email' => 'nullable|email',
             'user.password' => 'nullable|string|min:6|confirmed',
+            'user.whatsapp' => 'required|numeric',
         ]);
 
         // Update data desa
@@ -61,14 +63,16 @@ class DesaEdit extends Component
                 $user = User::findOrFail($this->user['id']);
                 $user->name = $this->user['name'];
                 $user->email = $this->user['email'];
+                $user->whatsapp = $this->user['whatsapp'];
                 if (!empty($this->user['password'])) {
                     $user->password = Hash::make($this->user['password']);
                 }
                 $user->save();
             } else {
-             $user =   User::create([
+                $user = User::create([
                     'name' => $this->user['name'],
                     'email' => $this->user['email'],
+                    'whatsapp' => $this->user['whatsapp'],
                     'password' => Hash::make($this->user['password']),
                     'desa_id' => $this->desaId,
                 ]);

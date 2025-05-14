@@ -67,6 +67,18 @@
                       @endrole
 
 
+                      @role(['desa'])
+                          <li class="nav-item">
+                              <a href="{{ route('desa.desa-index') }}"
+                                  class="nav-link  {{ Request::segment(2) == 'desa-index' ? 'active' : '' }}{{ Request::segment(1) == '' ? 'active' : '' }}">
+                                  <i class="nav-icon fas fa-id-badge"></i>
+                                  <p>
+                                      Profil Desa
+                                  </p>
+                              </a>
+                          </li>
+                      @endrole
+
                       @role(['superadministrator'])
                           <li
                               class="nav-item

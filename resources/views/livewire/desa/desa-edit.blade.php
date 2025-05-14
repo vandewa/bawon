@@ -121,6 +121,13 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                                <div class="form-group col-md-12">
+                                    <label>WhatsApp</label>
+                                    <input type="number" class="form-control" wire:model.defer="user.whatsapp">
+                                    @error('user.whatsapp')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
                                 <div class="form-group col-md-6">
                                     <label>Password Baru (Opsional)</label>
                                     <input type="password" class="form-control" wire:model.defer="user.password">
