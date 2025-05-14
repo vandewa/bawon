@@ -187,7 +187,7 @@ Route::middleware([
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.'], function () {
         Route::get('vendor-index', VendorIndex::class)->name('vendor-index')->middleware('role:superadministrator|dinsos');
-        Route::get('vendor-profile/{id?}', VendorProfile::class)->name('vendor-profile');
+        Route::get('vendor-profile/{vendorId?}', VendorProfile::class)->name('vendor-profile');
         Route::get('vendor-index/vendor-create', VendorCreate::class)->name('vendor-create');
         Route::get('vendor-index/vendor-edit/{id}', VendorEdit::class)->name('vendor-edit');
         Route::get('penawaran-index', PaketPekerjaanPenyediaIndex::class)->name('penawaran-index');
