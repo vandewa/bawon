@@ -87,6 +87,8 @@ class NegosiasiPage extends Component
 
 
 
+
+
     if ($lastOpponentLog && $lastOpponentLog->items()->exists()) {
 
         $this->logItems = $lastOpponentLog->items->map(function ($item) {
@@ -155,7 +157,7 @@ class NegosiasiPage extends Component
             'user_id' => auth()->id(),
         ]);
 
-        $this->kirimWaNego($log->id);
+
 
         // Simpan semua item (harga satuan saja yang disimpan)
         foreach ($this->logItems as $item) {
@@ -167,6 +169,8 @@ class NegosiasiPage extends Component
         }
 
         DB::commit();
+        $this->kirimWaNego($log->id);
+
 
         $this->loadNegosiasiData();
         $this->loadNegosiasiLogs();
@@ -270,18 +274,23 @@ public function konfirmasiSetujuiLog($id)
 }
 
 public function kirimWaNego($id){
+
     $log = NegosiasiLog::with(['negosiasi' => function($a){
         $a->with(['paketKegiatan.paketPekerjaan.desa','vendor']);
     }])->findOrFail($id);
 
     if (auth()->user()->hasRole('vendor')) {
+
         $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
         $nilai = number_format($log->penawaran, 0, ',', '.');
         $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa ?? null;
+
+
     if ($desa && $desa->telp) {
         $namaDesa = $desa->nama ?? 'Desa';
         $pesanDesa = "Halo {$namaDesa},\n\nPenyedia telah melakukan penawaran melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\.";
-        kirimPesan::dispatch($pesanDesa, $desa->telp);
+        kirimPesan::dispatch($desa->telp, $pesanDesa);
+
     }
     } else {
         $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
@@ -290,7 +299,7 @@ public function kirimWaNego($id){
         $pesan = "Halo {$namaVendor},\n\Desa telah melakukan penawaran melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\n.";
         $telepon = $log->negosiasi->vendor->telepon ?? null;
         if(!$telepon){
-            kirimPesan::dispatch($pesan, $telepon);
+            kirimPesan::dispatch($telepon, $pesan );
         }
 
     }
@@ -308,7 +317,7 @@ public function setujuiLog()
     if ($desa && $desa->telp) {
         $namaDesa = $desa->nama ?? 'Desa';
         $pesanDesa = "Halo {$namaDesa},\n\nPenawaran Anda telah disetujui melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
-        kirimPesan::dispatch($pesanDesa, $desa->telp);
+        kirimPesan::dispatch( $desa->telp, $pesanDesa);
     }
     } else {
         $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
@@ -317,7 +326,7 @@ public function setujuiLog()
         $pesan = "Halo {$namaVendor},\n\nPenawaran Anda telah disetujui melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
         $telepon = $log->negosiasi->vendor->telepon ?? null;
         if(!$telepon){
-            kirimPesan::dispatch($pesan, $telepon);
+            kirimPesan::dispatch($telepon, $pesan);
         }
 
     }

@@ -31,11 +31,13 @@ class kirimPesan implements ShouldQueue
      */
     public function handle(): void
     {
-        Http::withHeaders([
+       $a =  Http::withHeaders([
             'Authorization' => config('app.token_wa'),
         ])->withoutVerifying()->post(config('app.wa_url') . "/send-message", [
                     'phone' => konversi_nomor($this->nohape),
                     'message' => $this->pesan,
                 ]);
+
+
     }
 }
