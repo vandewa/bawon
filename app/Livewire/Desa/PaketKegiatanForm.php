@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Desa;
 
-use Livewire\Component;
-use Livewire\WithFileUploads;
-use App\Models\ComCode;
-use App\Models\PaketKegiatan;
-use App\Models\PaketPekerjaan;
-use App\Models\PaketPekerjaanRinci;
-use App\Models\PaketKegiatanRinci;
 use App\Models\Tpk;
+use App\Models\ComCode;
+use Livewire\Component;
+use App\Models\PaketKegiatan;
+use Livewire\WithFileUploads;
+use App\Models\PaketPekerjaan;
+use App\Models\PaketKegiatanRinci;
+use Illuminate\Support\Facades\DB;
+use App\Models\PaketPekerjaanRinci;
 
 class PaketKegiatanForm extends Component
 {
@@ -76,6 +77,9 @@ class PaketKegiatanForm extends Component
             return $item['hrg_satuan_pak'] * $qty;
         });
 
+    //     DB::beginTransaction();
+
+    // try {
         $kegiatan = new PaketKegiatan();
         $kegiatan->paket_pekerjaan_id = $this->paketPekerjaan->id;
         $kegiatan->tpk_id = $this->tpk_id;
@@ -110,6 +114,14 @@ class PaketKegiatanForm extends Component
 
             PaketPekerjaanRinci::where('id', $rinciId)->update(['quantity' => $total]);
         }
+    // } catch (\Throwable $e) {
+    //     DB::rollBack();
+    //     report($e);
+    //     dd($e);
+
+
+    //     session()->flash('error', 'Gagal menyimpan negosiasi.');
+    //     }
 
 
 

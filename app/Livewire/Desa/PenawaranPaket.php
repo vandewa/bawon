@@ -179,11 +179,7 @@ class PenawaranPaket extends Component
         JS);
 
 
-        // kirim pesan whatsapp
-        $pesan = 'tes';
-        $telepon = '089604484626';
 
-        kirimPesan::dispatch($pesan, $telepon);
 
     }
 
@@ -194,7 +190,29 @@ class PenawaranPaket extends Component
         Penawaran::where('paket_kegiatan_id', $this->paketKegiatan->id)
             ->update(['kirim_st' => true]);
 
+
+            $a = Penawaran::with(['vendor'])->where('paket_kegiatan_id', $this->paketKegiatan->id)->get();
+
+             // kirim pesan whatsapp
+             foreach ($a as $penawaran) {
+                $vendor = $penawaran->vendor ?? null;
+                $namaVendor = $penawaran->vendor->nama_perusahaan ?? 'Penyedia';
+                $nilai = number_format($penawaran->nilai, 0, ',', '.');
+                $desa = $this->paketKegiatan->paketPekerjaan->desa ?? null;
+                if ( $vendor && $vendor->telepon) {
+                    $namaPaket = $this->paketKegiatan->paketPekerjaan->nama_kegiatan ?? 'Kegiatan Pengadaan';
+
+                    $pesan = "Yth. *{$namaVendor}*,\n\nKami mengundang perusahaan Anda untuk mengajukan *penawaran harga* terkait kegiatan: *{$namaPaket}*.\n\nMohon agar penawaran dapat dikirim melalui sistem sebelum batas waktu yang ditentukan.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nHormat kami,\nTim Pengadaan Desa";
+
+                    $telepon = $penawaran->vendor->telepon ?? '089604484626'; // fallback jika belum ada
+
+                    kirimPesan::dispatch($telepon, $pesan);
+                }
+            }
+
         $this->loadPenawarans(); // Refresh tabel
+
+
 
         $route = route('desa.penawaran.pelaksanaan.index');
 

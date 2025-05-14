@@ -120,8 +120,9 @@
                                                 <td>{{ number_format($rinci['anggaran_stlh_pak'], 0, ',', '.') }}</td>
                                                 <td>
                                                     @php
-                                                        $qty = $quantities[$rinci['id']] ?? 0;
-                                                        $total = $rinci['hrg_satuan_pak'] * $qty;
+                                                        $qty = (float) ($quantities[$rinci['id']] ?? 0);
+                                                        $harga = (float) ($rinci['hrg_satuan_pak'] ?? 0);
+                                                        $total = $harga * $qty;
                                                     @endphp
                                                     <strong>{{ number_format($total, 0, ',', '.') }}</strong>
                                                 </td>

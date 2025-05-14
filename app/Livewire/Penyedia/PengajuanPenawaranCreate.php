@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Penyedia;
 
-use App\Models\Penawaran;
 use Livewire\Component;
+use App\Models\Penawaran;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class PengajuanPenawaranCreate extends Component
@@ -47,6 +48,9 @@ class PengajuanPenawaranCreate extends Component
             'dok_kebenaran_usaha' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
+        DB::beginTransaction();
+        try {
+
         $this->penawaran->nilai = $this->nilai;
         $this->penawaran->tanggal_upload_dok = now();
         $this->penawaran->keterangan = $this->keterangan;
@@ -84,6 +88,11 @@ class PengajuanPenawaranCreate extends Component
         $this->penawaran->update(['nilai' => $total]);
 
         session()->flash('message', 'Penawaran berhasil diperbarui.');
+    } catch (\Throwable $e) {
+        DB::rollBack();
+        report($e);
+        session()->flash('error', 'Gagal menyimpan negosiasi.');
+        }
 
         $this->js(<<<'JS'
             Swal.fire({

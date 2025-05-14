@@ -213,8 +213,11 @@ class NegosiasiPage extends Component
         'nilaiDisepakati' => 'required|numeric|min:0',
     ]);
 
-    $path = $this->ba_negoisasi->store('negoisasi/ba');
 
+    $path = $this->ba_negoisasi->store('negoisasi/ba');
+    DB::beginTransaction();
+
+    try {
     // Update pada tabel negoisasis
     Negoisasi::where('id', $this->negosiasi_id)->update([
         'ba_negoisasi' => $path,
@@ -226,6 +229,11 @@ class NegosiasiPage extends Component
     PaketKegiatan::where('id', $this->paket_kegiatan_id)->update([
         'nilai_kesepakatan' => $this->nilaiDisepakati,
     ]);
+    } catch (\Throwable $e) {
+        DB::rollBack();
+        report($e);
+        session()->flash('error', 'Gagal menyimpan negosiasi.');
+    }
 
     $this->loadNegosiasiData();
     $this->loadNegosiasiLogs();
@@ -276,20 +284,20 @@ public function konfirmasiSetujuiLog($id)
 public function kirimWaNego($id){
 
     $log = NegosiasiLog::with(['negosiasi' => function($a){
-        $a->with(['paketKegiatan.paketPekerjaan.desa','vendor']);
+        $a->with(['paketKegiatan.paketPekerjaan.desa.user','vendor']);
     }])->findOrFail($id);
 
     if (auth()->user()->hasRole('vendor')) {
 
         $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
         $nilai = number_format($log->penawaran, 0, ',', '.');
-        $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa ?? null;
+        $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa->user ?? null;
 
 
-    if ($desa && $desa->telp) {
+    if ($desa && $desa->whatsapp) {
         $namaDesa = $desa->nama ?? 'Desa';
-        $pesanDesa = "Halo {$namaDesa},\n\nPenyedia telah melakukan penawaran melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\.";
-        kirimPesan::dispatch($desa->telp, $pesanDesa);
+        $pesanDesa = "Halo {$namaDesa},\n\nPenyedia telah melakukan penawaran melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\n.";
+        kirimPesan::dispatch($desa->whatsapp, $pesanDesa);
 
     }
     } else {

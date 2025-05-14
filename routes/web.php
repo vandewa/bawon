@@ -189,7 +189,7 @@ Route::middleware([
         Route::get('vendor-index', VendorIndex::class)->name('vendor-index')->middleware('role:superadministrator|dinsos');
         Route::get('vendor-profile/{vendorId?}', VendorProfile::class)->name('vendor-profile');
         Route::get('vendor-index/vendor-create', VendorCreate::class)->name('vendor-create');
-        Route::get('vendor-index/vendor-edit/{id}', VendorEdit::class)->name('vendor-edit');
+        Route::get('vendor-index/vendor-edit/{vendorId}', VendorEdit::class)->name('vendor-edit');
         Route::get('penawaran-index', PaketPekerjaanPenyediaIndex::class)->name('penawaran-index');
         Route::get('penawaran-index/{penawaranId}/create', PengajuanPenawaranCreate::class)->name('penawaran.create');
         Route::get('lelang-index', LelangIndex::class)->name('lelang-index');

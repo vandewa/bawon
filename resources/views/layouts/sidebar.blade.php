@@ -303,10 +303,10 @@
                                   <i class="nav-icon fas fa-tasks"></i>
                                   <p>
                                       Pelaksanaan
-                                      <span
+                                      {{-- <span
                                           class="badge badge-{{ $jumlahPelaksanaan > 0 ? 'danger' : 'secondary' }} ml-2">
                                           {{ $jumlahPelaksanaan }}
-                                      </span>
+                                      </span> --}}
                                   </p>
                               </a>
                           </li>
@@ -316,9 +316,9 @@
                                   <i class="nav-icon fas fa-file-alt"></i>
                                   <p>
                                       Pelaporan
-                                      <span class="badge badge-{{ $jumlahPelaporan > 0 ? 'danger' : 'secondary' }} ml-2">
+                                      {{-- <span class="badge badge-{{ $jumlahPelaporan > 0 ? 'danger' : 'secondary' }} ml-2">
                                           {{ $jumlahPelaporan }}
-                                      </span>
+                                      </span> --}}
                                   </p>
                               </a>
                           </li>
