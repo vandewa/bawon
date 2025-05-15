@@ -29,7 +29,13 @@ class PelaporanIndex extends Component
                     $q->where('desa_id', $user->desa_id);
                 }
             })
-            ->latest()
+            ->latest();
+            if(auth()->user()->desa_id){
+                $paketKegiatans = $paketKegiatans->whereHas('paketPekerjaan', function ($q) {
+                    $q->where('desa_id', auth()->user()->desa_id);
+                });
+            }
+        $paketKegiatans = $paketKegiatans
             ->paginate(10);
         return view('livewire.desa.pelaporan-index', [
             'paketKegiatans' => $paketKegiatans,
