@@ -150,7 +150,7 @@
                                                                         </td>
                                                                         <td
                                                                             class="px-3 py-2 text-center align-middle text-nowrap">
-                                                                            @if ($paket->ba_evaluasi_penawaran)
+                                                                            @if (!$paket->ba_evaluasi_penawaran)
                                                                                 <a href="{{ route('desa.penawaran.paket', $paket->id) }}"
                                                                                     class="mb-1 btn btn-sm btn-primary">
                                                                                     <i class="fa fa-edit"></i> Kelola

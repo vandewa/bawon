@@ -30,8 +30,13 @@ class PenawaranIndex extends Component
             $q->whereNull('surat_perjanjian')
               ->orWhereNull('spk');
         })
-        ->latest()
-        ->paginate(10);
+        ->latest();
+        if(auth()->user()->desa_id){
+            $paketKegiatans = $paketKegiatans->whereHas('paketPekerjaan', function ($q) {
+                $q->where('desa_id', auth()->user()->desa_id);
+            });
+        }
+        $paketKegiatans  = $paketKegiatans->paginate(10);
 
 
         return view('livewire.desa.penawaran-index', [
