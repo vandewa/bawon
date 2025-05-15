@@ -236,7 +236,7 @@
                     <div class="modal-body">
                         <div class="mb-3 row">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" wire:model.debounce.500ms="searchVendor"
+                                <input type="text" class="form-control" wire:model.live="searchVendor"
                                     placeholder="Cari nama perusahaan atau NIB...">
                             </div>
                         </div>
