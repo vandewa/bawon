@@ -41,10 +41,12 @@
                                 <p><strong>Kode Pos:</strong> {{ $vendor->kode_pos ?: '-' }}</p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>NIB:</strong> {{ $vendor->nib ?: '-' }}</p>
-                                <p><strong>NPWP:</strong> {{ $vendor->npwp ?: '-' }}</p>
-                                <p><strong>Masa Berlaku NIB:</strong> {{ $formattedData['masa_berlaku_nib'] }}</p>
-                                <p><strong>Instansi Pemberi NIB:</strong> {{ $vendor->instansi_pemberi_nib ?: '-' }}
+                                <p><strong>NIB (Nomor Induk Berusaha):</strong> {{ $vendor->nib ?: '-' }}</p>
+                                <p><strong>NPWP (Nomor Pokok Wajib Pajak):</strong> {{ $vendor->npwp ?: '-' }}</p>
+                                <p><strong>Masa berlaku NIB (Nomor Induk Berusaha):</strong>
+                                    {{ $formattedData['masa_berlaku_nib'] }}</p>
+                                <p><strong>Instansi Pemberi NIB (Nomor Induk Berusaha):</strong>
+                                    {{ $vendor->instansi_pemberi_nib ?: '-' }}
                                 </p>
                                 <p><strong>Penghasilan Kena Pajak (PKP):</strong> {{ $vendor->pkp ? 'Ya' : 'Tidak' }}
                                 </p>

@@ -49,7 +49,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>NPWP</label>
+                                    <label>NPWP (Nomor Pokok Wajib Pajak)</label>
                                     <input type="text"
                                         class="form-control @error('vendor.npwp') is-invalid @enderror"
                                         wire:model.defer="vendor.npwp">
@@ -58,7 +58,8 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>NIB/SBU <span class="text-danger">*</span></label>
+                                    <label>NIB (Nomor Induk Berusaha) / SBU (Sertifikat Badan Usaha) <span
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('vendor.nib') is-invalid @enderror"
                                         wire:model.defer="vendor.nib">
                                     @error('vendor.nib')
@@ -66,7 +67,8 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Masa berlaku NIB <span class="text-danger">*</span></label>
+                                    <label>Masa berlaku NIB (Nomor Induk Berusaha) <span
+                                            class="text-danger">*</span></label>
                                     <input type="date"
                                         class="form-control @error('vendor.masa_berlaku_nib') is-invalid @enderror"
                                         wire:model.defer="vendor.masa_berlaku_nib">
@@ -75,7 +77,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Instansi Pemberi NIB</label>
+                                    <label>Instansi Pemberi NIB (Nomor Induk Berusaha)</label>
                                     <input type="text"
                                         class="form-control @error('vendor.instansi_pemberi_nib') is-invalid @enderror"
                                         wire:model.defer="vendor.instansi_pemberi_nib">
