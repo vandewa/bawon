@@ -88,6 +88,7 @@
                               {{ Request::segment(2) == 'role-index' ? 'menu-is-opening menu-open' : '' }}
                               {{ Request::segment(2) == 'user-index' ? 'menu-is-opening menu-open' : '' }}
                               {{ Request::segment(2) == 'tag' ? 'menu-is-opening menu-open' : '' }}
+                              {{ Request::segment(2) == 'kecamatan' ? 'menu-is-opening menu-open' : '' }}
                             ">
                               <a href="#"
                                   class="nav-link
@@ -97,6 +98,7 @@
                                     {{ Request::segment(2) == 'user-index' ? 'active' : '' }}
                                     {{ Request::segment(2) == 'user' ? 'active' : '' }}
                                     {{ Request::segment(2) == 'tag' ? 'active' : '' }}
+                                    {{ Request::segment(2) == 'kecamatan' ? 'active' : '' }}
                                    ">
                                   <i class="nav-icon fa-solid fas fa-database"></i>
                                   <p>
@@ -135,6 +137,19 @@
                                               <i class="ml-2 far fa-circle nav-icon"></i>
                                           @endif
                                           <p>Role</p>
+                                      </a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a href="{{ route('master.kecamatan') }}"
+                                          class="nav-link
+                                            {{ Request::segment(2) == 'kecamatan' ? 'active' : '' }}
+                                        ">
+                                          @if (Request::segment(2) == 'kecamatan')
+                                              <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                          @else
+                                              <i class="ml-2 far fa-circle nav-icon"></i>
+                                          @endif
+                                          <p>Kecamatan</p>
                                       </a>
                                   </li>
                                   <li class="nav-item">
