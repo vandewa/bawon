@@ -54,11 +54,11 @@ class VendorCreate extends Component
         'bank_st' => '',
         'no_rekening' => '',
         'atas_nama_rekening' => '',
-
+        'pkp' => '',
     ];
 
     // Properties for document uploads
-    public $akta_pendirian, $nib_file, $npwp_file, $siup, $izin_usaha_lain, $ktp_direktur, $dok_kebenaran_usaha_file, $bukti_setor_pajak_file;
+    public $akta_pendirian, $nib_file, $npwp_file, $siup, $izin_usaha_lain, $ktp_direktur, $dok_kebenaran_usaha_file, $bukti_setor_pajak_file, $pkp_file;
 
     public $klasifikasiUsaha = [];
 
@@ -84,6 +84,7 @@ class VendorCreate extends Component
         'vendor.bank_st' => 'nullable|string|max:255',
         'vendor.no_rekening' => 'nullable|numeric',
         'vendor.atas_nama_rekening' => 'nullable|string|max:255',
+        'vendor.pkp' => 'required|in:0,1', // PKP is required and must be 0 or 1
         'foto_vendor.*' => 'image|max:2048',
         'akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'nib_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -93,6 +94,7 @@ class VendorCreate extends Component
         'ktp_direktur' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'dok_kebenaran_usaha_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'bukti_setor_pajak_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'pkp_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048|required_if:vendor.pkp,1', // Required if vendor.pkp is 1
         'user.name' => 'required|string|max:255',
         'user.email' => 'required|email|max:255',
         'user.password' => 'required|string|min:6|same:user.password_confirmation',
@@ -132,10 +134,6 @@ class VendorCreate extends Component
         ];
 
         $this->validate($rules);
-
-        // Copy coordinates from component properties to vendor array
-        // $this->vendor['latitude'] = $this->latitude;
-        // $this->vendor['longitude'] = $this->longitude;
 
         // Create vendor record
         $vendor = Vendor::create($this->vendor);
@@ -186,6 +184,7 @@ class VendorCreate extends Component
             'ktp_direktur',
             'dok_kebenaran_usaha_file',
             'bukti_setor_pajak_file',
+            'pkp_file',
         ];
 
         foreach ($documentFields as $field) {

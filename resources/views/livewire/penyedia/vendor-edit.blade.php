@@ -83,6 +83,41 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label for="pkp">Penghasilan Kena Pajak (PKP) <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-control @error('vendor.pkp') is-invalid @enderror"
+                                        id="pkp" wire:model.live="vendor.pkp">
+                                        <option value="" disabled>Pilih Status PKP</option>
+                                        <option value="1" {{ $vendor['pkp'] == '1' ? 'selected' : '' }}>Ya</option>
+                                        <option value="0" {{ $vendor['pkp'] == '0' ? 'selected' : '' }}>Tidak
+                                        </option>
+                                    </select>
+                                    @error('vendor.pkp')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                @if ($vendor['pkp'])
+                                    <div class="form-group col-md-6">
+                                        <label for="pkp_file">Dokumen PKP <span class="text-danger">*</span></label>
+                                        <input type="file" wire:model="pkp_file"
+                                            class="form-control @error('pkp_file') is-invalid @enderror"
+                                            accept=".pdf,.jpg,.jpeg,.png">
+                                        @if ($vendor['pkp_file'])
+                                            <small class="text-muted mt-1">File saat ini: <a
+                                                    href="{{ route('helper.show-picture', ['path' => $vendor['pkp_file']]) }}"
+                                                    target="_blank">Lihat</a></small>
+                                        @endif
+                                        @if ($this->pkp_file)
+                                            <small class="text-success mt-1">
+                                                <i class="fas fa-check"></i> File baru telah dipilih
+                                            </small>
+                                        @endif
+                                        @error('pkp_file')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                @endif
                             </div>
                         </fieldset>
 

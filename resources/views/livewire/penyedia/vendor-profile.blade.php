@@ -23,12 +23,12 @@
             @endif
 
             <!-- Data Penyedia -->
-            <div class="mb-3 card card-primary shadow-sm">
+            <div class="mb-4 card card-primary shadow-sm">
                 <div class="card-header d-flex align-items-center bg-primary text-white">
-                    <i class="mr-2 fas fa-building"></i>
+                    <i class="me-2 fas fa-building"></i>
                     <h5 class="m-0 card-title">Data Penyedia</h5>
                 </div>
-                <div class="p-3 card-body">
+                <div class="p-4 card-body">
                     <!-- Identitas Perusahaan -->
                     <fieldset class="p-3 mb-4 border rounded">
                         <legend class="w-auto font-weight-bold">Identitas Perusahaan</legend>
@@ -46,6 +46,8 @@
                                 <p><strong>Masa Berlaku NIB:</strong> {{ $formattedData['masa_berlaku_nib'] }}</p>
                                 <p><strong>Instansi Pemberi NIB:</strong> {{ $vendor->instansi_pemberi_nib ?: '-' }}
                                 </p>
+                                <p><strong>Penghasilan Kena Pajak (PKP):</strong> {{ $vendor->pkp ? 'Ya' : 'Tidak' }}
+                                </p>
                             </div>
                         </div>
                     </fieldset>
@@ -59,8 +61,13 @@
                                 <p><strong>Telepon:</strong> {{ $vendor->telepon ?: '-' }}</p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong>Website:</strong> <a href="{{ $vendor->website ?: '#' }}"
-                                        target="_blank">{{ $vendor->website ?: '-' }}</a></p>
+                                <p><strong>Website:</strong>
+                                    @if ($vendor->website)
+                                        <a href="{{ $vendor->website }}" target="_blank">{{ $vendor->website }}</a>
+                                    @else
+                                        -
+                                    @endif
+                                </p>
                             </div>
                         </div>
                     </fieldset>
@@ -93,16 +100,28 @@
                             </div>
                         </div>
                     </fieldset>
+
+                    <!-- Lokasi Usaha -->
+                    @if ($vendor->latitude && $vendor->longitude)
+                        <fieldset class="p-3 mb-4 border rounded">
+                            <legend class="w-auto font-weight-bold">Lokasi Usaha</legend>
+                            <div id="map" style="height: 300px; width: 100%;"></div>
+                            <div class="mt-2">
+                                <p><strong>Latitude:</strong> {{ number_format($vendor->latitude, 6) }}</p>
+                                <p><strong>Longitude:</strong> {{ number_format($vendor->longitude, 6) }}</p>
+                            </div>
+                        </fieldset>
+                    @endif
                 </div>
             </div>
 
             <!-- Klasifikasi Usaha -->
-            <div class="mb-3 card card-success shadow-sm">
+            <div class="mb-4 card card-success shadow-sm">
                 <div class="card-header d-flex align-items-center bg-success text-white">
-                    <i class="mr-2 fas fa-list"></i>
+                    <i class="me-2 fas fa-list"></i>
                     <h5 class="m-0 card-title">Klasifikasi Bidang Usaha</h5>
                 </div>
-                <div class="p-3 card-body">
+                <div class="p-4 card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead>
@@ -119,8 +138,9 @@
                                         <td>{{ $item['nama_text'] ?? 'N/A' }}</td>
                                         <td>
                                             @if ($item['foto'])
-                                                <a href="{{ Storage::url($item['foto']) }}" data-bs-toggle="lightbox"
-                                                    data-gallery="vendor-gallery">
+                                                <a href="{{ Storage::url($item['foto']) }}" data-bs-toggle="modal"
+                                                    data-bs-target="#imageModal"
+                                                    data-image="{{ Storage::url($item['foto']) }}">
                                                     <img src="{{ Storage::url($item['foto']) }}" alt="Foto Usaha"
                                                         class="img-thumbnail" style="max-height: 50px;" loading="lazy">
                                                 </a>
@@ -133,8 +153,9 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4" class="text-center text-muted">Belum ada klasifikasi usaha
-                                            yang ditambahkan</td>
+                                        <td colspan="4" class="text-center text-muted">
+                                            Belum ada klasifikasi usaha yang ditambahkan
+                                        </td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -144,12 +165,12 @@
             </div>
 
             <!-- Dokumen Legalitas -->
-            <div class="mb-3 card card-warning shadow-sm">
+            <div class="mb-4 card card-warning shadow-sm">
                 <div class="card-header d-flex align-items-center bg-warning text-white">
-                    <i class="mr-2 fas fa-file-alt"></i>
+                    <i class="me-2 fas fa-file-alt"></i>
                     <h5 class="m-0 card-title">Dokumen Legalitas</h5>
                 </div>
-                <div class="p-3 card-body">
+                <div class="p-4 card-body">
                     <div class="row">
                         @foreach ([
         'akta_pendirian' => 'Akta Pendirian',
@@ -160,20 +181,28 @@
         'ktp_direktur' => 'KTP Direktur',
         'dok_kebenaran_usaha_file' => 'Dokumen Kebenaran Usaha',
         'bukti_setor_pajak_file' => 'Bukti Setor Pajak',
+        'pkp_file' => 'Dokumen PKP',
     ] as $field => $label)
-                            <div class="col-md-4 mb-3">
+                            <div class="col-md-4 col-lg-3 mb-3">
                                 <div class="card h-100 shadow-sm">
                                     <div class="card-body text-center">
-                                        <i class="fas fa-file-pdf fa-3x text-danger mb-3"></i>
-                                        <h6>{{ $label }}</h6>
+                                        <i class="fas fa-file-alt fa-3x text-warning mb-3"></i>
+                                        <h5>{{ $label }}</h5>
                                         @if ($vendor->$field)
-                                            {{-- Embed preview PDF --}}
-                                            <embed
-                                                src="{{ route('helper.show-picture', ['path' => $vendor->$field]) }}"
-                                                type="application/pdf" width="100%" height="150" class="mt-2" />
+                                            @if (in_array(pathinfo($vendor->$field, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png']))
+                                                <a href="{{ route('helper.show-picture', ['path' => $vendor->$field]) }}"
+                                                    data-bs-toggle="modal" data-bs-target="#imageModal"
+                                                    data-image="{{ route('helper.show-picture', ['path' => $vendor->$field]) }}">
+                                                    <img src="{{ route('helper.show-picture', ['path' => $vendor->$field]) }}"
+                                                        alt="{{ $label }}" class="img-thumbnail mt-2"
+                                                        style="max-height: 100px;" loading="lazy">
+                                                </a>
+                                            @else
+                                                <span class="mt-2 text-muted small d-block">Dokumen PDF</span>
+                                            @endif
                                             <a href="{{ route('helper.show-picture', ['path' => $vendor->$field]) }}"
                                                 target="_blank" class="mt-2 btn btn-sm btn-outline-primary">
-                                                <i class="fas fa-eye"></i> Lihat Full
+                                                <i class="fas fa-eye"></i> Lihat
                                             </a>
                                         @else
                                             <span class="mt-2 text-muted small d-block">Belum diunggah</span>
@@ -187,17 +216,17 @@
             </div>
 
             <!-- Data Pengguna -->
-            <div class="mb-3 card card-info shadow-sm">
+            <div class="mb-4 card card-info shadow-sm">
                 <div class="card-header d-flex align-items-center bg-info text-white">
-                    <i class="mr-2 fas fa-user"></i>
+                    <i class="me-2 fas fa-user"></i>
                     <h5 class="m-0 card-title">Data Pengguna</h5>
                 </div>
-                <div class="p-3 card-body">
+                <div class="p-4 card-body">
                     @if ($user)
                         <div class="row">
                             <div class="col-md-6">
-                                <p><strong>Nama:</strong> {{ $user->name }}</p>
-                                <p><strong>Email:</strong> {{ $user->email }}</p>
+                                <p><strong>Nama:</strong> {{ $user->name ?: '-' }}</p>
+                                <p><strong>Email:</strong> {{ $user->email ?: '-' }}</p>
                             </div>
                             <div class="col-md-6">
                                 <p><strong>Terdaftar Sejak:</strong>
@@ -216,45 +245,60 @@
                 <a href="{{ route('penyedia.vendor-index') }}" class="btn btn-secondary">
                     <i class="fas fa-arrow-left"></i> Kembali
                 </a>
-                <a href="{{ route('penyedia.vendor-edit', $vendor->id) }}" class="btn btn-primary float-right">
+                <a href="{{ route('penyedia.vendor-edit', $vendor->id) }}" class="btn btn-primary float-end">
                     <i class="fas fa-edit"></i> Edit Profil
                 </a>
             </div>
         </div>
     </section>
+
+    <!-- Image Preview Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="imageModalLabel">Pratinjau Gambar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" id="modalImage" class="img-fluid" alt="Pratinjau">
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @push('styles')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
 @endpush
 
 @push('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Lightbox for photo gallery
-            document.querySelectorAll('a[data-bs-toggle="lightbox"]').forEach(el => {
-                el.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const lightbox = new EkkoLightbox({
-                        alwaysShowClose: true,
-                        gallery: el.getAttribute('data-gallery'),
-                        type: 'image'
-                    });
-                    lightbox.show(el.getAttribute('href'));
+            // Handle image modal
+            const imageModal = document.getElementById('imageModal');
+            if (imageModal) {
+                imageModal.addEventListener('show.bs.modal', function(event) {
+                    const button = event.relatedTarget;
+                    const imageUrl = button.getAttribute('data-image');
+                    const modalImage = imageModal.querySelector('#modalImage');
+                    modalImage.src = imageUrl;
                 });
-            });
+            }
 
             // Google Maps initialization
             let map, marker;
 
             function initMap() {
-                if (!document.getElementById('map')) return;
+                const mapElement = document.getElementById('map');
+                if (!mapElement) return;
 
-                const lat = parseFloat('{{ $vendor->latitude ?? -7.3594 }}');
-                const lng = parseFloat('{{ $vendor->longitude ?? 109.8932 }}');
-                map = new google.maps.Map(document.getElementById('map'), {
+                const lat = parseFloat('{{ $vendor->latitude ?? 0 }}');
+                const lng = parseFloat('{{ $vendor->longitude ?? 0 }}');
+
+                if (lat === 0 || lng === 0) return;
+
+                map = new google.maps.Map(mapElement, {
                     zoom: 15,
                     center: {
                         lat,
@@ -264,24 +308,27 @@
                     streetViewControl: false,
                     fullscreenControl: true,
                 });
+
                 marker = new google.maps.Marker({
                     position: {
                         lat,
                         lng
                     },
                     map,
-                    title: '{{ $vendor->nama_perusahaan }}',
+                    title: '{{ $vendor->nama_perusahaan ?? 'Lokasi Penyedia' }}',
                     animation: google.maps.Animation.DROP,
                 });
             }
 
-            // Load Google Maps asynchronously
-            const script = document.createElement('script');
-            script.src =
-                `https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap&libraries=places`;
-            script.async = true;
-            script.defer = true;
-            document.head.appendChild(script);
+            // Load Google Maps only if map element exists
+            if (document.getElementById('map')) {
+                const script = document.createElement('script');
+                script.src =
+                    `https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap&libraries=places`;
+                script.async = true;
+                script.defer = true;
+                document.head.appendChild(script);
+            }
         });
     </script>
 @endpush

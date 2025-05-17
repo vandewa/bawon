@@ -83,6 +83,30 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label for="pkp">Penghasilan Kena Pajak (PKP) <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-control @error('vendor.pkp') is-invalid @enderror"
+                                        id="pkp" wire:model.live="vendor.pkp">
+                                        <option value="" selected disabled>Pilih Status PKP</option>
+                                        <option value="1">Ya</option>
+                                        <option value="0">Tidak</option>
+                                    </select>
+                                    @error('vendor.pkp')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                @if ($vendor['pkp'])
+                                    <div class="form-group col-md-6">
+                                        <label for="pkp">PKP File<span class="text-danger">*</span></label>
+                                        <input type="file" wire:model="pkp_file"
+                                            class="form-control @error('pkp_file') is-invalid @enderror"
+                                            accept="image/*">
+                                        @error('pkp_file')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                @endif
                             </div>
                         </fieldset>
 
