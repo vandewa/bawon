@@ -18,6 +18,28 @@ class Tag extends Component
     public $search, $edit = false;
     public $idHapus;
 
+    // Pesan validasi custom
+    protected $messages = [
+        'form.kode_kbli.required' => 'Kode KBLI harus diisi.',
+        'form.kode_kbli.unique' => 'Kode KBLI sudah terdaftar.',
+        'form.nama.required' => 'Nama Tag harus diisi.',
+    ];
+
+    // Aturan validasi dinamis (create/update)
+    public function rules()
+    {
+        if ($this->edit) {
+            return [
+                'form.kode_kbli' => 'required|unique:tags,kode_kbli,' . $this->idHapus,
+                'form.nama' => 'required',
+            ];
+        }
+        return [
+            'form.kode_kbli' => 'required|unique:tags,kode_kbli',
+            'form.nama' => 'required',
+        ];
+    }
+
     // Fungsi untuk mengambil data dan mengisi form edit
     public function getEdit($id)
     {
@@ -37,7 +59,6 @@ class Tag extends Component
     // Fungsi untuk menyimpan data baru atau mengupdate data
     public function save()
     {
-
         if ($this->edit) {
             $this->storeUpdate();
         } else {
@@ -59,6 +80,7 @@ class Tag extends Component
     // Menyimpan data baru
     public function store()
     {
+        $this->validate($this->rules());
         ModelTag::create($this->form);
     }
 
@@ -97,10 +119,15 @@ class Tag extends Component
         JS);
     }
 
+    public function resetForm()
+    {
+        $this->reset(['form', 'edit', 'idHapus']);
+    }
+
     // Fungsi untuk memperbarui data tag
     public function storeUpdate()
     {
-
+        $this->validate($this->rules());
         ModelTag::find($this->idHapus)->update($this->form);
         $this->reset();
         $this->edit = false;

@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Desa;
 
+use App\Models\Tag;
 use App\Models\Vendor;
+use App\Models\ComCode;
 use Livewire\Component;
 use App\Jobs\kirimPesan;
 use App\Models\Negoisasi;
@@ -26,13 +28,40 @@ class PenawaranPaket extends Component
     public $editMode = false;
     public $idHapus;
     public $negosiasiExists = false;
+    public $filterKualifikasi = null;
+    public $filterJenisUsaha = null;
+    public $filterTagIds = [];
+
+    public $daftarKualifikasi = [];
+    public $daftarJenisUsaha = [];
 
     public function mount($paketKegiatanId)
     {
         $this->paketKegiatan = PaketKegiatan::with(['paketPekerjaan', 'paketType'])->findOrFail($paketKegiatanId);
         $this->negosiasiExists = Negoisasi::where('paket_kegiatan_id', $paketKegiatanId)->exists();
         $this->loadPenawarans();
+        $this->daftarKualifikasi = ComCode::where('code_group', 'KUALIFIKASI_ST')->get();
+        $this->daftarJenisUsaha = ComCode::where('code_group', 'JENIS_USAHA_ST')->get();
     }
+
+    public function updatedShowModalVendor($value)
+    {
+       $this->js(<<<'JS'
+        setTimeout(function() {
+            $('#tags-filter').select2({
+                  placeholder: 'Pilih Klasifikasi',    // <-- di sini
+                    allowClear: true,
+            });
+            $('#tags-filter').on('change', function(e) {
+                var orderlist = $('#tags-filter').select2("val");
+
+                $wire.set('filterTagIds', orderlist);
+            });
+        }, 500);
+        JS);
+
+    }
+
 
     public function loadPenawarans()
     {
@@ -44,12 +73,13 @@ class PenawaranPaket extends Component
 
     public function tambahVendor($vendorId)
     {
+
         $this->vendorId = $vendorId;
         $this->batasAkhir = null;
         $this->suratUndangan = null;
         $this->keterangan = null;
         $this->editMode = false;
-        $this->showModalVendor = false;
+
     }
 
     public function simpanPenawaranVendor()
@@ -245,10 +275,26 @@ class PenawaranPaket extends Component
 
     public function render()
     {
-        return view('livewire.desa.penawaran-paket', [
-            'vendors' => Vendor::where('nama_perusahaan', 'like', '%' . $this->searchVendor . '%')
-                ->orWhere('nib', 'like', '%' . $this->searchVendor . '%')
-                ->get(),
-        ]);
+
+            $tags = Tag::orderBy('nama')->get();
+
+         $vendors = Vendor::with('tags')
+            ->when($this->filterKualifikasi, function ($q) {
+                $q->where('kualifikasi', $this->filterKualifikasi); // kolom pada table vendors
+            })
+            ->when($this->filterJenisUsaha, function ($q) {
+                $q->where('jenis_usaha', $this->filterJenisUsaha); // kolom pada table vendors
+            })
+            ->when($this->filterTagIds, function ($q) {
+                $q->whereHas('tags', function ($q2) {
+                    $q2->whereIn('tags.id', $this->filterTagIds);
+                });
+            })
+            ->paginate(10);
+
+            return view('livewire.desa.penawaran-paket', [
+                'vendors' => $vendors,
+                'tags' => $tags,
+            ]);
     }
 }

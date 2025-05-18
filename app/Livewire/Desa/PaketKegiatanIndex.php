@@ -20,7 +20,21 @@ class PaketKegiatanIndex extends Component
 
     public function mount($paketPekerjaanId)
     {
-        $this->paketPekerjaanId = $paketPekerjaanId;
+         $user = auth()->user();
+
+         if (!$user->hasRole(['superadministrator', 'desa', 'dinsos'])) {
+                abort(403, 'Unauthorized access.');
+            }
+        if ($user->desa_id) {
+            $paket = \App\Models\PaketPekerjaan::findOrFail($paketPekerjaanId);
+
+        if ($user->desa_id != $paket->desa_id) {
+            abort(403, 'Anda tidak berhak mengakses data desa lain.');
+            }
+            $this->paketPekerjaanId = $paketPekerjaanId;
+        }
+
+
     }
 
 

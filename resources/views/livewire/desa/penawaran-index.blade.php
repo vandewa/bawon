@@ -150,6 +150,14 @@
                                                                         </td>
                                                                         <td
                                                                             class="px-3 py-2 text-center align-middle text-nowrap">
+                                                                            @if ($paket->paket_kegiatan == 'PAKET_KEGIATAN_ST_02')
+                                                                                <button
+                                                                                    wire:click="confirmCancelStatus({{ $paket->id }})"
+                                                                                    class="mb-1 btn btn-sm btn-danger">
+                                                                                    <i class="fa fa-times-circle"></i>
+                                                                                    Batalkan Pengadaan
+                                                                                </button>
+                                                                            @endif
                                                                             @if (!$paket->ba_evaluasi_penawaran)
                                                                                 <a href="{{ route('desa.penawaran.paket', $paket->id) }}"
                                                                                     class="mb-1 btn btn-sm btn-primary">

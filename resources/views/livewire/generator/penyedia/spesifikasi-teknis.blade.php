@@ -7,10 +7,10 @@
                 @endif
 
                 <!-- Petunjuk Pengisian dalam Card -->
-                <div class="card mb-3">
-                    <div class="card-header bg-danger text-white">
+                <div class="mb-3 card">
+                    <div class="text-white card-header bg-danger">
                         <h5 class="mb-0">
-                            <i class="fas fa-book mr-2"></i> Petunjuk Pengisian
+                            <i class="mr-2 fas fa-book"></i> Petunjuk Pengisian
                         </h5>
                     </div>
 
@@ -47,6 +47,10 @@
                     <button class="btn btn-primary" wire:click="simpan">
                         <i class="fas fa-save"></i> Simpan Dokumen
                     </button>
+                    <button class="btn btn-warning" wire:click="resetIsiSurat" type="button">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
+
 
                     @if ($sudahDisimpan)
                         <button class="btn btn-success" onclick="downloadWord()">

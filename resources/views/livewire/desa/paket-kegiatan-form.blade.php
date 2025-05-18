@@ -87,56 +87,78 @@
                                             <th>Satuan</th>
                                             <th>Harga</th>
                                             <th>Total Anggaran</th>
+                                            <th>Harga Input</th>
                                             <th>Total Belanja</th>
-
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse ($rincianList as $i => $rinci)
-                                            @php
-                                                $usedQty = $rinci['quantity'] ?? 0;
-                                                $sisaQty = $rinci['jml_satuan_pak'] - $usedQty;
-                                                $isDisabled = $sisaQty <= 0;
-                                            @endphp
+                                        @php
+                                            $grouped = collect($rincianList)->groupBy('nama_obyek');
+                                        @endphp
 
-                                            <tr>
-                                                <td class="text-center align-middle">
-                                                    <input type="checkbox" wire:model.live="selectedRincian"
-                                                        value="{{ $rinci['id'] }}"
-                                                        {{ $isDisabled ? 'disabled' : '' }}>
-                                                </td>
-                                                <td>{{ $rinci['kd_rincian'] }}</td>
-                                                <td>{{ $rinci['uraian'] }}</td>
-                                                <td>{{ $rinci['jml_satuan_pak'] }}</td>
-                                                <td>{{ $rinci['quantity'] ?? 0 }}</td>
-                                                <td>
-                                                    <input type="number" min="1" max="{{ $sisaQty }}"
-                                                        wire:model.live="quantities.{{ $rinci['id'] }}"
-                                                        class="form-control form-control-sm" style="width: 80px;"
-                                                        {{ in_array($rinci['id'], $selectedRincian) ? '' : 'disabled' }}>
-                                                </td>
-                                                <td>{{ $rinci['satuan'] }}</td>
-                                                <td>{{ number_format($rinci['hrg_satuan_pak'], 0, ',', '.') }}</td>
-                                                <td>{{ number_format($rinci['anggaran_stlh_pak'], 0, ',', '.') }}</td>
-                                                <td>
+                                        @forelse ($grouped as $obyek => $groupItems)
+                                            <tr class="table-secondary">
+                                                <td colspan="11"><strong>{{ $obyek }}</strong></td>
+                                            </tr>
+
+                                            @foreach ($groupItems as $rinci)
+                                                @php
+                                                    $usedQty = $rinci['quantity'] ?? 0;
+                                                    $sisaQty = $rinci['jml_satuan_pak'] - $usedQty;
+                                                    $isDisabled = $sisaQty <= 0;
+                                                    $qty = (float) ($quantities[$rinci['id']] ?? 0);
+                                                    $hargaInput = (float) ($hargas[$rinci['id']] ?? 0);
+                                                    $totalBelanja = $qty * $hargaInput;
+                                                @endphp
+                                                <tr>
+                                                    <td class="text-center align-middle">
+                                                        <input type="checkbox" wire:model.live="selectedRincian"
+                                                            value="{{ $rinci['id'] }}"
+                                                            {{ $isDisabled ? 'disabled' : '' }}>
+                                                    </td>
+                                                    <td>{{ $rinci['kd_rincian'] }}</td>
+                                                    <td>{{ $rinci['uraian'] }}</td>
+                                                    <td>{{ $rinci['jml_satuan_pak'] }}</td>
+                                                    <td>{{ $usedQty }}</td>
+                                                    <td>
+                                                        <input type="number" min="1" max="{{ $sisaQty }}"
+                                                            wire:model.live="quantities.{{ $rinci['id'] }}"
+                                                            class="form-control form-control-sm" style="width: 80px;"
+                                                            {{ in_array($rinci['id'], $selectedRincian) ? '' : 'disabled' }}>
+                                                    </td>
+                                                    <td>{{ $rinci['satuan'] }}</td>
+                                                    <td>{{ number_format($rinci['hrg_satuan_pak'], 0, ',', '.') }}</td>
+                                                    <td>{{ number_format($rinci['anggaran_stlh_pak'], 0, ',', '.') }}
+                                                    </td>
+                                                    {{-- Kolom input harga (user input) --}}
+                                                    <td>
+                                                        <input type="number" min="0" step="0.01" required
+                                                            wire:model.live="hargas.{{ $rinci['id'] }}"
+                                                            class="form-control form-control-sm" style="width: 100px;"
+                                                            {{ in_array($rinci['id'], $selectedRincian) ? '' : 'disabled' }}>
+                                                    </td>
+                                                    {{-- Kolom Total Belanja --}}
                                                     @php
                                                         $qty = (float) ($quantities[$rinci['id']] ?? 0);
-                                                        $harga = (float) ($rinci['hrg_satuan_pak'] ?? 0);
-                                                        $total = $harga * $qty;
+                                                        $hargaInput = (float) ($hargas[$rinci['id']] ?? 0);
+                                                        $totalBelanja = $qty * $hargaInput;
                                                     @endphp
-                                                    <strong>{{ number_format($total, 0, ',', '.') }}</strong>
-                                                </td>
-                                            </tr>
+                                                    <td>
+                                                        <strong>{{ number_format($totalBelanja, 0, ',', '.') }}</strong>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                         @empty
                                             <tr>
-                                                <td colspan="8" class="text-center text-muted">Tidak ada rincian
+                                                <td colspan="11" class="text-center text-muted">Tidak ada rincian
                                                     tersedia.</td>
                                             </tr>
                                         @endforelse
-
                                     </tbody>
                                 </table>
                             </div>
+
+
                         </div>
 
                     </div>

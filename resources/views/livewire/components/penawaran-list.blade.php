@@ -49,14 +49,21 @@
                     </div>
                     <div class="text-center card-footer">
                         @if ($penawaran->penawaran_st == 'PENAWARAN_ST_01')
-                            <button wire:click="openModal({{ $penawaran->id }})" class="btn btn-success btn-sm">
-                                <i class="fas fa-check"></i> Setujui
-                            </button>
+                            @if ($allDokPenawaranUploaded)
+                                <button wire:click="openModal({{ $penawaran->id }})" class="btn btn-success btn-sm">
+                                    <i class="fas fa-check"></i> Setujui
+                                </button>
+                            @else
+                                <button class="btn btn-secondary btn-sm" disabled>
+                                    <i class="fas fa-info-circle"></i> Tunggu Semua Upload Penawaran
+                                </button>
+                            @endif
                         @elseif ($penawaran->penawaran_st == 'PENAWARAN_ST_02')
                             <button class="btn btn-danger btn-sm" disabled>
                                 <i class="fas fa-times"></i> Sudah Disetujui
                             </button>
                         @endif
+
 
                         <a href="{{ route('desa.penawaran.pelaksanaan.preview', $penawaran->id) }}"
                             class="btn btn-sm btn-outline-primary">

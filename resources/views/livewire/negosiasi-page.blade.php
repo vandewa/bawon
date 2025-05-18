@@ -94,6 +94,9 @@
                                 <div class="card-body">
                                     <h5>Detail Kegiatan</h5>
                                     <dl class="row">
+                                        <dt class="col-sm-5">Desa</dt>
+                                        <dd class="col-sm-7">{{ $paketKegiatan->paketPekerjaan->desa->name ?? '-' }}
+                                        </dd>
                                         <dt class="col-sm-5">Bidang</dt>
                                         <dd class="col-sm-7">{{ $paketKegiatan->paketPekerjaan->nama_bidang ?? '-' }}
                                         </dd>
@@ -149,7 +152,7 @@
                                             <dd class="col-sm-7">{{ $vendor->alamat }}</dd>
 
                                             <dt class="col-sm-5">Kontak</dt>
-                                            <dd class="col-sm-7">{{ $vendor->kontak }}</dd>
+                                            <dd class="col-sm-7">{{ $vendor->telepon }}</dd>
 
                                             <dt class="col-sm-5">Email</dt>
                                             <dd class="col-sm-7">{{ $vendor->email ?? '-' }}</dd>
