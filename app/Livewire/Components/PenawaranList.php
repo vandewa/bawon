@@ -23,13 +23,15 @@ class PenawaranList extends Component
     public $allDokPenawaranUploaded = false;
 
     public function mount()
-{
-    $total = Penawaran::where('paket_kegiatan_id', $this->paketKegiatanId)->count();
-    $withDok = Penawaran::where('paket_kegiatan_id', $this->paketKegiatanId)
-        ->whereNotNull('dok_penawaran')
-        ->count();
-    $this->allDokPenawaranUploaded = ($total > 1) && ($total == $withDok);
-}
+    {
+        $total = Penawaran::where('paket_kegiatan_id', $this->paketKegiatanId)->count();
+
+        $withDok = Penawaran::where('paket_kegiatan_id', $this->paketKegiatanId)
+            ->whereNotNull('dok_penawaran')
+            ->count();
+
+        $this->allDokPenawaranUploaded = ($total == $withDok);
+    }
 
 
     public function openModal($penawaranId)
