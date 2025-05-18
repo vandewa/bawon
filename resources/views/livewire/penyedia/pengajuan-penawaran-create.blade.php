@@ -105,23 +105,6 @@
                                 @enderror
                             </div>
 
-                            {{-- Bukti Setor Pajak --}}
-                            <div class="form-group">
-                                <label>Bukti Setor Pajak</label>
-                                @if ($penawaran->bukti_setor_pajak)
-                                    <div class="mb-2">
-                                        <a href="{{ route('helper.show-picture', ['path' => $penawaran->bukti_setor_pajak]) }}"
-                                            target="_blank" class="btn btn-sm btn-info">Lihat File Sebelumnya</a>
-                                    </div>
-                                @endif
-                                <input type="file" class="form-control" wire:model="bukti_setor_pajak">
-                                <div wire:loading wire:target="bukti_setor_pajak" class="mt-2 text-info">
-                                    <i class="fas fa-spinner fa-spin"></i> Mengunggah bukti setor pajak...
-                                </div>
-                                @error('bukti_setor_pajak')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
 
                             {{-- Dokumen Penawaran --}}
                             <div class="form-group">
@@ -141,23 +124,7 @@
                                 @enderror
                             </div>
 
-                            {{-- Dokumen Kebenaran Usaha --}}
-                            <div class="form-group">
-                                <label>Dokumen Kebenaran Usaha</label>
-                                @if ($penawaran->dok_kebenaran_usaha)
-                                    <div class="mb-2">
-                                        <a href="{{ route('helper.show-picture', ['path' => $penawaran->dok_kebenaran_usaha]) }}"
-                                            target="_blank" class="btn btn-sm btn-info">Lihat File Sebelumnya</a>
-                                    </div>
-                                @endif
-                                <input type="file" class="form-control" wire:model="dok_kebenaran_usaha">
-                                <div wire:loading wire:target="dok_kebenaran_usaha" class="mt-2 text-info">
-                                    <i class="fas fa-spinner fa-spin"></i> Mengunggah dokumen kebenaran usaha...
-                                </div>
-                                @error('dok_kebenaran_usaha')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
+
 
                             {{-- Keterangan --}}
                             <div class="form-group">
@@ -232,8 +199,7 @@
                                     wire:target="bukti_setor_pajak,dok_penawaran,dok_kebenaran_usaha">
                                     Simpan Pengajuan
                                 </button>
-                                <a href="{{ route('penyedia.penawaran-index') }}"
-                                    class="btn btn-secondary">Kembali</a>
+                                <a href="{{ route('penyedia.penawaran-index') }}" class="btn btn-secondary">Kembali</a>
                                 <a href="{{ asset('surat_penawaran.docx') }}" class="btn btn-info">Generate
                                     Penawaran</a>
                             </div>
