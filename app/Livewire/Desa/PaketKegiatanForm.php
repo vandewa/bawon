@@ -22,6 +22,7 @@ class PaketKegiatanForm extends Component
     public $paket_type;
     public $paketTypes = [];
     public $quantities = [];
+    public $hargas = [];
 
     public $rincianList = [];
     public $selectedRincian = [];
@@ -47,16 +48,16 @@ class PaketKegiatanForm extends Component
             ->get();
     }
 
-    public function updatedSelectedRincian()
-    {
-        $this->jumlah_anggaran = collect($this->rincianList)
-        ->filter(fn($item) => in_array($item['id'], $this->selectedRincian))
-        ->sum(function ($item) {
-            $qty = $this->quantities[$item['id']] ?? 1;
-            return $item['hrg_satuan_pak'] * $qty;
-        });
-    }
-
+   public function updatedSelectedRincian()
+        {
+            $this->jumlah_anggaran = collect($this->rincianList)
+                ->filter(fn($item) => in_array($item['id'], $this->selectedRincian))
+                ->sum(function ($item) {
+                    $qty = $this->quantities[$item['id']] ?? 1;
+                    $hargaInput = $this->hargas[$item['id']] ?? 0;
+                    return $hargaInput * $qty;
+                });
+        }
     public function save()
     {
         $this->validate([
@@ -77,9 +78,9 @@ class PaketKegiatanForm extends Component
             return $item['hrg_satuan_pak'] * $qty;
         });
 
-    //     DB::beginTransaction();
+        DB::beginTransaction();
 
-    // try {
+    try {
         $kegiatan = new PaketKegiatan();
         $kegiatan->paket_pekerjaan_id = $this->paketPekerjaan->id;
         $kegiatan->tpk_id = $this->tpk_id;
@@ -90,6 +91,7 @@ class PaketKegiatanForm extends Component
         foreach ($this->selectedRincian as $rinciId) {
             $rinci = collect($this->rincianList)->firstWhere('id', $rinciId);
             $qty = $this->quantities[$rinciId] ?? 1;
+            $hargaInput = $this->hargas[$rinciId] ?? 0; // Ambil harga dari input user
 
             $used = $rinci['quantity'] ?? 0;
             $available = $rinci['jml_satuan_pak'] - $used;
@@ -103,9 +105,10 @@ class PaketKegiatanForm extends Component
                 'paket_kegiatan_id' => $kegiatan->id,
                 'paket_pekerjaan_rinci_id' => $rinciId,
                 'quantity' => $qty,
+                'harga' => $hargaInput, // <-- simpan harga input user ke field harga
             ]);
 
-           // Hitung ulang total quantity dari tabel anak
+            // Hitung ulang total quantity dari tabel anak
             $total = PaketKegiatanRinci::whereHas('paketKegiatan', function ($q) {
                 $q->where('paket_pekerjaan_id', $this->paketPekerjaan->id);
             })
@@ -114,14 +117,16 @@ class PaketKegiatanForm extends Component
 
             PaketPekerjaanRinci::where('id', $rinciId)->update(['quantity' => $total]);
         }
-    // } catch (\Throwable $e) {
-    //     DB::rollBack();
-    //     report($e);
-    //     dd($e);
+        DB::commit();
+
+    } catch (\Throwable $e) {
+        DB::rollBack();
+        report($e);
+        dd($e);
 
 
-    //     session()->flash('error', 'Gagal menyimpan negosiasi.');
-    //     }
+        session()->flash('error', 'Gagal menyimpan negosiasi.');
+        }
 
 
 
@@ -140,6 +145,7 @@ class PaketKegiatanForm extends Component
 
     public function render()
     {
+        $this->updatedSelectedRincian();
         return view('livewire.desa.paket-kegiatan-form');
     }
 }

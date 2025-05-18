@@ -135,79 +135,106 @@
                                 <strong>Rincian Anggaran Terkait</strong>
                             </div>
                             <div class="p-0 card-body">
+                                @php
+                                    $grouped = $paketPekerjaan->rincian->groupBy('nama_obyek');
+                                @endphp
+
                                 <table class="table mb-0 table-sm table-hover">
                                     <thead class="thead-light">
                                         <tr>
-                                            <th>Pilih</th>
-                                            <th>Kode Rincian</th>
+                                            <th style="width: 40px;"></th>
+                                            <th>KD Rincian</th>
                                             <th>Uraian</th>
+                                            <th>Jumlah Awal</th>
+                                            <th>Jumlah Dibelanjakan</th>
                                             <th>Jumlah</th>
                                             <th>Satuan</th>
                                             <th>Harga</th>
-                                            <th>Total</th>
-                                            <th>Jumlah Dibelanjakan</th>
-                                            <th>Qty</th>
-                                            <th>Status</th>
+                                            <th>Total Anggaran</th>
+                                            <th>Harga Input</th>
+                                            <th>Total Belanja</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($paketPekerjaan->rincian as $i => $rinci)
-                                            @php
-                                                $terkait = $rinci
-                                                    ->kegiatanRinci()
-                                                    ->where('paket_kegiatan_id', $paketKegiatan->id)
-                                                    ->exists();
-                                                $dipakaiDiKegiatanLain = $rinci
-                                                    ->kegiatanRinci()
-                                                    ->where('paket_kegiatan_id', '!=', $paketKegiatan->id)
-                                                    ->exists();
+                                        @forelse ($grouped as $obyek => $rincianGroup)
+                                            <tr class="table-secondary">
+                                                <td colspan="11"><strong>{{ $obyek }}</strong></td>
+                                            </tr>
+                                            @foreach ($rincianGroup as $rinci)
+                                                @php
+                                                    $terkait = $rinci
+                                                        ->kegiatanRinci()
+                                                        ->where('paket_kegiatan_id', $paketKegiatan->id)
+                                                        ->exists();
+                                                    $dipakaiDiKegiatanLain = $rinci
+                                                        ->kegiatanRinci()
+                                                        ->where('paket_kegiatan_id', '!=', $paketKegiatan->id)
+                                                        ->exists();
+                                                    $jumlahDibelanjakan = \App\Models\PaketKegiatanRinci::where(
+                                                        'paket_pekerjaan_rinci_id',
+                                                        $rinci->id,
+                                                    )
+                                                        ->where('paket_kegiatan_id', '!=', $paketKegiatan->id)
+                                                        ->sum('quantity');
+                                                    $sisaTersedia = $rinci->jml_satuan_pak - $jumlahDibelanjakan;
+                                                    $qty = (float) ($quantities[$rinci->id] ?? 0);
+                                                    $hargaInput =
+                                                        (float) ($hargas[$rinci->id] ?? $rinci->hrg_satuan_pak);
+                                                    $totalBelanja = $qty * $hargaInput;
+                                                @endphp
 
-                                                $jumlahDibelanjakan = \App\Models\PaketKegiatanRinci::where(
-                                                    'paket_pekerjaan_rinci_id',
-                                                    $rinci->id,
-                                                )
-                                                    ->where('paket_kegiatan_id', '!=', $paketKegiatan->id)
-                                                    ->sum('quantity');
+                                                @continue($dipakaiDiKegiatanLain && !$terkait)
 
-                                                $sisaTersedia = $rinci->jml_satuan_pak - $jumlahDibelanjakan;
-                                            @endphp
-
-                                            @continue($dipakaiDiKegiatanLain && !$terkait)
-
-                                            <tr>
-                                                <td class="text-center">
-                                                    <input type="checkbox" wire:model.live="selectedRincian"
-                                                        value="{{ $rinci->id }}">
-                                                </td>
-                                                <td>{{ $rinci->kd_rincian }}</td>
-                                                <td>{{ $rinci->uraian }}</td>
-                                                <td>{{ number_format($rinci->jml_satuan_pak, 0, ',', '.') }}</td>
-                                                <td>{{ $rinci->satuan }}</td>
-                                                <td>{{ number_format($rinci->hrg_satuan_pak, 0, ',', '.') }}</td>
-                                                <td><strong>{{ number_format($rinci->anggaran_stlh_pak, 0, ',', '.') }}</strong>
-                                                </td>
-                                                <td>{{ number_format($jumlahDibelanjakan, 0, ',', '.') }}</td>
-                                                <td>
-                                                    @if (in_array($rinci->id, $selectedRincian))
+                                                <tr>
+                                                    <td class="text-center align-middle">
+                                                        <input type="checkbox" wire:model.live="selectedRincian"
+                                                            value="{{ $rinci->id }}">
+                                                    </td>
+                                                    <td>{{ $rinci->kd_rincian }}</td>
+                                                    <td>{{ $rinci->uraian }}</td>
+                                                    <td>{{ number_format($rinci->jml_satuan_pak, 0, ',', '.') }}</td>
+                                                    <td>{{ number_format($jumlahDibelanjakan, 0, ',', '.') }}</td>
+                                                    <td>
                                                         <input type="number" class="form-control form-control-sm"
                                                             wire:model.live="quantities.{{ $rinci->id }}"
-                                                            min="1" max="{{ $sisaTersedia }}">
-                                                        @error('quantities.' . $rinci->id)
-                                                            <small class="text-danger">{{ $message }}</small>
-                                                        @enderror
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($terkait)
-                                                        <span class="badge badge-info">Digunakan di kegiatan ini</span>
-                                                    @else
-                                                        <span class="badge badge-secondary">Belum digunakan</span>
-                                                    @endif
-                                                </td>
+                                                            min="1" max="{{ $sisaTersedia }}"
+                                                            {{ in_array($rinci->id, $selectedRincian) ? '' : 'disabled' }}>
+                                                    </td>
+                                                    <td>{{ $rinci->satuan }}</td>
+                                                    <td>{{ number_format($rinci->hrg_satuan_pak, 0, ',', '.') }}</td>
+                                                    <td>{{ number_format($rinci->anggaran_stlh_pak, 0, ',', '.') }}
+                                                    </td>
+                                                    <td>
+                                                        @if (in_array($rinci->id, $selectedRincian))
+                                                            <input type="number" min="0" step="0.01"
+                                                                wire:model.live="hargas.{{ $rinci->id }}"
+                                                                class="form-control form-control-sm"
+                                                                style="width: 100px;">
+                                                            @error('hargas.' . $rinci->id)
+                                                                <small class="text-danger">{{ $message }}</small>
+                                                            @enderror
+                                                        @else
+                                                            <span
+                                                                class="text-muted">{{ number_format($hargaInput, 0, ',', '.') }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td><strong>{{ number_format($totalBelanja, 0, ',', '.') }}</strong>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="11" class="text-center text-muted">Tidak ada rincian
+                                                    tersedia.</td>
                                             </tr>
-                                        @endforeach
+                                        @endforelse
                                     </tbody>
                                 </table>
+
+
+
+
+
                             </div>
                         </div>
 

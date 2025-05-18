@@ -16,7 +16,7 @@ class SyncAnggaranRinci extends Command
 {
     $this->info('🚀 Mulai sinkronisasi data rincian unik terbaru...');
 
-    $limit = 500;
+    $limit = 10;
     $offset = 0;
     $chunkCount = 0;
     $totalInserted = 0;
@@ -24,34 +24,42 @@ class SyncAnggaranRinci extends Command
     do {
         $results = DB::connection('sqlsrv')->select("
             WITH Ranked AS (
-                SELECT
-                    a.KdPosting,
-                    a.Tahun,
-                    a.Kd_Desa,
-                    a.Kd_Keg,
-                    a.Kd_Rincian,
-                    r.nama_obyek,
-                    a.Kd_SubRinci,
-                    a.No_Urut,
-                    a.Uraian,
-                    a.SumberDana,
-                    a.JmlSatuanPAK,
-                    a.Satuan,
-                    a.HrgSatuanPAK,
-                    a.AnggaranStlhPAK,
-                    ROW_NUMBER() OVER (
-                        PARTITION BY
-                            a.Tahun, a.Kd_Desa, a.Kd_Keg,
-                            a.Kd_Rincian, a.Kd_SubRinci, a.No_Urut
-                        ORDER BY a.KdPosting DESC
-                    ) AS rn
-                FROM Ta_AnggaranRinci a
-                LEFT JOIN Ref_Rek4 r ON a.Kd_Rincian = r.Obyek
-            )
-            SELECT *
-            FROM Ranked
-            WHERE rn = 1
-            ORDER BY Kd_Keg, Kd_Rincian
+    SELECT
+        a.KdPosting,
+        a.Tahun,
+        a.Kd_Desa,
+        a.Kd_Keg,
+        a.Kd_Rincian,
+        rr.Nama_Obyek,
+        a.Kd_SubRinci,
+        a.No_Urut,
+        a.Uraian,
+        a.SumberDana,
+        a.JmlSatuanPAK,
+        a.Satuan,
+        a.HrgSatuanPAK,
+        a.AnggaranStlhPAK,
+        ROW_NUMBER() OVER (
+            PARTITION BY
+                a.Tahun,
+                a.Kd_Desa,
+                a.Kd_Keg,
+                a.Kd_Rincian,
+                a.Kd_SubRinci,
+                a.No_Urut
+            ORDER BY a.KdPosting DESC
+        ) AS rn
+    FROM Ta_Kegiatan tk
+    JOIN Ta_KegiatanOutput tko  ON tk.Kd_Keg = tko.Kd_Keg
+    JOIN Ta_Anggaran ta          ON ta.Kd_Keg = tko.Kd_Keg
+    JOIN Ref_Rek4 rr             ON rr.Obyek = ta.Kd_Rincian
+    JOIN Ta_AnggaranRinci a      ON a.Kd_Keg = ta.Kd_Keg AND ta.Kd_Rincian = a.Kd_Rincian
+)
+SELECT *
+FROM Ranked
+WHERE rn = 1
+  AND AnggaranStlhPAK > 0
+ORDER BY Kd_Keg, Kd_Rincian
             OFFSET ? ROWS FETCH NEXT ? ROWS ONLY
         ", [$offset, $limit]);
 
