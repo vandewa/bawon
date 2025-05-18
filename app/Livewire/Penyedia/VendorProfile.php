@@ -17,7 +17,7 @@ class VendorProfile extends Component
     public $klasifikasiUsaha = [];
     public $formattedData = [];
 
-    public function mount($vendorId)
+    public function mount($vendorId = '')
     {
         $this->vendor = Vendor::findOrFail($vendorId);
         $this->user = User::where('vendor_id', $vendorId)->first();

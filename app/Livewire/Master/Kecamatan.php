@@ -2,16 +2,15 @@
 
 namespace App\Livewire\Master;
 
-use App\Models\Tag as ModelTag;
+use App\Models\Kecamatan as ModelKecamatan;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Tag extends Component
+class Kecamatan extends Component
 {
     use WithPagination;
 
     public $form = [
-        'kode_kbli' => '',
         'nama' => '',
     ];
 
@@ -21,8 +20,8 @@ class Tag extends Component
     // Fungsi untuk mengambil data dan mengisi form edit
     public function getEdit($id)
     {
-        $tag = ModelTag::find($id);
-        $this->form = $tag->only(['kode_kbli', 'nama']);
+        $data = ModelKecamatan::find($id);
+        $this->form = $data->only(['nama']);
         $this->edit = true;
         $this->idHapus = $id;
     }
@@ -59,7 +58,7 @@ class Tag extends Component
     // Menyimpan data baru
     public function store()
     {
-        ModelTag::create($this->form);
+        ModelKecamatan::create($this->form);
     }
 
     // Menghapus data tag
@@ -87,7 +86,7 @@ class Tag extends Component
     // Fungsi untuk menghapus data tag setelah konfirmasi
     public function hapus()
     {
-        ModelTag::destroy($this->idHapus);
+        ModelKecamatan::destroy($this->idHapus);
         $this->js(<<<'JS'
         Swal.fire({
             title: 'Good job!',
@@ -100,8 +99,7 @@ class Tag extends Component
     // Fungsi untuk memperbarui data tag
     public function storeUpdate()
     {
-
-        ModelTag::find($this->idHapus)->update($this->form);
+        ModelKecamatan::find($this->idHapus)->update($this->form);
         $this->reset();
         $this->edit = false;
     }
@@ -109,12 +107,12 @@ class Tag extends Component
     // Fungsi untuk render dan menampilkan data
     public function render()
     {
-        $tags = ModelTag::when($this->search, function ($query) {
+        $data = ModelKecamatan::when($this->search, function ($query) {
             return $query->where('nama', 'like', '%' . $this->search . '%');
         })->paginate(10);
 
-        return view('livewire.master.tag', [
-            'tags' => $tags
+        return view('livewire.master.kecamatan', [
+            'data' => $data
         ]);
     }
 }

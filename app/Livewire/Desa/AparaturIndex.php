@@ -25,8 +25,8 @@ class AparaturIndex extends Component
         'telp' => 'nullable|string',
         'tempat_lahir' => 'nullable|string',
         'tanggal_lahir' => 'nullable|date',
-        'tmt_awal' => 'required|date|before_or_equal:tmt_akhir',
-        'tmt_akhir' => 'required|date|after_or_equal:tmt_awal',
+        'tmt_awal' => 'date|before_or_equal:tmt_akhir',
+        'tmt_akhir' => 'date|after_or_equal:tmt_awal',
     ];
 
     public function mount($id = '')

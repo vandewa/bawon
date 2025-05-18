@@ -56,10 +56,11 @@ class VendorEdit extends Component
         'bank_st' => '',
         'no_rekening' => '',
         'atas_nama_rekening' => '',
+        'pkp' => '',
     ];
 
     // Properties for document uploads
-    public $akta_pendirian, $nib_file, $npwp_file, $siup, $izin_usaha_lain, $ktp_direktur, $dok_kebenaran_usaha_file, $bukti_setor_pajak_file;
+    public $akta_pendirian, $nib_file, $npwp_file, $siup, $izin_usaha_lain, $ktp_direktur, $dok_kebenaran_usaha_file, $bukti_setor_pajak_file, $pkp_file;
 
     public $klasifikasiUsaha = [];
 
@@ -85,6 +86,7 @@ class VendorEdit extends Component
         'vendor.bank_st' => 'nullable|string|max:255',
         'vendor.no_rekening' => 'nullable|numeric',
         'vendor.atas_nama_rekening' => 'nullable|string|max:255',
+        'vendor.pkp' => 'required|in:0,1',
         'foto_vendor.*' => 'image|max:2048',
         'akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'nib_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
@@ -94,11 +96,23 @@ class VendorEdit extends Component
         'ktp_direktur' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'dok_kebenaran_usaha_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'bukti_setor_pajak_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'pkp_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048|required_if:vendor.pkp,1',
         'user.name' => 'required|string|max:255',
         'user.email' => 'required|email|max:255',
         'user.password' => 'nullable|string|min:6|same:user.password_confirmation',
         'user.password_confirmation' => 'nullable|string|min:6',
     ];
+
+    protected function messages()
+    {
+        return [
+            'vendor.pkp.required' => 'Status PKP wajib dipilih.',
+            'vendor.pkp.in' => 'Status PKP harus Ya atau Tidak.',
+            'pkp_file.required_if' => 'Dokumen PKP wajib diunggah jika status PKP adalah Ya.',
+            'pkp_file.mimes' => 'Dokumen PKP harus berupa PDF, JPG, JPEG, atau PNG.',
+            'pkp_file.max' => 'Dokumen PKP tidak boleh lebih dari 2MB.',
+        ];
+    }
 
     public function mount($vendorId)
     {
@@ -160,7 +174,21 @@ class VendorEdit extends Component
 
         // Update vendor record
         $vendor = Vendor::findOrFail($this->vendorId);
+
+        // Check if pkp is changed to 0
+        if ($this->vendor['pkp'] == '0' && $vendor->pkp != '0') {
+            // Delete existing pkp_file from storage if it exists
+            if ($vendor->pkp_file) {
+                Storage::disk('public')->delete($vendor->pkp_file);
+            }
+            // Set pkp_file to null
+            $this->vendor['pkp_file'] = null;
+        }
+
         $vendor->update($this->vendor);
+
+        // Process document uploads (will skip pkp_file if no new file is uploaded)
+        $this->processDocumentUploads($vendor);
 
         // Update or create klasifikasi usaha
         if (!empty($this->klasifikasiUsaha)) {
@@ -176,9 +204,6 @@ class VendorEdit extends Component
                 ]);
             }
         }
-
-        // Process document uploads
-        $this->processDocumentUploads($vendor);
 
         // Update or create user
         if (!empty($this->user['email'])) {
@@ -212,6 +237,7 @@ class VendorEdit extends Component
             'ktp_direktur',
             'dok_kebenaran_usaha_file',
             'bukti_setor_pajak_file',
+            'pkp_file',
         ];
 
         foreach ($documentFields as $field) {

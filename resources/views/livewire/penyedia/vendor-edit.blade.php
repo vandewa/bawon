@@ -49,7 +49,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>NPWP</label>
+                                    <label>NPWP (Nomor Pokok Wajib Pajak)</label>
                                     <input type="text"
                                         class="form-control @error('vendor.npwp') is-invalid @enderror"
                                         wire:model.defer="vendor.npwp">
@@ -58,7 +58,8 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>NIB/SBU <span class="text-danger">*</span></label>
+                                    <label>NIB (Nomor Induk Berusaha) / SBU (Sertifikat Badan Usaha) <span
+                                            class="text-danger">*</span></label>
                                     <input type="text" class="form-control @error('vendor.nib') is-invalid @enderror"
                                         wire:model.defer="vendor.nib">
                                     @error('vendor.nib')
@@ -66,7 +67,8 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Masa Berlaku NIB</label>
+                                    <label>Masa berlaku NIB (Nomor Induk Berusaha) <span
+                                            class="text-danger">*</span></label>
                                     <input type="date"
                                         class="form-control @error('vendor.masa_berlaku_nib') is-invalid @enderror"
                                         wire:model.defer="vendor.masa_berlaku_nib">
@@ -75,7 +77,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label>Instansi Pemberi NIB</label>
+                                    <label>Instansi Pemberi NIB (Nomor Induk Berusaha)</label>
                                     <input type="text"
                                         class="form-control @error('vendor.instansi_pemberi_nib') is-invalid @enderror"
                                         wire:model.defer="vendor.instansi_pemberi_nib">
@@ -83,6 +85,41 @@
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label for="pkp">Penghasilan Kena Pajak (PKP) <span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-control @error('vendor.pkp') is-invalid @enderror"
+                                        id="pkp" wire:model.live="vendor.pkp">
+                                        <option value="" disabled>Pilih Status PKP</option>
+                                        <option value="1" {{ $vendor['pkp'] == '1' ? 'selected' : '' }}>Ya</option>
+                                        <option value="0" {{ $vendor['pkp'] == '0' ? 'selected' : '' }}>Tidak
+                                        </option>
+                                    </select>
+                                    @error('vendor.pkp')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                @if ($vendor['pkp'])
+                                    <div class="form-group col-md-6">
+                                        <label for="pkp_file">Dokumen PKP <span class="text-danger">*</span></label>
+                                        <input type="file" wire:model="pkp_file"
+                                            class="form-control @error('pkp_file') is-invalid @enderror"
+                                            accept=".pdf,.jpg,.jpeg,.png">
+                                        @if ($vendor['pkp_file'])
+                                            <small class="text-muted mt-1">File saat ini: <a
+                                                    href="{{ route('helper.show-picture', ['path' => $vendor['pkp_file']]) }}"
+                                                    target="_blank">Lihat</a></small>
+                                        @endif
+                                        @if ($this->pkp_file)
+                                            <small class="text-success mt-1">
+                                                <i class="fas fa-check"></i> File baru telah dipilih
+                                            </small>
+                                        @endif
+                                        @error('pkp_file')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                @endif
                             </div>
                         </fieldset>
 

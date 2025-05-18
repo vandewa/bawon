@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\BeritaEdit;
 use App\Livewire\Dashboard;
 use App\Livewire\Desa\TpkIndex;
 use App\Livewire\Master\Role;
@@ -29,6 +30,8 @@ use App\Livewire\Desa\PaketKegiatanIndex;
 use App\Http\Controllers\HelperController;
 use App\Livewire\Desa\PaketPekerjaanIndex;
 use App\Http\Controllers\PasswordResetController;
+use App\Livewire\BeritaCreate;
+use App\Livewire\BeritaIndex;
 use App\Livewire\Penyedia\PengajuanPenawaranCreate;
 use App\Livewire\Penyedia\PaketPekerjaanPenyediaIndex;
 use App\Livewire\Generator\Penyedia\Hps as PenyediaHps;
@@ -65,11 +68,11 @@ use App\Livewire\Generator\Penyedia\LaporanHasilPemeriksaanOlehKasiKaur as Penye
 use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan as SwakelolaHasilPembahasanKegiatanPersiapanPengadaan;
 
 use App\Livewire\Generator\Desa\Tpk as GeneratorTpk;
+use App\Livewire\Master\Kecamatan;
 use App\Livewire\Master\Tag;
 use App\Livewire\Penyedia\LelangIndex;
 use App\Livewire\Penyedia\PengajuanLelangCreate;
-
-
+use App\Livewire\Regulasi;
 
 // use App\Livewire\Generator\SpesifikasiTeknisEditor;
 
@@ -154,6 +157,12 @@ Route::middleware([
         Route::get('role/{id?}', Role::class)->name('role');
         Route::get('role-index', RoleIndex::class)->name('role.index');
         Route::get('tag/{id?}', Tag::class)->name('tag');
+        Route::get('kecamatan/{id?}', Kecamatan::class)->name('kecamatan');
+        Route::get('regulasi/{id?}', Regulasi::class)->name('regulasi');
+        Route::get('berita-index', BeritaIndex::class)->name('berita-index');
+        Route::get('berita-create', BeritaCreate::class)->name('berita-create');
+        Route::get('berita-edit/{id?}', BeritaEdit::class)->name('berita-edit');
+
 
 
     });

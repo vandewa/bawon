@@ -96,7 +96,7 @@
                                                                             </button>
                                                                             <a href="{{ route('desa.aparatur-index', $item->id) }}"
                                                                                 class="btn btn-sm btn-info mb-1">
-                                                                                <i class="fa fa-users"></i> Aparatur
+                                                                                <i class="fa fa-user"></i> Aparatur
                                                                             </a>
                                                                             <a href="{{ route('desa.tpk-index', $item->id) }}"
                                                                                 class="btn btn-sm btn-dark mb-1">
