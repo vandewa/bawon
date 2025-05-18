@@ -66,6 +66,24 @@
                           </li>
                       @endrole
 
+                      @role(['superadministrator', 'dinsos'])
+                          <li class="nav-item">
+                              <a href="{{ route('master.berita-index') }}"
+                                  class="nav-link  {{ Request::segment(2) == 'berita-index' ? 'active' : '' }}">
+                                  <i class="nav-icon fas fa-newspaper"></i>
+                                  <p>Berita</p>
+                              </a>
+                          </li>
+
+                          <li class="nav-item">
+                              <a href="{{ route('master.regulasi') }}"
+                                  class="nav-link  {{ Request::segment(2) == 'regulasi' ? 'active' : '' }}">
+                                  <i class="nav-icon fas fa-file-alt"></i>
+                                  <p>Regulasi</p>
+                              </a>
+                          </li>
+                      @endrole
+
 
                       @role(['desa'])
                           <li class="nav-item">
