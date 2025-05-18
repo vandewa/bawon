@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FrontController;
 use App\Livewire\BeritaEdit;
 use App\Livewire\Dashboard;
 use App\Livewire\Desa\TpkIndex;
@@ -82,6 +83,9 @@ Route::get('/login', function () {
 })->name('login');
 
 
+Route::get('/', [FrontController::class, 'beranda'])->name('home');
+Route::get('/regulasi', [FrontController::class, 'regulasi'])->name('regulasi');
+Route::get('/daftar-penyedia', [FrontController::class, 'daftarPenyedia'])->name('daftar-penyedia');
 Route::get('show-picture', [HelperController::class, 'showPicture'])->name('helper.show-picture');
 Route::get('password-reset', [PasswordResetController::class, 'index'])->name('password.index');
 Route::post('password-reset', [PasswordResetController::class, 'updatePassword'])->name('password.post');
@@ -93,7 +97,7 @@ Route::middleware([
     'verified',
 
 ])->group(function () {
-    Route::get('/', Dashboard::class)->name('index');
+    // Route::get('/', Dashboard::class)->name('index');
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
     Route::group(['prefix' => 'generator', 'as' => 'generator.'], function () {
