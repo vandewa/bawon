@@ -222,30 +222,58 @@
 
     {{-- Modal pilih vendor --}}
     @if ($showModalVendor)
-        <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.5);">
+        <div class="modal fade show d-block" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg" role="document">
                 <div class="border-0 shadow modal-content">
                     <div class="modal-header bg-info">
-                        <h5 class="text-white modal-title">Pilih Vendor</h5>
-                        <button type="button" class="text-white btn-close"
-                            wire:click="$set('showModalVendor', false)">
+                        <h5 class=" modal-title">Pilih Vendor</h5>
+                        <button type="button" class=" btn-close" wire:click="$set('showModalVendor', false)">
                             <span>&times;</span>
                         </button>
                     </div>
 
                     <div class="modal-body">
                         <div class="mb-3 row">
-                            <div class="col-md-6">
+                            <div class="mb-2 col-md-6">
                                 <input type="text" class="form-control" wire:model.live="searchVendor"
                                     placeholder="Cari nama perusahaan atau NIB...">
                             </div>
+                            <div class="col-md-6">
+                                <div wire:ignore>
+                                    <select id="tags-filter" class="form-control" multiple="multiple">
+
+                                        @foreach ($tags as $tag)
+                                            <option value="{{ $tag->id }}">{{ $tag->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <select wire:model.live="filterKualifikasi" class="form-control">
+                                    <option value="">Kualifikasi</option>
+                                    @foreach ($daftarKualifikasi as $item)
+                                        <option value="{{ $item->com_cd }}">{{ $item->code_nm }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select wire:model.live="filterJenisUsaha" class="form-control">
+                                    <option value="">Jenis Usaha</option>
+                                    @foreach ($daftarJenisUsaha as $item)
+                                        <option value="{{ $item->com_cd }}">{{ $item->code_nm }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
+
 
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>Nama</th>
                                     <th>NIB</th>
+                                    <th>Profil</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -254,6 +282,12 @@
                                     <tr>
                                         <td>{{ $vendor->nama_perusahaan }}</td>
                                         <td>{{ $vendor->nib }}</td>
+                                        <td>
+                                            <a href="{{ route('penyedia.vendor-profile', $vendor->id) }}"
+                                                class="btn btn-info btn-sm" target="_blank">
+                                                <i class="fa fa-user"></i> Profil
+                                            </a>
+                                        </td>
                                         <td>
                                             <button class="btn btn-primary btn-sm"
                                                 wire:click="tambahVendor({{ $vendor->id }})">
