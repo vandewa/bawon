@@ -1,18 +1,24 @@
 <?php
 
-use App\Http\Controllers\FrontController;
-use App\Livewire\BeritaEdit;
+use App\Livewire\Penyedia\DaftarHitam;
+use App\Livewire\Regulasi;
 use App\Livewire\Dashboard;
-use App\Livewire\Desa\TpkIndex;
+use App\Livewire\BeritaEdit;
+use App\Livewire\Master\Tag;
+use App\Livewire\BeritaIndex;
 use App\Livewire\Master\Role;
 use App\Livewire\Master\User;
-use App\Livewire\Desa\DesaEdit;
-use App\Livewire\NegosiasiPage;
+use App\Livewire\BeritaCreate;
 
+use App\Livewire\Desa\DesaEdit;
+use App\Livewire\Desa\TpkIndex;
+use App\Livewire\NegosiasiPage;
 use App\Livewire\Desa\DesaIndex;
 use App\Livewire\Desa\DesaCreate;
+use App\Livewire\Master\Kecamatan;
 use App\Livewire\Master\RoleIndex;
 use App\Livewire\Master\UserIndex;
+use App\Livewire\HeroSliderManager;
 use App\Livewire\Desa\AparaturIndex;
 use App\Livewire\Desa\PelaporanIndex;
 use App\Livewire\Desa\PenawaranIndex;
@@ -20,20 +26,23 @@ use App\Livewire\Desa\PenawaranPaket;
 use App\Livewire\Penyedia\VendorEdit;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Desa\PelaporanDetail;
+
+use App\Livewire\Penyedia\LelangIndex;
 use App\Livewire\Penyedia\VendorIndex;
 use App\Livewire\Desa\PenawaranPreview;
 use App\Livewire\Penyedia\VendorCreate;
 use App\Livewire\Desa\PaketKegiatanEdit;
 use App\Livewire\Desa\PaketKegiatanForm;
-
 use App\Livewire\Penyedia\VendorProfile;
+use App\Http\Controllers\FrontController;
 use App\Livewire\Desa\PaketKegiatanIndex;
 use App\Http\Controllers\HelperController;
 use App\Livewire\Desa\PaketPekerjaanIndex;
+use App\Livewire\Penyedia\PengajuanLelangCreate;
 use App\Http\Controllers\PasswordResetController;
-use App\Livewire\BeritaCreate;
-use App\Livewire\BeritaIndex;
 use App\Livewire\Penyedia\PengajuanPenawaranCreate;
+use App\Livewire\Generator\Desa\Tpk as GeneratorTpk;
+
 use App\Livewire\Penyedia\PaketPekerjaanPenyediaIndex;
 use App\Livewire\Generator\Penyedia\Hps as PenyediaHps;
 use App\Livewire\Generator\Penyedia\Kak as PenyediaKak;
@@ -41,7 +50,6 @@ use App\Livewire\Generator\Penyedia\Spk as PenyediaSpk;
 use App\Livewire\Generator\Swakelola\Kak as SwakelolaKak;
 use App\Livewire\Generator\Penyedia\JadwalPelaksanaanPekerjaan;
 use App\Livewire\Generator\Lelang\PengumumanLelang as LelangPengumumanLelang;
-
 use App\Livewire\Generator\Penyedia\SkKepalaDesaTpk as PenyediaSkKepalaDesaTpk;
 use App\Livewire\Generator\Penyedia\SuratPerjanjian as PenyediaSuratPerjanjian;
 use App\Livewire\Generator\Swakelola\SkKepalaDesaTpk as SwakelolaSkKepalaDesaTpk;
@@ -60,6 +68,7 @@ use App\Livewire\Generator\Penyedia\BastDariPenyediaKepadaKasi as PenyediaBastDa
 use App\Livewire\Generator\Swakelola\BeritaAcaraPenyerahanHasil as SwakelolaBeritaAcaraPenyerahanHasil;
 use App\Livewire\Generator\Penyedia\BastDariKasiKepadaKepalaDesa as PenyediaBastDariKasiKepadaKepalaDesa;
 use App\Livewire\Generator\Swakelola\LaporanPenggunaanSumberdaya as SwakelolaLaporanPenggunaanSumberdaya;
+
 use App\Livewire\Generator\Penyedia\SuratPernyataanKebenaranUsaha as PenyediaSuratPernyataanKebenaranUsaha;
 use App\Livewire\Generator\Penyedia\PengumumanPerencanaanPengadaan as PenyediaPengumumanPerencanaanPengadaan;
 use App\Livewire\Generator\Swakelola\PengumumanPerencanaanPengadaan as SwakelolaPengumumanPerencanaanPengadaan;
@@ -67,13 +76,6 @@ use App\Livewire\Generator\Swakelola\PengumumanHasilKegiatanPengadaan as Swakelo
 use App\Livewire\Generator\Swakelola\SuratPenyampaianDokumenPersiapan as SwakelolaSuratPenyampaianDokumenPersiapan;
 use App\Livewire\Generator\Penyedia\LaporanHasilPemeriksaanOlehKasiKaur as PenyediaLaporanHasilPemeriksaanOlehKasiKaur;
 use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan as SwakelolaHasilPembahasanKegiatanPersiapanPengadaan;
-
-use App\Livewire\Generator\Desa\Tpk as GeneratorTpk;
-use App\Livewire\Master\Kecamatan;
-use App\Livewire\Master\Tag;
-use App\Livewire\Penyedia\LelangIndex;
-use App\Livewire\Penyedia\PengajuanLelangCreate;
-use App\Livewire\Regulasi;
 
 // use App\Livewire\Generator\SpesifikasiTeknisEditor;
 
@@ -86,6 +88,10 @@ Route::get('/login', function () {
 Route::get('/', [FrontController::class, 'beranda'])->name('home');
 Route::get('/regulasi', [FrontController::class, 'regulasi'])->name('regulasi');
 Route::get('/daftar-penyedia', [FrontController::class, 'daftarPenyedia'])->name('daftar-penyedia');
+Route::get('/daftar-hitam', [FrontController::class, 'daftarHitam'])->name('daftar-hitam');
+Route::get('/kontak-kami', [FrontController::class, 'kontakKami'])->name('kontak-kami');
+Route::get('/list-berita', [FrontController::class, 'listBerita'])->name('list-berita');
+Route::get('/detail-berita/{id}', [FrontController::class, 'detailBerita'])->name('detail-berita');
 Route::get('show-picture', [HelperController::class, 'showPicture'])->name('helper.show-picture');
 Route::get('password-reset', [PasswordResetController::class, 'index'])->name('password.index');
 Route::post('password-reset', [PasswordResetController::class, 'updatePassword'])->name('password.post');
@@ -166,6 +172,7 @@ Route::middleware([
         Route::get('berita-index', BeritaIndex::class)->name('berita-index');
         Route::get('berita-create', BeritaCreate::class)->name('berita-create');
         Route::get('berita-edit/{id?}', BeritaEdit::class)->name('berita-edit');
+        Route::get('gambar', HeroSliderManager::class)->name('gambar');
 
 
 
@@ -207,6 +214,7 @@ Route::middleware([
         Route::get('penawaran-index/{penawaranId}/create', PengajuanPenawaranCreate::class)->name('penawaran.create');
         Route::get('lelang-index', LelangIndex::class)->name('lelang-index');
         Route::get('pengajuan-lelang/create/{paketKegiatanId?}/{vendorId?}', PengajuanLelangCreate::class)->name('pengajuan-lelang.create');
+        Route::get('daftar-hitam', DaftarHitam::class)->name('daftar-hitam')->middleware('role:superadministrator|dinsos');
 
 
     });

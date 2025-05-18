@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
+use App\Models\HeroSlide;
 use App\Models\Regulasi;
 use App\Models\Vendor;
 use Yajra\DataTables\DataTables;
@@ -15,10 +16,28 @@ class FrontController extends Controller
     {
         $berita = Berita::where('status_berita_st', 'STATUS_BERITA_ST_01')->orderBy('created_at', 'desc')->limit(6)->get();
 
+        $jumlah_berita = Berita::count();
+
+        $gambar = HeroSlide::orderBy('created_at', 'desc')->get();
+
         return view('layouts.beranda', [
-            'berita' => $berita
+            'berita' => $berita,
+            'slides' => $gambar,
+            'jumlah_berita' => $jumlah_berita,
         ]);
     }
+
+    public function listBerita()
+    {
+        $data = Berita::where('status_berita_st', 'STATUS_BERITA_ST_01')->orderBy('created_at', 'desc')->paginate(10);
+
+
+        return view('layouts.list-berita', [
+            'data' => $data,
+        ]);
+    }
+
+
 
     public function regulasi(Request $request)
     {
@@ -45,11 +64,11 @@ class FrontController extends Controller
 
         return view('layouts.regulasi');
     }
+
     public function daftarPenyedia(Request $request)
     {
-
         if ($request->ajax()) {
-            $data = Vendor::select('*');
+            $data = Vendor::where('daftar_hitam', 0)->select('*');
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -57,6 +76,34 @@ class FrontController extends Controller
         }
 
         return view('layouts.daftar-penyedia');
+    }
+
+    public function daftarHitam(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = Vendor::where('daftar_hitam', 1)->select('*');
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->make(true);
+        }
+
+        return view('layouts.daftar-hitam');
+    }
+
+    public function kontakKami()
+    {
+        return view('layouts.kontak-kami');
+    }
+
+    public function detailBerita($id)
+    {
+
+        $data = Berita::with('creator')->where('slug', $id)->first();
+
+        return view('layouts.detail-berita', [
+            'data' => $data
+        ]);
     }
 
 

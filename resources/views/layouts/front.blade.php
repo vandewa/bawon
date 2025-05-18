@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Starty - Beranda</title>
+    <title>Ruang Desa</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Beranda Aplikasi Berita" />
-    <meta name="author" content="Your Name" />
+    <meta name="description" content="Ruang Desa" />
+    <meta name="author" content="Wonosobo" />
 
     <!-- favicon -->
-    <link href="{{ asset('starty/images/favicon.ico') }}" rel="shortcut icon">
+    <link href="{{ asset('logo.ico') }}" rel="shortcut icon">
     <!-- Bootstrap -->
     <link href="{{ asset('starty/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('starty/css/tiny-slider.css') }}" rel="stylesheet" type="text/css" />
@@ -79,9 +79,9 @@
                         <li><a href="{{ route('home') }}" class="sub-menu-item">Beranda</a></li>
                         <li><a href="#" class="sub-menu-item">Paket Pekerjaan</a></li>
                         <li><a href="{{ route('daftar-penyedia') }}" class="sub-menu-item">Daftar Penyedia</a></li>
-                        <li><a href="#" class="sub-menu-item">Daftar Hitam</a></li>
+                        <li><a href="{{ route('daftar-hitam') }}" class="sub-menu-item">Daftar Hitam</a></li>
                         <li><a href="{{ route('regulasi') }}" class="sub-menu-item">Regulasi</a></li>
-                        <li><a href="#" class="sub-menu-item">Kontak Kami</a></li>
+                        <li><a href="{{ route('kontak-kami') }}" class="sub-menu-item">Kontak Kami</a></li>
                         <li><a href="{{ route('login') }}" class="sub-menu-item">Masuk/Daftar</a></li>
                     </ul><!--end navigation menu-->
                 </div><!--end navigation-->
@@ -104,7 +104,7 @@
                                 <div class="row justify-content-center">
                                     <div class="col">
                                         <div class="text-center">
-                                            <p class="mb-0">© {{ date('Y') }} Portal Berita. Powered by Laravel.
+                                            <p class="mb-0">© {{ date('Y') }} Ruang Desa.
                                             </p>
                                         </div>
                                     </div>

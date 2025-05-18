@@ -82,6 +82,14 @@
                                   <p>Regulasi</p>
                               </a>
                           </li>
+
+                          <li class="nav-item">
+                              <a href="{{ route('master.gambar') }}"
+                                  class="nav-link  {{ Request::segment(2) == 'gambar' ? 'active' : '' }}">
+                                  <i class="nav-icon fas fa-images"></i>
+                                  <p>Gambar Depan</p>
+                              </a>
+                          </li>
                       @endrole
 
 
@@ -266,6 +274,8 @@
                               <a href="#"
                                   class="nav-link
                                 {{ Request::segment(2) == 'vendor-index' ? 'active' : '' }}
+                                {{ Request::segment(2) == 'penawaran-index' ? 'active' : '' }}
+                                {{ Request::segment(2) == 'daftar-hitam' ? 'active' : '' }}
                             ">
                                   <i class="nav-icon fa-solid fas fa-database"></i>
                                   <p>
@@ -298,6 +308,19 @@
                                               <i class="ml-2 far fa-circle nav-icon"></i>
                                           @endif
                                           <p>Penawaran</p>
+                                      </a>
+                                  </li>
+                                  <li class="nav-item">
+                                      <a href="{{ route('penyedia.daftar-hitam') }}"
+                                          class="nav-link
+                                        {{ Request::segment(2) == 'daftar-hitam' ? 'active' : '' }}
+                                    ">
+                                          @if (Request::segment(2) == 'daftar-hitam')
+                                              <i class="ml-2 far fa-dot-circle nav-icon"></i>
+                                          @else
+                                              <i class="ml-2 far fa-circle nav-icon"></i>
+                                          @endif
+                                          <p>Daftar Hitam</p>
                                       </a>
                                   </li>
                               </ul>

@@ -29,6 +29,7 @@ class VendorIndex extends Component
                 $query->where('nama_perusahaan', 'like', "%{$this->search}%")
                     ->orWhere('nib', 'like', "%{$this->search}%");
             })
+            ->where('daftar_hitam', 0)
             ->orderBy('nama_perusahaan')
             ->paginate(10);
 

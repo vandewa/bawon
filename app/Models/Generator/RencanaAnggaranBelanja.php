@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class RencanaAnggaranBelanja extends Model
 {
-    use HasFactory;
-  rencana_kerja
+  use HasFactory;
+
+  protected $guarded = [];
+
 }

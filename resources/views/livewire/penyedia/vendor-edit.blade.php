@@ -209,7 +209,7 @@
                                     <label>Jenis Usaha</label>
                                     <select class="form-control @error('vendor.jenis_usaha') is-invalid @enderror"
                                         wire:model.defer="vendor.jenis_usaha">
-                                        <option value="">Pilih Jenε Usaha</option>
+                                        <option value="">Pilih Jenis Usaha</option>
                                         @foreach ($listJenisUsaha as $jenis)
                                             <option value="{{ $jenis->com_cd }}">{{ $jenis->code_nm }}</option>
                                         @endforeach
@@ -387,8 +387,35 @@
                                 @endforeach
                             </div>
                         </fieldset>
+
+
+                        <fieldset class="p-3 mb-4 border rounded">
+                            <legend class="w-auto font-weight-bold">Daftar Hitam</legend>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="pkp">Status Daftar Hitam<span
+                                            class="text-danger">*</span></label>
+                                    <select class="form-control @error('vendor.daftar_hitam') is-invalid @enderror"
+                                        id="daftar_hitam" wire:model.live="vendor.daftar_hitam">
+                                        <option value="" disabled>Pilih Status PKP</option>
+                                        <option value="1" {{ $vendor['daftar_hitam'] == '1' ? 'selected' : '' }}>
+                                            Ya
+                                        </option>
+                                        <option value="0" {{ $vendor['daftar_hitam'] == '0' ? 'selected' : '' }}>
+                                            Tidak
+                                        </option>
+                                    </select>
+                                    @error('vendor.daftar_hitam')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+                        </fieldset>
+
                     </div>
                 </div>
+
+
 
                 <div class="mb-3 card card-success">
                     <div class="card-header d-flex align-items-center">
