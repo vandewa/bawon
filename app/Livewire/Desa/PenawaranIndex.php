@@ -16,6 +16,7 @@ class PenawaranIndex extends Component
     public $fileSuratPerjanjian;
     public $fileSPK;
     public $paketIdUpload;
+    public $idBatalStatus;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -43,6 +44,47 @@ class PenawaranIndex extends Component
             'paketKegiatans' => $paketKegiatans,
         ]);
     }
+    public function confirmCancelStatus($id)
+        {
+            $this->idBatalStatus = $id;
+            $this->js(<<<'JS'
+                Swal.fire({
+                    title: 'Batalkan Pengadaan?',
+                    text: "Pengadaan akan dibatalkan dan kembali ke tahap awal. Lanjutkan?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Batalkan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $wire.cancelToSt01()
+                    }
+                });
+            JS);
+        }
+        public function cancelToSt01()
+        {
+            $item = \App\Models\PaketKegiatan::find($this->idBatalStatus);
+
+            if (!$item) return;
+
+            $item->paket_kegiatan = 'PAKET_KEGIATAN_ST_01';
+            $item->save();
+
+            $this->reset('idBatalStatus');
+
+            $this->js(<<<'JS'
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: 'Pengadaan telah dibatalkan dan kembali ke tahap awal.'
+                });
+            JS);
+        }
+
+
 
     public function openUploadModal($paketId)
     {
