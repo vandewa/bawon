@@ -45,7 +45,7 @@
                                             <th class="px-3 py-2">Judul</th>
                                             <th class="px-3 py-2">File</th>
                                             <th class="px-3 py-2">Dibuat Oleh</th>
-                                            <th class="px-3 py-2">Status</th>
+                                            <th class="px-3 py-2">Published</th>
                                             <th class="px-3 py-2 text-center">Aksi</th>
                                         </tr>
                                     </thead>
