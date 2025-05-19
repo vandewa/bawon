@@ -46,6 +46,9 @@
                     <button class="btn btn-primary" wire:click="simpan">
                         <i class="fas fa-save"></i> Simpan Dokumen
                     </button>
+                    <button class="btn btn-warning" wire:click="resetIsiSurat" type="button">
+                        <i class="fas fa-undo"></i> Reset
+                    </button>
 
                     @if ($sudahDisimpan)
                         <button class="btn btn-success" onclick="downloadWord()">

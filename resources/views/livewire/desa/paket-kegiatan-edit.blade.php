@@ -100,7 +100,7 @@
 
                                         <div class="input-group-append">
                                             @if (isset($generateRoutes[$field]) && $prefix)
-                                                <a href="{{ route($prefix . $generateRoutes[$field], ['id' => $paketPekerjaan->id]) }}"
+                                                <a href="{{ route($prefix . $generateRoutes[$field], ['id' => $paketKegiatan->id]) }}"
                                                     target="_blank" class="ml-1 btn btn-outline-success">
                                                     <i class="fas fa-magic"></i> Generate
                                                 </a>

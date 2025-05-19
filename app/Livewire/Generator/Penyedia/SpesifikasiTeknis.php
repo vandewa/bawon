@@ -16,10 +16,11 @@ class SpesifikasiTeknis extends Component
     public function mount($id)
     {
         // Ambil data PaketPekerjaan beserta relasi yang dibutuhkan
-        $this->paketPekerjaan = PaketPekerjaan::with(['desa', 'paketKegiatans'])->findOrFail($id);
+        $this->paketKegiatan = PaketKegiatan::where('id', $id)->first();
+        $this->paketPekerjaan = PaketPekerjaan::with(['desa', 'paketKegiatans'])->findOrFail($this->paketKegiatan->paket_pekerjaan_id);
 
         // Ambil PaketKegiatan terkait
-        $this->paketKegiatan = PaketKegiatan::where('paket_pekerjaan_id', $this->paketPekerjaan->id)->first();
+
 
         // Jika ada, cek apakah sudah ada data spesifikasi teknis
         if ($this->paketKegiatan) {
@@ -52,19 +53,24 @@ class SpesifikasiTeknis extends Component
         </tr>";
 
     // Data rincian
-    $rows = '';
+ $rows = '';
+$total = 0;
     if ($this->paketKegiatan && $this->paketKegiatan->rincian->count()) {
         foreach ($this->paketKegiatan->rincian as $i => $rinci) {
-            $uraian      = $rinci->uraian ?? '';
-            $quantity    = $rinci->pivot->quantity ?? '';
-            $satuan      = $rinci->satuan ?? '';
-            $spesifikasi = $rinci->spesifikasi ?? '';
+            $no = $i + 1;
+    $uraian = $rinci->uraian ?? '';
+    $spesifikasi = $rinci->spesifikasi ?? '';
+    $volume = (float) ($rinci->pivot->quantity ?? 0);
+    $satuan = $rinci->satuan ?? '';
+    $hrg_satuan = (float) ($rinci->pivot->harga ?? 0);
+    $jml_satuan = $hrg_satuan * $volume;
+    $total += $jml_satuan;
 
             $rows .= "
                 <tr>
                     <td style='text-align: center;'>".($i+1).".</td>
                     <td>{$uraian}</td>
-                    <td style='text-align: center;'>{$quantity}</td>
+                    <td style='text-align: center;'>{$volume}</td>
                     <td style='text-align: center;'>{$satuan}</td>
                     <td>{$spesifikasi}</td>
                 </tr>";
@@ -129,13 +135,15 @@ class SpesifikasiTeknis extends Component
     HTML;
 }
 
-public function resetIsiSurat()
-{
-    $this->isiSurat = $this->getDefaultIsiSurat();
-    $this->sudahDisimpan = false; // opsional: hilangkan tombol download setelah reset
-    $this->simpan();
-    session()->flash('message', 'Dokumen di-reset ke template awal.');
-}
+    public function resetIsiSurat()
+    {
+        $this->isiSurat = $this->getDefaultIsiSurat();
+        $this->sudahDisimpan = false; // opsional: hilangkan tombol download setelah reset
+        $this->simpan();
+        session()->flash('message', 'Dokumen di-reset ke template awal.');
+
+         $this->redirect(request()->header('Referer') ?? url()->current());
+    }
 
 
 
