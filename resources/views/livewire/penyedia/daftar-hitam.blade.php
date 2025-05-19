@@ -59,7 +59,7 @@
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input" type="checkbox" role="switch"
                                                             id="daftarHitamSwitch{{ $vendor->id }}"
-                                                            wire:click="toggleStatus({{ $vendor->id }})"
+                                                            wire:click="confirmToggleStatus({{ $vendor->id }})"
                                                             {{ $vendor->daftar_hitam ? 'checked' : '' }}>
                                                         <label class="form-check-label"
                                                             for="daftarHitamSwitch{{ $vendor->id }}"></label>

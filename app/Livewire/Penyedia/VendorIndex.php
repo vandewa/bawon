@@ -139,6 +139,43 @@ class VendorIndex extends Component
         session()->flash('message', 'Data vendor berhasil dihapus.');
     }
 
+    public function daftarHitam($id)
+    {
+        $this->idHapus = $id;
+        $this->js(<<<'JS'
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Apakah kamu ingin menambahkan ke daftar hitam? proses ini tidak dapat dikembalikan.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.aksiDaftarHitam()
+                }
+            })
+        JS);
+    }
+
+    public function aksiDaftarHitam()
+    {
+        Vendor::find($this->idHapus)->update([
+            'daftar_hitam' => '1'
+        ]);
+
+        $this->js(<<<'JS'
+            Swal.fire({
+                title: 'Berhasil!',
+                text: 'Data dimasukkan ke daftar hitam.',
+                icon: 'success'
+            })
+        JS);
+        session()->flash('message', 'Data vendor berhasil diupdate.');
+    }
+
     public function resetForm()
     {
         $this->reset([
