@@ -39,11 +39,12 @@
                                             <th class="px-3 py-2">Desa</th>
                                             <th class="px-3 py-2">Tahun</th>
                                             <th class="px-3 py-2">Kegiatan</th>
+                                            <th class="px-3 py-2">Status Pengadaan</th>
                                             <th class="px-3 py-2">Jenis Pengadaan</th>
                                             <th class="px-3 py-2 text-end">Pagu</th>
                                             <th class="px-3 py-2 text-end">Nilai Kesepakatan</th>
                                             <th class="px-3 py-2">Status Dokumen</th>
-                                            <th class="px-3 py-2">Status</th>
+                                            <th class="px-3 py-2">Status Penawaran</th>
                                             <th class="px-3 py-2 text-center">Aksi</th>
                                         </tr>
                                     </thead>
@@ -62,6 +63,19 @@
                                                 <td class="px-3 py-2 align-middle">
                                                     <span
                                                         class="badge
+                                                        @switch($item->paketKegiatan->statusKegiatan->com_cd ?? '')
+                                                            @case('PAKET_KEGIATAN_ST_01') bg-warning @break
+                                                            @case('PAKET_KEGIATAN_ST_02') bg-info text-dark @break
+                                                            @case('PAKET_KEGIATAN_ST_03') bg-success @break
+                                                            @case('PAKET_KEGIATAN_ST_04') bg-danger @break
+                                                            @default bg-secondary
+                                                        @endswitch">
+                                                        {{ $item->paketKegiatan->statusKegiatan->code_nm ?? '-' }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-3 py-2 align-middle">
+                                                    <span
+                                                        class="badge
                                                         @switch($item->paketKegiatan->paketType->com_cd ?? '')
                                                             @case('PAKET_TYPE_01') bg-primary @break
                                                             @case('PAKET_TYPE_02') bg-warning text-dark @break
@@ -75,7 +89,7 @@
                                                     Rp{{ number_format($item->paketKegiatan->jumlah_anggaran ?? 0, 0, ',', '.') }}
                                                 </td>
                                                 <td class="px-3 py-2 align-middle text-end">
-                                                    Rp{{ number_format($item->paketKegiatan->nilai_kontrak ?? 0, 0, ',', '.') }}
+                                                    Rp{{ number_format($item->paketKegiatan->nilai_kesepakatan ?? 0, 0, ',', '.') }}
                                                 </td>
                                                 <td class="px-3 py-2 align-middle">
                                                     <ul class="mb-0 list-unstyled">
@@ -139,6 +153,18 @@
                                                                 Evaluasi Penawaran
                                                             @endif
                                                         </li>
+                                                        <li>
+                                                            @if ($item->paketKegiatan?->ba_pemenang)
+                                                                <i class="fas fa-check-circle text-success"></i>
+                                                                <a href="{{ route('helper.show-picture', ['path' => $item->paketKegiatan->ba_pemenang]) }}"
+                                                                    target="_blank">
+                                                                    BA Pemenang
+                                                                </a>
+                                                            @else
+                                                                <i class="fas fa-times-circle text-danger"></i>
+                                                                BA Pemenang
+                                                            @endif
+                                                        </li>
 
                                                         @if ($item->statusPenawaran?->com_cd == 'PENAWARAN_ST_02')
                                                             <li>
@@ -174,6 +200,18 @@
                                                                 @else
                                                                     <i class="fas fa-times-circle text-danger"></i>
                                                                     Surat Perjanjian
+                                                                @endif
+                                                            </li>
+                                                            <li>
+                                                                @if ($item->paketKegiatan?->bukti_bayar)
+                                                                    <i class="fas fa-check-circle text-success"></i>
+                                                                    <a href="{{ route('helper.show-picture', ['path' => $item->paketKegiatan->bukti_bayar]) }}"
+                                                                        target="_blank">
+                                                                        Bukti Pembayaran
+                                                                    </a>
+                                                                @else
+                                                                    <i class="fas fa-times-circle text-danger"></i>
+                                                                    Bukti Pembayaran
                                                                 @endif
                                                             </li>
                                                             <li>

@@ -18,8 +18,9 @@ class PaketPekerjaanPenyediaIndex extends Component
     public function render()
     {
         $posts = Penawaran::with([
-            'paketKegiatan.paketPekerjaan.desa',
-            'paketKegiatan.paketType', // tambahkan ini
+            'paketKegiatan' => function($a) {
+                $a->with(['paketPekerjaan.desa', 'paketType', 'statusKegiatan']);
+            },
             'statusPenawaran'
         ])
             ->where('kirim_st', true)

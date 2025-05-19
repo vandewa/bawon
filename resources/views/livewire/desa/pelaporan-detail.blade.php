@@ -34,57 +34,73 @@
 
 
                     <!-- Profil Vendor -->
-                    <div class="mb-4 shadow-md card">
-                        <div class="card-header bg-secondary">
-                            <strong>Profil Penyedia</strong>
-                        </div>
-                        <div class="card-body">
-                            <div class="mb-3 d-flex align-items-start">
-                                <!-- Vendor Image -->
-                                <img class="mr-3 rounded-circle" width="80" height="80"
-                                    src="https://ui-avatars.com/api/?name={{ urlencode($paketKegiatan->negosiasi?->vendor?->nama_perusahaan ?? 'V') }}"
-                                    alt="vendor">
+                    @foreach ($paketKegiatan->penawarans as $item)
+                        <div class="mb-4 shadow-md card">
+                            <div
+                                class="card-header @if ($item->penawaran_st == 'PENAWARAN_ST_02') bg-danger @else  bg-secondary @endif">
+                                <strong>Profil Penyedia @if ($item->penawaran_st == 'PENAWARAN_ST_02')
+                                        (Pemenang)
+                                    @endif
+                                </strong>
+                            </div>
+                            <div class="card-body">
 
-                                <!-- Vendor Details -->
-                                <div class="media-body">
-                                    <table class="no-border"
-                                        style="width: 100%; font-family: Arial, sans-serif; font-size: 10pt; border: none; border-collapse: collapse;">
-                                        <tr>
-                                            <td style="width: 30%;"><strong>Nama Perusahaan</strong></td>
-                                            <td style="width: 70%;">
-                                                {{ $paketKegiatan->negosiasi?->vendor?->nama_perusahaan ?? '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>NIB</strong></td>
-                                            <td>{{ $paketKegiatan->negosiasi?->vendor?->nib ?? '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>NPWP</strong></td>
-                                            <td>{{ $paketKegiatan->negosiasi?->vendor?->npwp ?? '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Alamat</strong></td>
-                                            <td>{{ $paketKegiatan->negosiasi?->vendor?->alamat ?? '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Telepon</strong></td>
-                                            <td>{{ $paketKegiatan->negosiasi?->vendor?->telepon ?? '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Direktur</strong></td>
-                                            <td>{{ $paketKegiatan->negosiasi?->vendor?->nama_direktur ?? '-' }}</td>
-                                        </tr>
-                                    </table>
+                                <div class="mb-3 d-flex align-items-start">
+                                    <!-- Vendor Image -->
+                                    <img class="mr-3 rounded-circle" width="80" height="80"
+                                        src="https://ui-avatars.com/api/?name={{ urlencode($item?->vendor?->nama_perusahaan ?? 'V') }}"
+                                        alt="vendor">
 
-                                    <a href="{{ route('penyedia.vendor-profile', $paketKegiatan->negosiasi?->vendor?->id) }}"
-                                        class="mt-2 btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-user"></i> Lihat Profil Lengkap
-                                    </a>
+                                    <!-- Vendor Details -->
+                                    <div class="media-body">
+                                        <table class="no-border"
+                                            style="width: 100%; font-family: Arial, sans-serif; font-size: 10pt; border: none; border-collapse: collapse;">
+                                            <tr>
+                                                <td style="width: 30%;"><strong>Nama Perusahaan</strong></td>
+                                                <td style="width: 70%;">
+                                                    {{ $item?->vendor?->nama_perusahaan ?? '-' }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>NIB</strong></td>
+                                                <td>{{ $item?->vendor?->nib ?? '-' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>NPWP</strong></td>
+                                                <td>{{ $item?->vendor?->npwp ?? '-' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Alamat</strong></td>
+                                                <td>{{ $item?->vendor?->alamat ?? '-' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Telepon</strong></td>
+                                                <td>{{ $item?->vendor?->telepon ?? '-' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Direktur</strong></td>
+                                                <td>{{ $item?->vendor?->nama_direktur ?? '-' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>Penawaran</strong></td>
+                                                <td>
+                                                    {{ $item?->nilai ? 'Rp ' . number_format($item->nilai, 0, ',', '.') : '-' }}
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                        <a href="{{ route('penyedia.vendor-profile', $item?->vendor?->id) }}"
+                                            class="mt-2 btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-user"></i> Lihat Profil Lengkap
+                                        </a>
+                                    </div>
+
                                 </div>
+
 
                             </div>
                         </div>
-                    </div>
+                    @endforeach
 
 
                     <!-- Upload Dokumen dan Tutup/Batal Kegiatan -->
@@ -181,7 +197,7 @@
                                 <div class="d-flex justify-content-between">
 
                                     <button type="submit" class="btn btn-success"
-                                        @if ($paketKegiatan->paket_kegiatan === 'KEGIATAN_ST_02') disabled @endif>
+                                        @if ($paketKegiatan->paket_kegiatan === 'PAKET_KEGIATAN_ST_03') disabled @endif>
                                         <i class="fas fa-save"></i> Simpan Dokumen
                                     </button>
 

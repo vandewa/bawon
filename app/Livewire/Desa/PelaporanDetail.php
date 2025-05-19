@@ -25,7 +25,8 @@ class PelaporanDetail extends Component
             'paketPekerjaan',
             'negosiasi.vendor',
             'penawaranTerpilih',
-            'statusKegiatan'
+            'statusKegiatan',
+            'penawarans.vendor'
         ])->findOrFail($id);
     }
 
@@ -85,21 +86,21 @@ class PelaporanDetail extends Component
     #[On('tutupKegiatan')]
     public function tutupKegiatan()
     {
-        $this->paketKegiatan->paket_kegiatan = 'KEGIATAN_ST_02';
+        $this->paketKegiatan->paket_kegiatan = 'PAKET_KEGIATAN_ST_03';
         $this->paketKegiatan->save();
 
         session()->flash('message', 'Kegiatan berhasil ditutup.');
         $this->js("
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil',
-        text: 'Penutupan kegiatan telah dilakukan.',
-        timer: 2000,
-        showConfirmButton: false
-    }).then(() => {
-        window.location.href = '" . route('desa.pelaporan.index') . "';
-    });
-");
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Penutupan kegiatan telah dilakukan.',
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = '" . route('desa.pelaporan.index') . "';
+            });
+        ");
     }
 
     public function konfirmasiBatalPenutupan()
@@ -124,21 +125,19 @@ class PelaporanDetail extends Component
 
     public function batalkanPenutupan()
     {
-        $this->paketKegiatan->paket_kegiatan = 'KEGIATAN_ST_01';
+        $this->paketKegiatan->paket_kegiatan = 'PAKET_KEGIATAN_ST_02';
         $this->paketKegiatan->save();
 
         session()->flash('message', 'Penutupan kegiatan telah dibatalkan.');
         $this->js("
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil',
-        text: 'Penutupan kegiatan telah dibatalkan.',
-        timer: 2000,
-        showConfirmButton: false
-    }).then(() => {
-        window.location.href = '" . route('desa.pelaporan.index') . "';
-    });
-");
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Penutupan kegiatan telah dibatalkan.',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        ");
         // return redirect()->route('desa.pelaporan.index');
     }
 
