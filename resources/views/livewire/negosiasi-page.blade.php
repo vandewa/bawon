@@ -315,7 +315,7 @@
 
                                             <!-- Keterangan -->
                                             <div class="form-group">
-                                                <label for="keterangan">Keterangan</label>
+                                                <label for="keterangan">Keterangan </label>
                                                 <textarea wire:model="keterangan" class="form-control" id="keterangan"
                                                     {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}></textarea>
                                                 @error('keterangan')
@@ -325,7 +325,7 @@
 
                                             <!-- Tabel Negosiasi per Item -->
                                             <div class="mt-4">
-                                                <h5>Negosiasi per Item Rincian:</h5>
+                                                <h5>Negosiasi per Item Rincian: {{ $lastSenderId }}</h5>
                                                 <div class="table-responsive">
                                                     <table class="table mb-0 table-bordered table-sm">
                                                         <thead class="thead-light">
@@ -361,7 +361,7 @@
                                                                     <td>
                                                                         <input type="number"
                                                                             class="form-control form-control-sm"
-                                                                            wire:model.defer="logItems.{{ $index }}.penawaran"
+                                                                            wire:model.live="logItems.{{ $index }}.penawaran"
                                                                             {{ $lastSenderId == auth()->id() || $negosiasiStatus == 'NEGOSIASI_ST_02' ? 'disabled' : '' }}>
                                                                     </td>
 

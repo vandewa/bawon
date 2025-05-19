@@ -18,6 +18,7 @@ class PenawaranList extends Component
 
     public $penawaranId;
     public $baEvaluasi;
+    public $penetapanPemenang;
     public $isModalOpen = false;
     public $paketKegiatanId;
     public $allDokPenawaranUploaded = false;
@@ -51,11 +52,24 @@ class PenawaranList extends Component
         $penawaran = Penawaran::with(['paketKegiatan.paketPekerjaan', 'items', 'vendor.user'])
             ->findOrFail($this->penawaranId);
 
+            $paketId = $penawaran->paket_kegiatan_id;
+
+
         DB::beginTransaction();
         try {
             // 1. Validasi upload dokumen BA
             $this->validate([
                 'baEvaluasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+                'penetapanPemenang' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            ]);
+            $paket = PaketKegiatan::findOrFail($paketId);
+
+            $baEvaluasiPath = $this->baEvaluasi->store('dokumen/ba_evaluasi_penawaran');
+            $baPemenangPath = $this->penetapanPemenang->store('dokumen/ba_pemenang');
+
+            $paket->update([
+                'ba_evaluasi_penawaran' => $baEvaluasiPath,
+                'ba_pemenang'           => $baPemenangPath
             ]);
 
             // 2. Set status penawaran terpilih ke "Disetujui"
@@ -105,21 +119,26 @@ class PenawaranList extends Component
             $this->kirimNotifikasiVendor($penawaran->paketKegiatan->id);
 
             // 8. Notif UI
-            $this->js(<<<'JS'
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Disetujui!',
-                    text: 'Penawaran disetujui tanpa BA. Negosiasi otomatis disetujui.',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-            JS);
 
         } catch (\Exception $e) {
             DB::rollBack();
             session()->flash('error', 'Terjadi kesalahan. Silakan coba lagi.');
             report($e);
         }
+
+        $url = route('desa.penawaran.pelaksanaan.negosiasi', $paketId);
+                $this->js(<<<JS
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Disetujui!',
+                        text: 'Penawaran disetujui tanpa BA. Negosiasi otomatis disetujui.',
+                        timer: 2000,
+                        showConfirmButton: true
+                    }).then(() => {
+                        window.location.href = '$url';
+                    });
+                JS);
+
     }
 
     /**
@@ -127,7 +146,7 @@ class PenawaranList extends Component
      */
     protected function kirimNotifikasiVendor($paketKegiatanId)
     {
-        $penawarans = Penawaran::with(['vendor', 'paketKegiatan.paketPekerjaan'])
+        $penawarans = Penawaran::with(['vendor', 'paketKegiatan.paketPekerjaan.desa'])
             ->where('paket_kegiatan_id', $paketKegiatanId)
             ->get();
 
@@ -138,8 +157,11 @@ class PenawaranList extends Component
                 $nilai = number_format($penawaran->nilai, 0, ',', '.');
                 $paketPekerjaan = $penawaran->paketKegiatan->paketPekerjaan ?? null;
                 $namaPaket = $paketPekerjaan->nama_kegiatan ?? 'Kegiatan Pengadaan';
+                $desa = $paketPekerjaan->desa ?? null;
+                $namaDesa = $desa->name ?? 'Desa';
 
-                $pesan = "Yth. *{$namaVendor}*,\n\nEvaluasi penawaran telah dilakukan terkait kegiatan: *{$namaPaket}*.\n\nMohon agar dapat melakukan pengecekan melalui aplikasi.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nHormat kami,\nTim Pengadaan Desa";
+
+                $pesan = "Yth. *{$namaVendor}*,\n\nEvaluasi penawaran telah dilakukan terkait kegiatan: *{$namaPaket}*.\n\nMohon agar dapat melakukan pengecekan melalui aplikasi.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nHormat kami,\nTim Pengadaan *{$namaDesa}*";
                 $telepon = $vendor->telepon;
 
                 kirimPesan::dispatch($telepon, $pesan);

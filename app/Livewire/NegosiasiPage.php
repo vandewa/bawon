@@ -18,7 +18,7 @@ class NegosiasiPage extends Component
 
     public $paket_kegiatan_id;
     public $negosiasi_id;
-    public $penawaran;
+    public $penawaran = 0;
     public $penawaranAwalDetail;
     public $keterangan;
     public $status_negosiasi = 'pending';
@@ -53,6 +53,20 @@ class NegosiasiPage extends Component
         $this->loadNegosiasiLogs(); // Memuat log negosiasi
         $this->loadKegiatanAndVendor(); // Memuat detail kegiatan dan vendor
         $this->loadLogItemsDariLogSebelumnya();
+        $this->updatePenawaranTotal();
+    }
+
+    public function updatedLogItems()
+    {
+        $this->updatePenawaranTotal();
+    }
+
+    public function updatePenawaranTotal()
+    {
+        $this->penawaran = collect($this->logItems)
+            ->sum(function ($item) {
+                return ((float) ($item['penawaran'] ?? 0)) * ((float) ($item['quantity'] ?? 1));
+            });
     }
 
 
@@ -366,7 +380,9 @@ public function setujuiLog()
 
     public function render()
     {
-        $this->lastSenderId = $this->negosiasiLogs->last()?->user_id ?? null;
+        $this->lastSenderId = $this->negosiasiLogs->first()?->user_id ?? null;
+
+
 
         return view('livewire.negosiasi-page');
     }

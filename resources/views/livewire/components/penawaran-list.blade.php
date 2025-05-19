@@ -116,6 +116,17 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+                            <div class="form-group">
+                                <label for="baEvaluasi">Penetapan Pemenang</label>
+                                <input type="file" wire:model="penetapanPemenang" class="form-control">
+                                <div wire:loading wire:target="penetapanPemenang" class="mt-2 text-info">
+                                    <i class="fas fa-spinner fa-spin"></i> Mengunggah...
+                                </div>
+                                @error('penetapanPemenang')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
 
 
                             <div class="mt-3 form-group d-flex justify-content-between">
@@ -129,6 +140,10 @@
                                 <a href="#" target="_blank"
                                     class="btn btn-outline-success d-flex align-items-center">
                                     <i class="mr-1 fas fa-file-download"></i> Generate BA Evaluasi
+                                </a>
+                                <a href="#" target="_blank"
+                                    class="btn btn-outline-success d-flex align-items-center">
+                                    <i class="mr-1 fas fa-file-download"></i> Generate Pemenang
                                 </a>
                             </div>
                         </form>
