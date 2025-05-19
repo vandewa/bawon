@@ -57,7 +57,6 @@ class VendorEdit extends Component
         'no_rekening' => '',
         'atas_nama_rekening' => '',
         'pkp' => '',
-        'daftar_hitam' => '',
     ];
 
     // Properties for document uploads
@@ -88,7 +87,6 @@ class VendorEdit extends Component
         'vendor.no_rekening' => 'nullable|numeric',
         'vendor.atas_nama_rekening' => 'nullable|string|max:255',
         'vendor.pkp' => 'required|in:0,1',
-        'vendor.daftar_hitam' => 'required|in:0,1',
         'foto_vendor.*' => 'image|max:2048',
         'akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'nib_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',

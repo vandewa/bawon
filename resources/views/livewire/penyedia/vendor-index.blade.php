@@ -71,6 +71,10 @@
                                             class="btn btn-sm btn-danger mb-1">
                                             <i class="fas fa-trash"></i> Hapus
                                         </button>
+                                        <button wire:click="daftarHitam({{ $vendor->id }})"
+                                            class="btn btn-sm btn-secondary mb-1">
+                                            <i class="fas fa-user-lock mr-1"></i>Daftar Hitam
+                                        </button>
                                     </td>
                                 </tr>
                             @empty
