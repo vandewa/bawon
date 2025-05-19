@@ -338,16 +338,24 @@ public function setujuiLog()
         $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
         $nilai = number_format($log->penawaran, 0, ',', '.');
         $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa->user ?? null;
+        $whatsapp = $desa->whatsapp ?? null;
+
+        $namaKegiatan = $log->negosiasi->paketKegiatan->paketPekerjaan->nama_kegiatan ?? 'Kegiatan';
+
     if ($desa && $desa->whatsapp) {
-        $namaDesa = $desa->nama ?? 'Desa';
-        $pesanDesa = "Halo {$namaDesa},\n\nPenawaran Anda telah disetujui melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
-        kirimPesan::dispatch( $desa->whatsapp, $pesanDesa);
+        $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa ?? null;
+        $namaDesa = $desa->name ?? 'Desa';
+        $pesanDesa = "Halo *{$namaDesa}*,\n\nPenawaran anda dalam kegiatan *{$namaKegiatan}* telah disetujui oleh *{$namaVendor}* melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
+        kirimPesan::dispatch( $whatsapp, $pesanDesa);
     }
     } else {
         $namaVendor = $log->negosiasi->vendor->nama_perusahaan ?? 'Penyedia';
+        $namaKegiatan = $log->negosiasi->paketKegiatan->paketPekerjaan->nama_kegiatan ?? 'Kegiatan';
+        $desa = $log->negosiasi->paketKegiatan->paketPekerjaan->desa ?? null;
+        $namaDesa = $desa->name ?? 'Desa';
         $nilai = number_format($log->penawaran, 0, ',', '.');
 
-        $pesan = "Halo {$namaVendor},\n\nPenawaran Anda telah disetujui melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
+        $pesan = "Halo *{$namaVendor}*,\n\nPenawaran Anda dalam kegiatan *{$namaKegiatan}* telah disetujui oleh *{$namaDesa}* melalui proses negosiasi dengan nilai sebesar *Rp {$nilai}*.\n\nTerima kasih atas partisipasinya.";
         $telepon = $log->negosiasi->vendor->telepon ?? null;
 
         if($telepon){
