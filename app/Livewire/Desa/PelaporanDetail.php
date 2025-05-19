@@ -17,6 +17,7 @@ class PelaporanDetail extends Component
     public $laporan_hasil_pemeriksaan;
     public $bast_penyedia;
     public $bast_kades;
+    public $bukti_bayar;
 
     public function mount($id)
     {
@@ -37,17 +38,24 @@ class PelaporanDetail extends Component
 
     public function save()
     {
-        $fields = [
-            'laporan_hasil_pemeriksaan',
-            'bast_penyedia',
-            'bast_kades'
-        ];
+       if ($this->bukti_bayar) {
+            $path = $this->bukti_bayar->store('dokumen/pelaporan');
+            $this->paketKegiatan->bukti_bayar = $path;
+        }
 
-        foreach ($fields as $field) {
-            if ($this->{$field}) {
-                $path = $this->{$field}->store('dokumen/pelaporan');
-                $this->paketKegiatan->{$field} = $path;
-            }
+        if ($this->laporan_hasil_pemeriksaan) {
+            $path = $this->laporan_hasil_pemeriksaan->store('dokumen/pelaporan');
+            $this->paketKegiatan->laporan_hasil_pemeriksaan = $path;
+        }
+
+        if ($this->bast_penyedia) {
+            $path = $this->bast_penyedia->store('dokumen/pelaporan');
+            $this->paketKegiatan->bast_penyedia = $path;
+        }
+
+        if ($this->bast_kades) {
+            $path = $this->bast_kades->store('dokumen/pelaporan');
+            $this->paketKegiatan->bast_kades = $path;
         }
 
         $this->paketKegiatan->save();

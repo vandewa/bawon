@@ -3,9 +3,10 @@
 namespace App\Livewire\Desa;
 
 use Livewire\Component;
+use App\Jobs\kirimPesan;
 use Livewire\WithPagination;
-use Livewire\WithFileUploads;
 use App\Models\PaketKegiatan;
+use Livewire\WithFileUploads;
 
 class PenawaranIndex extends Component
 {
@@ -113,6 +114,25 @@ class PenawaranIndex extends Component
 
         PaketKegiatan::where('id', $this->paketIdUpload)->update($data);
 
+
+        $paketKegiatans = PaketKegiatan::with(['negosiasi.vendor', 'paketPekerjaan.desa'])->where('id', $this->paketIdUpload)->first();
+
+        if ($paketKegiatans && $paketKegiatans->negosiasi && $paketKegiatans->negosiasi->vendor) {
+            $vendor = $paketKegiatans->negosiasi->vendor;
+            $namaVendor = $vendor->nama_perusahaan ?? '-';
+            $teleponVendor = $vendor->telepon ?? null; // pastikan field telepon ada di table vendor
+            $namaPaket = $paketKegiatans->paketPekerjaan->nama_kegiatan ?? '-';
+            $namaDesa = $paketKegiatans->paketPekerjaan->desa->name ?? '-';
+
+
+            // Pesan yang dikirim ke vendor
+            $pesan = "Yth. $namaVendor,\n\nSurat Perjanjian dan SPK untuk paket *{$namaPaket}* telah di-upload. Mohon agar segera melaksanakan kegiatan sesuai ketentuan yang berlaku. Terima kasih.\n\nSalam,\nTim Pengadaan *{$namaDesa}*";
+
+            if ($teleponVendor) {
+                // Kirim pesan (gunakan job, helper, atau API yang kamu miliki)
+                kirimPesan::dispatch($teleponVendor, $pesan);
+            }
+        }
         $this->resetUploadModal();
 
         session()->flash('message', 'Dokumen berhasil diupload.');

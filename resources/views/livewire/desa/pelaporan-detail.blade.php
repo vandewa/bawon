@@ -96,27 +96,83 @@
                             <form wire:submit.prevent="save" enctype="multipart/form-data">
                                 @if ($paketKegiatan->paket_kegiatan === 'PAKET_KEGIATAN_ST_02')
                                     <div class="row">
-                                        @foreach ([
-        'laporan-hasil-pemeriksaan' => 'Laporan Hasil Pemeriksaan',
-        'bast-dari-penyedia-kepada-kasi' => 'BAST Penyedia',
-        'bast-dari-kasi-kepada-kades' => 'BAST Kepala Desa',
-    ] as $field => $label)
-                                            <div class="mb-3 col-md-4">
-                                                <label for="{{ $field }}"
-                                                    class="form-label">{{ $label }}</label>
-                                                <div class="input-group">
-                                                    <input type="file" wire:model="{{ $field }}"
-                                                        class="form-control">
-                                                    <a href="{{ route('generator.penyedia.' . $field) }}"
-                                                        target="_blank" class="btn btn-outline-info">
-                                                        <i class="fas fa-magic"></i>
-                                                    </a>
+                                        <div class="mb-3 col-md-4">
+                                            <label for="bukti-bayar" class="form-label">Bukti Bayar</label>
+                                            <div class="input-group">
+                                                <input type="file" wire:model="bukti_bayar" class="form-control">
+                                                {{-- Loading Spinner --}}
+                                                <div wire:loading wire:target="bukti_bayar"
+                                                    class="input-group-text bg-white border-0">
+                                                    <span class="spinner-border spinner-border-sm text-primary"
+                                                        role="status" aria-hidden="true"></span>
                                                 </div>
-                                                @error($field)
-                                                    <small class="text-danger">{{ $message }}</small>
-                                                @enderror
+                                                {{-- Tidak ada tombol generator --}}
                                             </div>
-                                        @endforeach
+                                            @error('bukti_bayar')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+
+                                        <div class="mb-3 col-md-4">
+                                            <label for="laporan-hasil-pemeriksaan" class="form-label">Laporan Hasil
+                                                Pemeriksaan</label>
+                                            <div class="input-group">
+                                                <input type="file" wire:model="laporan_hasil_pemeriksaan"
+                                                    class="form-control">
+                                                <div wire:loading wire:target="laporan_hasil_pemeriksaan"
+                                                    class="input-group-text bg-white border-0">
+                                                    <span class="spinner-border spinner-border-sm text-primary"
+                                                        role="status" aria-hidden="true"></span>
+                                                </div>
+                                                <a href="{{ route('generator.penyedia.laporan-hasil-pemeriksaan') }}"
+                                                    target="_blank" class="btn btn-outline-info">
+                                                    <i class="fas fa-magic"></i>
+                                                </a>
+                                            </div>
+                                            @error('laporan_hasil_pemeriksaan')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+
+                                        <div class="mb-3 col-md-4">
+                                            <label for="bast-dari-penyedia-kepada-kasi" class="form-label">BAST
+                                                Penyedia</label>
+                                            <div class="input-group">
+                                                <input type="file" wire:model="bast_penyedia" class="form-control">
+                                                <div wire:loading wire:target="bast_penyedia"
+                                                    class="input-group-text bg-white border-0">
+                                                    <span class="spinner-border spinner-border-sm text-primary"
+                                                        role="status" aria-hidden="true"></span>
+                                                </div>
+                                                <a href="{{ route('generator.penyedia.bast-dari-penyedia-kepada-kasi') }}"
+                                                    target="_blank" class="btn btn-outline-info">
+                                                    <i class="fas fa-magic"></i>
+                                                </a>
+                                            </div>
+                                            @error('bast_penyedia')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+
+                                        <div class="mb-3 col-md-4">
+                                            <label for="bast-dari-kasi-kepada-kades" class="form-label">BAST Kepala
+                                                Desa</label>
+                                            <div class="input-group">
+                                                <input type="file" wire:model="bast_kades" class="form-control">
+                                                <div wire:loading wire:target="bast_kades"
+                                                    class="input-group-text bg-white border-0">
+                                                    <span class="spinner-border spinner-border-sm text-primary"
+                                                        role="status" aria-hidden="true"></span>
+                                                </div>
+                                                <a href="{{ route('generator.penyedia.bast-dari-kasi-kepada-kades') }}"
+                                                    target="_blank" class="btn btn-outline-info">
+                                                    <i class="fas fa-magic"></i>
+                                                </a>
+                                            </div>
+                                            @error('bast_kades')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
+                                        </div>
                                     </div>
                                 @else
                                     <p>Kegiatan telah di tutup</p>
@@ -172,18 +228,21 @@
                         <div class="list-group list-group-flush">
                             @php
                                 $dokumenAll = [
-                                    'Surat Perjanjian' => $paketKegiatan->surat_perjanjian,
-                                    'SPK' => $paketKegiatan->spk,
-                                    'BA Evaluasi' => $paketKegiatan->ba_evaluasi_penawaran,
                                     'Spek Teknis' => $paketKegiatan->spek_teknis,
                                     'KAK' => $paketKegiatan->kak,
                                     'Jadwal Pelaksanaan' => $paketKegiatan->jadwal_pelaksanaan,
                                     'Rencana Kerja' => $paketKegiatan->rencana_kerja,
                                     'HPS' => $paketKegiatan->hps,
+                                    'Surat Undangan Penawaran' => $paketKegiatan->penawaranTerpilih?->surat_undangan,
+                                    'Evaluasi Penawaran' => $paketKegiatan->ba_evaluasi_penawaran,
+                                    'BA Pemenang' => $paketKegiatan->ba_pemenang,
+                                    'BA Negosiasi' => $paketKegiatan->negosiasi?->ba_negosiasi,
+                                    'Surat Perjanjian' => $paketKegiatan->surat_perjanjian,
+                                    'SPK' => $paketKegiatan->spk,
+                                    'Bukti Pembayaran' => $paketKegiatan->bukti_bayar,
                                     'Laporan Pemeriksaan' => $paketKegiatan->laporan_hasil_pemeriksaan,
                                     'BAST Penyedia' => $paketKegiatan->bast_penyedia,
                                     'BAST Kades' => $paketKegiatan->bast_kades,
-                                    'Surat Undangan' => $paketKegiatan->penawaranTerpilih?->surat_undangan,
                                     'Bukti Setor Pajak' => $paketKegiatan->penawaranTerpilih?->bukti_setor_pajak,
                                     'Dokumen Penawaran' => $paketKegiatan->penawaranTerpilih?->dok_penawaran,
                                     'Dokumen Kebenaran Usaha' =>
@@ -194,8 +253,8 @@
                                 <div class="list-group-item d-flex justify-content-between align-items-center">
                                     {{ $label }}
                                     @if ($file)
-                                        <a href="{{ route('helper.show-picture', ['path' => $file]) }}" target="_blank"
-                                            class="badge bg-primary">Lihat</a>
+                                        <a href="{{ route('helper.show-picture', ['path' => $file]) }}"
+                                            target="_blank" class="badge bg-primary">Lihat</a>
                                     @else
                                         <span class="badge bg-secondary">-</span>
                                     @endif
