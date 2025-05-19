@@ -14,6 +14,7 @@
 
           <!-- Right navbar links -->
           <ul class="ml-auto navbar-nav">
+              @livewire('components.tahun-kegiatan-select')
               <li class="nav-item">
                   <a class="nav-link" href="{{ route('logout') }}"
                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
