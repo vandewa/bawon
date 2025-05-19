@@ -225,6 +225,9 @@ class VendorEdit extends Component
         }
 
         session()->flash('message', 'Vendor berhasil diperbarui.');
+        if(auth()->user()->vendor_id) {
+            return redirect()->route('penyedia.vendor-profile', auth()->user()->vendor_id);
+        }
         return redirect()->route('penyedia.vendor-index');
     }
 

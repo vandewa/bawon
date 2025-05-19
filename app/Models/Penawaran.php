@@ -29,8 +29,8 @@ class Penawaran extends Model
     }
 
     public function items()
-{
-    return $this->hasMany(PenawaranItem::class);
-}
+    {
+        return $this->hasMany(PenawaranItem::class);
+    }
 
 }

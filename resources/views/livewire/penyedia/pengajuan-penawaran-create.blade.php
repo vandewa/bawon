@@ -150,19 +150,18 @@
                                         @php
                                             $pekerjaan = $rinci->rincian;
                                             $qty = (float) $rinci->quantity;
-                                            $harga = (float) ($penawaranItems[$rinci->id] ?? 0);
+                                            $harga = (float) ($penawaranItems[$rinci->pivot->id] ?? 0);
                                             $subtotal = $qty * $harga;
                                         @endphp
                                         <tr>
                                             <td class="text-center">{{ $index + 1 }}</td>
-                                            <td>{{ $pekerjaan->uraian ?? '—' }}</td>
+                                            <td>{{ $rinci->uraian ?? '—' }}</td>
                                             <td class="text-center">{{ $qty }}</td>
-                                            <td class="text-center">{{ $pekerjaan->satuan ?? '-' }}</td>
+                                            <td class="text-center">{{ $rinci->satuan ?? '-' }}</td>
                                             <td>
                                                 <input type="number" step="any" min="0"
                                                     class="text-right form-control"
-                                                    wire:model.live.debounce.250ms
-="penawaranItems.{{ $rinci->id }}"
+                                                    wire:model.live.debounce.250ms="penawaranItems.{{ $rinci->pivot->id }}"
                                                     placeholder="0.00">
                                                 @error("penawaranItems.$rinci->id")
                                                     <small class="text-danger">{{ $message }}</small>
@@ -179,7 +178,7 @@
                                         @php
                                             $total = 0;
                                             foreach ($penawaranItems as $rinciId => $harga) {
-                                                $rinci = $penawaran->paketKegiatan->rincian->firstWhere('id', $rinciId);
+                                                $rinci = $penawaran->paketKegiatan->merinci->firstWhere('id', $rinciId);
                                                 $qty = (float) ($rinci?->quantity ?? 0);
                                                 $harga = (float) $harga; // atau (float) jika harganya desimal
                                                 $total += $harga * $qty;

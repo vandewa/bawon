@@ -42,7 +42,12 @@ class PaketKegiatan extends Model
     public function rincian()
     {
         return $this->belongsToMany(PaketPekerjaanRinci::class, 'paket_kegiatan_rincis')
-        ->withPivot(['quantity', 'harga', 'paket_pekerjaan_rinci_id']);
+        ->withPivot(['quantity', 'harga', 'paket_pekerjaan_rinci_id', 'id']);
+    }
+     public function merinci()
+    {
+        return $this->hasMany(PaketKegiatanRinci::class);
+
     }
     public function tpk()
     {

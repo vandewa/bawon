@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Desa;
 
+use Carbon\Carbon;
 use App\Models\Tag;
 use App\Models\Vendor;
 use App\Models\ComCode;
@@ -228,11 +229,16 @@ class PenawaranPaket extends Component
                 $vendor = $penawaran->vendor ?? null;
                 $namaVendor = $penawaran->vendor->nama_perusahaan ?? 'Penyedia';
                 $nilai = number_format($penawaran->nilai, 0, ',', '.');
-                $desa = $this->paketKegiatan->paketPekerjaan->desa ?? null;
+                $desa = $this->paketKegiatan->paketPekerjaan->desa->name ?? null;
+                $batasAkhir = $penawaran->batas_akhir ?? null;
+                $tanggalIndo = $batasAkhir
+                ? Carbon::parse($batasAkhir)->locale('id')->translatedFormat('d F Y')
+                : '-';
+
                 if ( $vendor && $vendor->telepon) {
                     $namaPaket = $this->paketKegiatan->paketPekerjaan->nama_kegiatan ?? 'Kegiatan Pengadaan';
 
-                    $pesan = "Yth. *{$namaVendor}*,\n\nKami mengundang perusahaan Anda untuk mengajukan *penawaran harga* terkait kegiatan: *{$namaPaket}*.\n\nMohon agar penawaran dapat dikirim melalui sistem sebelum batas waktu yang ditentukan.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nHormat kami,\nTim Pengadaan Desa";
+                    $pesan = "Yth. *{$namaVendor}*,\n\nKami mengundang perusahaan Anda untuk mengajukan *penawaran harga* terkait kegiatan: *{$namaPaket}*.\n\nMohon agar penawaran dapat dikirim melalui sistem sebelum batas waktu yang ditentukan *({$tanggalIndo})*.\n\nTerima kasih atas perhatian dan kerja samanya.\n\nHormat kami,\nTim Pengadaan *{$desa}*";
 
                     $telepon = $penawaran->vendor->telepon ?? '089604484626'; // fallback jika belum ada
 

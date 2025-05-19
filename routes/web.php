@@ -179,7 +179,7 @@ Route::middleware([
     });
 
     Route::group(['prefix' => 'desa', 'as' => 'desa.',
-        'middleware' => ['role:desa|superadministrator|dinsos']], function () {
+        ], function () {
         Route::get('desa-create', DesaCreate::class)
             ->middleware(['auth', 'role:superadministrator|dinsos']) // hanya admin/dinsos
             ->name('desa-create');
@@ -207,7 +207,7 @@ Route::middleware([
 
     });
     Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.',
-    'middleware' => ['role:penyedia|superadministrator|dinsos']
+
     ], function () {
         Route::get('vendor-index', VendorIndex::class)->name('vendor-index')->middleware('role:superadministrator|dinsos');
         Route::get('vendor-profile/{vendorId?}', VendorProfile::class)->name('vendor-profile');

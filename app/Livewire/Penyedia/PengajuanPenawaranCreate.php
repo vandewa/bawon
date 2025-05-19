@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Penyedia;
 
+use App\Models\PaketKegiatanRinci;
 use Livewire\Component;
 use App\Models\Penawaran;
 use Livewire\WithFileUploads;
@@ -26,7 +27,7 @@ class PengajuanPenawaranCreate extends Component
 
         $this->penawaran = Penawaran::with([
             'paketKegiatan.paketPekerjaan.desa',
-            'paketKegiatan.rincian',
+            'paketKegiatan.merinci',
             'items'
         ])->findOrFail($penawaranId);
         if(auth()->user()->vendor_id){
@@ -38,8 +39,10 @@ class PengajuanPenawaranCreate extends Component
         $this->nilai = $this->penawaran->nilai;
         $this->keterangan = $this->penawaran->keterangan;
 
+
         // Pre-fill harga jika sudah pernah diisi
         foreach ($this->penawaran->items as $item) {
+
             $this->penawaranItems[$item->paket_kegiatan_rinci_id] = $item->harga_satuan;
         }
     }
@@ -91,7 +94,8 @@ class PengajuanPenawaranCreate extends Component
         $this->penawaran->items()->delete(); // reset dulu
 
         foreach ($this->penawaranItems as $rinciId => $hargaSatuan) {
-            $rinci = $this->penawaran->paketKegiatan->rincian->firstWhere('id', $rinciId);
+
+           $rinci = PaketKegiatanRinci::find($rinciId);
             if (!$rinci) continue;
 
             $subtotal = $hargaSatuan * $rinci->quantity;
@@ -110,8 +114,18 @@ class PengajuanPenawaranCreate extends Component
         session()->flash('message', 'Penawaran berhasil diperbarui.');
     } catch (\Throwable $e) {
         DB::rollBack();
-        report($e);
-        session()->flash('error', 'Gagal menyimpan penawaran.');
+        dd($e);
+        $this->js(<<<'JS'
+        Swal.fire({
+            icon: 'error',
+            title: 'Gagal!',
+            text: 'Penawaran gagal disimpan.',
+            timer: 2000,
+            showConfirmButton: false
+        }).then(() => {
+            window.location.href = "/penyedia/penawaran-index";
+        });
+    JS);
         return;
     }
 
@@ -135,7 +149,8 @@ class PengajuanPenawaranCreate extends Component
 
         foreach ($this->penawaranItems as $rinciId => $harga) {
 
-            $rinci = $this->penawaran->paketKegiatan->rincian->firstWhere('id', $rinciId);
+
+            $rinci = PaketKegiatanRinci::find($rinciId);
 
             if ($rinci) {
                 $harga = (float) $harga;
