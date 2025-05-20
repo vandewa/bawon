@@ -78,7 +78,7 @@ class VendorEdit extends Component
         'vendor.provinsi' => 'nullable|string|max:100',
         'vendor.kabupaten' => 'nullable|string|max:100',
         'vendor.kode_pos' => 'nullable|string|max:10',
-        'vendor.masa_berlaku_nib' => 'nullable|date',
+        'vendor.masa_berlaku_nib' => 'required|date',
         'vendor.instansi_pemberi_nib' => 'nullable|string|max:255',
         'vendor.website' => 'nullable|string|max:255',
         'vendor.latitude' => 'nullable|numeric',
@@ -223,7 +223,7 @@ class VendorEdit extends Component
         }
 
         session()->flash('message', 'Vendor berhasil diperbarui.');
-        if(auth()->user()->vendor_id) {
+        if (auth()->user()->vendor_id) {
             return redirect()->route('penyedia.vendor-profile', auth()->user()->vendor_id);
         }
         return redirect()->route('penyedia.vendor-index');
