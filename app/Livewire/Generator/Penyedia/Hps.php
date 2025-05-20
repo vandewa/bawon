@@ -22,9 +22,12 @@ class Hps extends Component
 
         // Mengambil data PaketKegiatan berdasarkan paket_pekerjaan_id
         $this->paketKegiatan = PaketKegiatan::with('rincian')->where('id', $id)->first();
-// Mengambil data PaketPekerjaan berdasarkan ID
+
+        // Mengambil data PaketPekerjaan berdasarkan ID
         $this->paketPekerjaan = PaketPekerjaan::with(['desa', 'paketKegiatans'])->findOrFail($this->paketKegiatan->paket_pekerjaan_id);
-            $this->rincianList = $this->paketKegiatan?->rincian ?? collect();
+
+        $this->rincianList = $this->paketKegiatan?->rincian ?? collect();
+        
         // Cek apakah data GeneratorSpesifikasiTeknis sudah ada
         if ($this->paketKegiatan) {
             $this->cekData = HargaPerkiraanSendiri::where('paket_kegiatan_id', $this->paketKegiatan->id)->first();

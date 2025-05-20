@@ -15,11 +15,9 @@ class Kak extends Component
 
     public function mount($id)
     {
-        // Mengambil data PaketPekerjaan berdasarkan ID
-        $this->paketPekerjaan = PaketPekerjaan::with(['desa', 'paketKegiatans'])->findOrFail($id);
+        $this->paketKegiatan = PaketKegiatan::with('rincian')->where('id', $id)->first();
 
-        // Mengambil data PaketKegiatan berdasarkan paket_pekerjaan_id
-        $this->paketKegiatan = PaketKegiatan::where('paket_pekerjaan_id', $this->paketPekerjaan->id)->first();
+        $this->paketPekerjaan = PaketPekerjaan::with(['desa', 'paketKegiatans'])->findOrFail($this->paketKegiatan->paket_pekerjaan_id);
 
         // Cek apakah data GeneratorSpesifikasiTeknis sudah ada
         if ($this->paketKegiatan) {
