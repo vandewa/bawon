@@ -9,10 +9,11 @@ use App\Models\PaketPekerjaan;
 
 class JadwalPelaksanaanPekerjaan extends Component
 {
-    public $isiSurat;
+    public string $isiSurat = '';
     public bool $sudahDisimpan = false;
-    public $paketPekerjaan, $paketKegiatan, $cekData;
-
+    public ?PaketPekerjaan $paketPekerjaan = null;
+    public ?PaketKegiatan $paketKegiatan = null;
+    public $cekData;
     public function mount($id)
     {
         // Mengambil data PaketPekerjaan berdasarkan ID

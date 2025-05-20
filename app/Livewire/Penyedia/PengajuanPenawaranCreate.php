@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Penyedia;
 
+use App\Jobs\kirimPesan;
 use App\Models\PaketKegiatanRinci;
 use Livewire\Component;
 use App\Models\Penawaran;
@@ -26,8 +27,9 @@ class PengajuanPenawaranCreate extends Component
     {
 
         $this->penawaran = Penawaran::with([
-            'paketKegiatan.paketPekerjaan.desa',
+            'paketKegiatan.paketPekerjaan.desa.user',
             'paketKegiatan.merinci',
+            'vendor',
             'items'
         ])->findOrFail($penawaranId);
         if(auth()->user()->vendor_id){
@@ -128,6 +130,24 @@ class PengajuanPenawaranCreate extends Component
     JS);
         return;
     }
+
+    // kirim WA
+    $desaUser = $this->penawaran->paketKegiatan->paketPekerjaan->desa->user;
+    $waNumber = $desaUser->whatsapp ?? $desaUser->phone ?? null;
+
+    $pesan = "Yth. {$this->penawaran->paketKegiatan->paketPekerjaan->desa->name}\n\n".
+            "Kami dari penyedia ({$this->penawaran->vendor->nama_perusahaan}) menginformasikan bahwa dokumen penawaran untuk kegiatan:\n".
+            "- Nama Kegiatan: {$this->penawaran->paketKegiatan->paketPekerjaan->nama_kegiatan}\n".
+            "- Tahun: {$this->penawaran->paketKegiatan->paketPekerjaan->tahun}\n\n".
+            "Telah berhasil diupload ke sistem .\n\n".
+            "Silakan melakukan pengecekan pada sistem untuk proses selanjutnya.\n\n".
+            "Terima kasih.";
+
+    if ($waNumber) {
+        // Kirim pesan WA lewat API (misal: Wablas, RuangAPI, Fonnte, dsb)
+        kirimPesan::dispatch($waNumber, $pesan);
+    }
+
 
     $this->js(<<<'JS'
         Swal.fire({

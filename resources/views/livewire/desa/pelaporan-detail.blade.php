@@ -20,7 +20,7 @@
                     <div class="mb-4 row">
                         @foreach ([['label' => 'HPS', 'value' => $paketKegiatan->jumlah_anggaran], ['label' => 'Nilai Pengadaan', 'value' => $paketKegiatan->nilai_kesepakatan], ['label' => 'Sisa', 'value' => $paketKegiatan->jumlah_anggaran - $paketKegiatan->nilai_kesepakatan ?? '-']] as $stat)
                             <div class="col-md-4">
-                                <div class="text-center card shadow-lg rounded">
+                                <div class="text-center rounded shadow-lg card">
                                     <div class="card-body">
                                         <div class="text-muted small">{{ $stat['label'] }}</div>
                                         <div class="h5">
@@ -118,7 +118,7 @@
                                                 <input type="file" wire:model="bukti_bayar" class="form-control">
                                                 {{-- Loading Spinner --}}
                                                 <div wire:loading wire:target="bukti_bayar"
-                                                    class="input-group-text bg-white border-0">
+                                                    class="bg-white border-0 input-group-text">
                                                     <span class="spinner-border spinner-border-sm text-primary"
                                                         role="status" aria-hidden="true"></span>
                                                 </div>
@@ -136,7 +136,7 @@
                                                 <input type="file" wire:model="laporan_hasil_pemeriksaan"
                                                     class="form-control">
                                                 <div wire:loading wire:target="laporan_hasil_pemeriksaan"
-                                                    class="input-group-text bg-white border-0">
+                                                    class="bg-white border-0 input-group-text">
                                                     <span class="spinner-border spinner-border-sm text-primary"
                                                         role="status" aria-hidden="true"></span>
                                                 </div>
@@ -156,7 +156,7 @@
                                             <div class="input-group">
                                                 <input type="file" wire:model="bast_penyedia" class="form-control">
                                                 <div wire:loading wire:target="bast_penyedia"
-                                                    class="input-group-text bg-white border-0">
+                                                    class="bg-white border-0 input-group-text">
                                                     <span class="spinner-border spinner-border-sm text-primary"
                                                         role="status" aria-hidden="true"></span>
                                                 </div>
@@ -176,7 +176,7 @@
                                             <div class="input-group">
                                                 <input type="file" wire:model="bast_kades" class="form-control">
                                                 <div wire:loading wire:target="bast_kades"
-                                                    class="input-group-text bg-white border-0">
+                                                    class="bg-white border-0 input-group-text">
                                                     <span class="spinner-border spinner-border-sm text-primary"
                                                         role="status" aria-hidden="true"></span>
                                                 </div>
@@ -242,6 +242,7 @@
                             <strong><i class="fas fa-file-alt"></i> Dokumen Tersedia</strong>
                         </div>
                         <div class="list-group list-group-flush">
+
                             @php
                                 $dokumenAll = [
                                     'Spek Teknis' => $paketKegiatan->spek_teknis,
@@ -252,7 +253,7 @@
                                     'Surat Undangan Penawaran' => $paketKegiatan->penawaranTerpilih?->surat_undangan,
                                     'Evaluasi Penawaran' => $paketKegiatan->ba_evaluasi_penawaran,
                                     'BA Pemenang' => $paketKegiatan->ba_pemenang,
-                                    'BA Negosiasi' => $paketKegiatan->negosiasi?->ba_negosiasi,
+                                    'BA Negosiasi' => $paketKegiatan->negosiasi?->ba_negoisasi,
                                     'Surat Perjanjian' => $paketKegiatan->surat_perjanjian,
                                     'SPK' => $paketKegiatan->spk,
                                     'Bukti Pembayaran' => $paketKegiatan->bukti_bayar,
@@ -276,6 +277,7 @@
                                     @endif
                                 </div>
                             @endforeach
+
                         </div>
                     </div>
                 </div>

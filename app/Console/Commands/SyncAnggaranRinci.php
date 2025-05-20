@@ -16,11 +16,13 @@ class SyncAnggaranRinci extends Command
 {
     $this->info('🚀 Mulai sinkronisasi data rincian unik terbaru...');
 
-    $limit = 10;
-    $offset = 0;
+    $limit = 500;
+    $offset = 25000;
     $chunkCount = 0;
     $totalInserted = 0;
-
+    $connection = DB::connection('sqlsrv');
+    $connection->setQueryGrammar(new \Illuminate\Database\Query\Grammars\SqlServerGrammar);
+    $connection->getPdo()->setAttribute(\PDO::ATTR_TIMEOUT, 120); // 60 detik timeout
     do {
         $results = DB::connection('sqlsrv')->select("
             WITH Ranked AS (
@@ -92,7 +94,7 @@ ORDER BY Kd_Keg, Kd_Rincian
                 'kd_desa' => $rincian->Kd_Desa,
                 'kd_keg' => $rincian->Kd_Keg,
                 'kd_rincian' => $rincian->Kd_Rincian,
-                'nama_obyek' => $rincian->nama_obyek,
+                'nama_obyek' => $rincian->Nama_Obyek,
                 'kd_subrinci' => $rincian->Kd_SubRinci,
                 'no_urut' => $rincian->No_Urut,
                 'uraian' => $rincian->Uraian,

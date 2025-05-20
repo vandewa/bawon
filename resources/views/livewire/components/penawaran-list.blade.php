@@ -137,11 +137,11 @@
                                 </div>
 
                                 <!-- Tombol Generate -->
-                                <a href="#" target="_blank"
+                                <a href="{{ route('generator.penyedia.berita-acara-hasil-evaluasi') }}" target="_blank"
                                     class="btn btn-outline-success d-flex align-items-center">
                                     <i class="mr-1 fas fa-file-download"></i> Generate BA Evaluasi
                                 </a>
-                                <a href="#" target="_blank"
+                                <a href="{{ route('generator.penyedia.penetapan-pemenang') }}" target="_blank"
                                     class="btn btn-outline-success d-flex align-items-center">
                                     <i class="mr-1 fas fa-file-download"></i> Generate Pemenang
                                 </a>
