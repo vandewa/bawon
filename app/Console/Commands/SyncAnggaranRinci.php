@@ -22,7 +22,7 @@ class SyncAnggaranRinci extends Command
     $totalInserted = 0;
     $connection = DB::connection('sqlsrv');
     $connection->setQueryGrammar(new \Illuminate\Database\Query\Grammars\SqlServerGrammar);
-    $connection->getPdo()->setAttribute(\PDO::ATTR_TIMEOUT, 120); // 60 detik timeout
+    // $connection->getPdo()->setAttribute(\PDO::ATTR_TIMEOUT, 120); // 60 detik timeout
     do {
         $results = DB::connection('sqlsrv')->select("
             WITH Ranked AS (
