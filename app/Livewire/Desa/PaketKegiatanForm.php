@@ -55,7 +55,7 @@ class PaketKegiatanForm extends Component
                 ->sum(function ($item) {
                     $qty = $this->quantities[$item['id']] ?? 1;
                     $hargaInput = $this->hargas[$item['id']] ?? 0;
-                    return $hargaInput * $qty;
+                    return (float)$hargaInput * (float)$qty;
                 });
         }
     public function save()
