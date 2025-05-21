@@ -61,7 +61,8 @@
                                   </div>
                               </div>
                               <div class="card-body content">
-                                  <a href="#" class="h5 title text-dark d-block mb-0">{{ $list->judul }}</a>
+                                  <a href="{{ route('detail-berita', $list->slug) }}"
+                                      class="h5 title text-dark d-block mb-0">{{ $list->judul }}</a>
                                   <p class="text-muted mt-2 mb-2">{!! Str::limit($list->isi_berita, 40) !!}</p>
                                   <a href="{{ route('detail-berita', $list->slug) }}" class="link text-dark">
                                       Baca Selengkapnya <i class="uil uil-arrow-right align-middle"></i>
