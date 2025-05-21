@@ -25,9 +25,9 @@
 
                               <!-- Tanggal dan Jam -->
                               <div class="text-end">
-                                  <small class="text-muted">
-                                      <i class="uil uil-calendar h5 text-dark me-1"></i>
-                                      {{ \Carbon\Carbon::parse($data->created_at)->translatedFormat('d F Y, H:i') }}
+                                  <small class="text-muted d-flex align-items-center">
+                                      <i class="uil uil-calendar h5 text-dark me-1 mb-0"></i>
+                                      {{ \Carbon\Carbon::parse($data->created_at)->isoFormat('LLLL') }} WIB
                                   </small>
                               </div>
                           </div>

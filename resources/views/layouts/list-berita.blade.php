@@ -11,8 +11,8 @@
                                   <img src="{{ asset('storage/' . $list->file_berita) }}" class="img-fluid" alt="">
 
                                   <div class="blog-tag">
-                                      <a href="javascript:void(0)"
-                                          class="badge text-bg-light">{{ \Carbon\Carbon::parse($list->created_at)->translatedFormat('d F Y') }}</a>
+                                      <a href="javascript:void(0)" class="badge text-bg-light">
+                                          {{ \Carbon\Carbon::parse($list->created_at)->isoFormat('DD MMMM YYYY') }}</a>
                                   </div>
                               </div>
 

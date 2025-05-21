@@ -59,7 +59,7 @@
                                                     {{ $loop->index + $data->firstItem() }}
                                                 </td>
                                                 <td class="px-3 py-2 align-middle">
-                                                    {{ \Carbon\Carbon::parse($list->created_at)->translatedFormat('d F Y') }}
+                                                    {{ \Carbon\Carbon::parse($list->created_at)->isoFormat('DD MMMM YYYY') }}
                                                 </td>
                                                 <td class="px-3 py-2 align-middle">
                                                     {{ $list->judul ?? '-' }}

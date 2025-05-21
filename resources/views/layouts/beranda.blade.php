@@ -57,7 +57,7 @@
                                           alt="">
                                       <div class="blog-tag">
                                           <a href="#" class="badge text-bg-light">
-                                              {{ \Carbon\Carbon::parse($list->created_at)->translatedFormat('d F Y') }}
+                                              {{ \Carbon\Carbon::parse($list->created_at)->isoFormat('DD MMMM YYYY') }}
                                           </a>
                                       </div>
                                   </div>
