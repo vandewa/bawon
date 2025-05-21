@@ -20,7 +20,8 @@
     <!-- Main Css -->
     <link href="{{ asset('starty/css/style.min.css') }}" rel="stylesheet" type="text/css" id="theme-opt" />
 
-    @stack('styles')
+
+    @stack('css')
 
     <style>
         html,
@@ -43,6 +44,7 @@
         .footer {
             flex-shrink: 0;
         }
+
     </style>
 
     @vite([])

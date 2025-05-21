@@ -1,14 +1,14 @@
   @extends('layouts.front')
   @section('content')
       @if ($slides->isNotEmpty())
-          <section class="home-slider position-relative">
+          <section class="home-slider position-relative" style="margin-top:4rem">
               <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel">
                   <div class="carousel-inner">
 
                       @foreach ($slides as $index => $slide)
                           <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                               <div class="bg-home d-flex align-items-center"
-                                  style="background: url('{{ asset('storage/' . $slide->image) }}') center; background-size: cover; height: 600px;">
+                                  style="background: url('{{ asset('storage/' . $slide->image) }}') center; background-size: cover; height: 650px; ">
                               </div>
                           </div>
                       @endforeach
@@ -76,3 +76,17 @@
           </div>
       </section>
   @endsection
+
+  @push('css')
+      <style>
+          .carousel-inner {
+              height: 100vh;
+              /* Slider setinggi layar */
+          }
+
+          .bg-home {
+              width: 100%;
+              height: 100%;
+          }
+      </style>
+  @endpush
