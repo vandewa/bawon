@@ -25,4 +25,11 @@ class Tpk extends Model
     {
         return $this->belongsTo(ComCode::class, 'tpk_type');
     }
+
+    public function tim()
+    {
+        return $this->belongsTo(ComCode::class, 'tim_type');
+    }
+
+
 }

@@ -28,7 +28,7 @@
                                 <div class="card-body">
                                     <div class="mb-2 row">
                                         <div class="col-md-2">
-                                            <input type="text" class="form-control" placeholder="Search"
+                                            <input type="text" class="form-control" placeholder="🔍 Pencarian"
                                                 wire:model.live='search'>
                                         </div>
                                         <div class="text-right col-md-10">
@@ -131,7 +131,7 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="7" class="text-center">Belum ada data paket
+                                                        <td colspan="8" class="text-center">Belum ada data paket
                                                             kegiatan.</td>
                                                     </tr>
                                                 @endforelse

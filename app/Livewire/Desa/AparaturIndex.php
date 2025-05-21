@@ -25,8 +25,28 @@ class AparaturIndex extends Component
         'telp' => 'nullable|string',
         'tempat_lahir' => 'nullable|string',
         'tanggal_lahir' => 'nullable|date',
-        'tmt_awal' => 'date|before_or_equal:tmt_akhir',
-        'tmt_akhir' => 'date|after_or_equal:tmt_awal',
+        'tmt_awal' => 'nullable|date|before_or_equal:tmt_akhir',
+        'tmt_akhir' => 'nullable|date|after_or_equal:tmt_awal',
+    ];
+
+    protected $messages = [
+        'desa_id.required' => 'Desa wajib dipilih.',
+        'nama.required' => 'Nama wajib diisi.',
+        'nik.required' => 'NIK wajib diisi.',
+        'nik.string' => 'NIK harus berupa teks.',
+        'jabatan.required' => 'Jabatan wajib diisi.',
+        'jabatan.string' => 'Jabatan harus berupa teks.',
+        'bidang.required' => 'Bidang wajib diisi.',
+        'bidang.string' => 'Bidang harus berupa teks.',
+        'alamat.required' => 'Alamat wajib diisi.',
+        'alamat.string' => 'Alamat harus berupa teks.',
+        'telp.string' => 'Nomor telepon harus berupa teks.',
+        'tempat_lahir.string' => 'Tempat lahir harus berupa teks.',
+        'tanggal_lahir.date' => 'Tanggal lahir harus berupa tanggal yang valid.',
+        'tmt_awal.date' => 'Tanggal mulai tugas harus berupa tanggal yang valid.',
+        'tmt_awal.before_or_equal' => 'Tanggal mulai tugas tidak boleh setelah tanggal akhir.',
+        'tmt_akhir.date' => 'Tanggal akhir tugas harus berupa tanggal yang valid.',
+        'tmt_akhir.after_or_equal' => 'Tanggal akhir tugas tidak boleh sebelum tanggal mulai.',
     ];
 
     public function mount($id = '')

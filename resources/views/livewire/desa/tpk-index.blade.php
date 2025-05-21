@@ -29,14 +29,26 @@
                     <div class="card-body">
                         <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}">
                             <div class="row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label>Tahun</label>
                                     <input wire:model="tahun" type="number" class="form-control" placeholder="Tahun">
                                     @error('tahun')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
+                                    <label>Tim</label>
+                                    <select wire:model="tim_type" class="form-control">
+                                        <option value="">-- Pilih Tim --</option>
+                                        @foreach ($tims as $tim)
+                                            <option value="{{ $tim->com_cd }}">{{ $tim->code_nm }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('tim_type')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-3">
                                     <label>Aparatur</label>
                                     <select wire:model="aparatur_id" class="form-control">
                                         <option value="">-- Pilih Aparatur --</option>
@@ -49,7 +61,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-3">
                                     <label>Jenis TPK</label>
                                     <select wire:model="tpk_type" class="form-control">
                                         <option value="">-- Pilih Jenis TPK --</option>
@@ -82,7 +94,7 @@
 
                                     </div>
 
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-2">
                                         <select wire:model.live="cari" class="form-control">
                                             <option value="">🔍 Pencarian Tahun</option>
                                             @foreach ($tahunList as $tahun)
@@ -102,36 +114,48 @@
                                     <tr>
                                         <th class="px-3 py-2">No</th>
                                         <th class="px-3 py-2">Tahun</th>
+                                        <th class="px-3 py-2">Tim</th>
                                         <th class="px-3 py-2">Aparatur</th>
                                         <th class="px-3 py-2">Jenis TPK</th>
                                         <th class="px-3 py-2 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($tpks as $index => $tpk)
-                                        <tr style="transition: background-color 0.2s;"
-                                            onmouseover="this.style.background='#f0f9ff'"
-                                            onmouseout="this.style.background='white'">
-                                            <td class="px-3 py-2 align-middle">{{ $index + 1 }}</td>
-                                            <td class="px-3 py-2 align-middle">{{ $tpk->tahun }}</td>
-                                            <td class="px-3 py-2 align-middle">{{ $tpk->aparatur->nama }}</td>
-                                            <td class="px-3 py-2 align-middle">{{ $tpk->jenis->code_nm }}</td>
-                                            <td class="px-3 py-2 text-center align-middle text-nowrap">
-                                                <button wire:click="edit({{ $tpk->id }})"
-                                                    class="btn btn-sm btn-warning mb-1">
-                                                    <i class="fas fa-edit"></i> Edit
-                                                </button>
-                                                <button wire:click="destroy({{ $tpk->id }})"
-                                                    class="btn btn-sm btn-danger mb-1"
-                                                    onclick="return confirm('Yakin ingin menghapus?')">
-                                                    <i class="fas fa-trash"></i> Hapus
-                                                </button>
+                                    @if ($tpks->count() > 0)
+                                        @foreach ($tpks as $index => $tpk)
+                                            <tr style="transition: background-color 0.2s;"
+                                                onmouseover="this.style.background='#f0f9ff'"
+                                                onmouseout="this.style.background='white'">
+                                                <td class="px-3 py-2 align-middle">{{ $index + 1 }}</td>
+                                                <td class="px-3 py-2 align-middle">{{ $tpk->tahun }}</td>
+                                                <td class="px-3 py-2 align-middle">{{ $tpk->tim->code_nm ?? '-' }}</td>
+                                                <td class="px-3 py-2 align-middle">{{ $tpk->aparatur->nama ?? '-' }}
+                                                </td>
+                                                <td class="px-3 py-2 align-middle">{{ $tpk->jenis->code_nm ?? '-' }}
+                                                </td>
+                                                <td class="px-3 py-2 text-center align-middle text-nowrap">
+                                                    <button wire:click="edit({{ $tpk->id }})"
+                                                        class="btn btn-sm btn-warning mb-1">
+                                                        <i class="fas fa-edit"></i> Edit
+                                                    </button>
+                                                    <button type="button" wire:click="delete('{{ $tpk->id }}')"
+                                                        class="btn btn-sm btn-danger mb-1">
+                                                        <i class="fas fa-trash"></i> Hapus
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="5" class="text-center px-3 py-4 text-muted">
+                                                <p class="mt-2 mb-0">Tidak ada data ditemukan.</p>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @endif
                                 </tbody>
                             </table>
                         </div>
+
                         {{ $tpks->links() }}
 
 
