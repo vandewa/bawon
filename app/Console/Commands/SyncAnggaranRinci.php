@@ -17,7 +17,7 @@ class SyncAnggaranRinci extends Command
     $this->info('🚀 Mulai sinkronisasi data rincian unik terbaru...');
 
     $limit = 500;
-    $offset = 25000;
+    $offset = 0;
     $chunkCount = 0;
     $totalInserted = 0;
     $connection = DB::connection('sqlsrv');
