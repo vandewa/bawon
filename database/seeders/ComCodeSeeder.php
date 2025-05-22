@@ -42,11 +42,6 @@ class ComCodeSeeder extends Seeder
             ['com_cd' => 'BANK_ST_01', 'code_nm' => 'BPR BANK WONOSOBO', 'code_group' => 'BANK_ST'],
             ['com_cd' => 'STATUS_BERITA_ST_01', 'code_nm' => 'Publish', 'code_group' => 'STATUS_BERITA_ST'],
             ['com_cd' => 'STATUS_BERITA_ST_02', 'code_nm' => 'Non Publish', 'code_group' => 'STATUS_BERITA_ST'],
-            ['com_cd' => 'TIM_TYPE_01', 'code_nm' => 'Tim 1', 'code_group' => 'TIM_TYPE'],
-            ['com_cd' => 'TIM_TYPE_02', 'code_nm' => 'Tim 2', 'code_group' => 'TIM_TYPE'],
-            ['com_cd' => 'TIM_TYPE_03', 'code_nm' => 'Tim 3', 'code_group' => 'TIM_TYPE'],
-            ['com_cd' => 'TIM_TYPE_04', 'code_nm' => 'Tim 4', 'code_group' => 'TIM_TYPE'],
-            ['com_cd' => 'TIM_TYPE_05', 'code_nm' => 'Tim 5', 'code_group' => 'TIM_TYPE'],
         ];
 
         foreach ($data as $item) {

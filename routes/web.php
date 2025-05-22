@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Desa\TpkCreate;
 use App\Livewire\Penyedia\DaftarHitam;
 use App\Livewire\Regulasi;
 use App\Livewire\Dashboard;
@@ -178,8 +179,10 @@ Route::middleware([
 
     });
 
-    Route::group(['prefix' => 'desa', 'as' => 'desa.',
-        ], function () {
+    Route::group([
+        'prefix' => 'desa',
+        'as' => 'desa.',
+    ], function () {
         Route::get('desa-create', DesaCreate::class)
             ->middleware(['auth', 'role:superadministrator|dinsos']) // hanya admin/dinsos
             ->name('desa-create');
@@ -203,10 +206,13 @@ Route::middleware([
         Route::get('pelaporan-index/{id?}', PelaporanDetail::class)->name('pelaporan-detail');
         Route::get('tpk-index/{id?}', TpkIndex::class)->name('tpk-index');
         Route::get('generator-tpk/{desaId?}/{tahun?}', GeneratorTpk::class)->name('generator-tpk');
+        Route::get('tpk-create/{id?}', TpkCreate::class)->name('tpk-create');
 
 
     });
-    Route::group(['prefix' => 'penyedia', 'as' => 'penyedia.',
+    Route::group([
+        'prefix' => 'penyedia',
+        'as' => 'penyedia.',
 
     ], function () {
         Route::get('vendor-index', VendorIndex::class)->name('vendor-index')->middleware('role:superadministrator|dinsos');

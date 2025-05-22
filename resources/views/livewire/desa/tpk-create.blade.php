@@ -1,7 +1,7 @@
 <div>
     <div class="container">
         <x-slot name="header">
-            <h1 class="m-0 text-dark">Manajemen Tim Pelaksana Kegiatan</h1>
+            <h1 class="m-0 text-dark">Data {{ $tim->nama ?? '' }}</h1>
         </x-slot>
 
         @if (session()->has('message'))
@@ -29,22 +29,8 @@
                     <div class="card-body">
                         <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}">
                             <div class="row">
-                                <div class="form-group col-md-2">
-                                    <label>Tahun</label>
-                                    <input wire:model="tahun" type="number" class="form-control" placeholder="Tahun">
-                                    @error('tahun')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                                <div class="form-group col-md-10">
-                                    <label>Nama Tim</label>
-                                    <input type="text" class="form-control" wire:model='nama'>
-                                    @error('tim_type')
-                                        <small class="text-danger">{{ $message }}</small>
-                                    @enderror
-                                </div>
-                                {{-- <div class="form-group col-md-3">
-                                 <label>Aparatur</label>
+                                <div class="form-group col-md-3">
+                                    <label>Aparatur</label>
                                     <select wire:model="aparatur_id" class="form-control">
                                         <option value="">-- Pilih Aparatur --</option>
                                         @foreach ($aparaturs as $aparatur)
@@ -67,67 +53,53 @@
                                     @error('tpk_type')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
-                                </div> --}}
-
-
-
-                                <div class="col-md-12 mt-3 d-flex justify-content-between">
-                                    <!-- Tombol Aksi -->
-                                    <div class="d-flex align-items-center">
-                                        <button class="btn btn-success mr-2" type="submit">
-                                            <i class="fas fa-save"></i> {{ $isEdit ? 'Update' : 'Simpan' }}
-                                        </button>
-                                        <button type="button" class="btn btn-secondary mr-2" wire:click="resetForm">
-                                            <i class="fas fa-undo"></i> Reset
-                                        </button>
-
-                                        <!-- Tombol Cetak -->
-                                        <a href="{{ route('desa.generator-tpk', [$desa_id, $cari ?? date('Y')]) }}"
-                                            target="_blank" class="btn btn-info">
-                                            <i class="fas fa-print"></i> Cetak Surat Keputusan TPK
-                                        </a>
-
-                                    </div>
-
-                                    <div class="form-group col-md-2">
-                                        <select wire:model.live="cari" class="form-control">
-                                            <option value="">🔍 Pencarian Tahun</option>
-                                            @foreach ($tahunList as $tahun)
-                                                <option value="{{ $tahun }}">{{ $tahun }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
                                 </div>
 
+                                <div class="col-md-12 mt-1 d-flex justify-content-between">
+                                    <!-- Tombol Aksi -->
+                                    <div class="d-flex align-items-center">
+                                        <!-- Tombol Simpan / Update -->
+                                        <button class="btn btn-success mr-2" type="submit">
+                                            <i class="fas fa-save"></i>
+                                            {{ $isEdit ? ' Update' : ' Simpan' }}
+                                        </button>
+
+                                        <!-- Tombol Reset -->
+                                        <button type="button" class="btn btn-secondary mr-2" wire:click="resetForm">
+                                            <i class="fas fa-redo"></i> Reset
+                                        </button>
+
+                                        <!-- Tombol Kembali -->
+                                        <a href="{{ route('desa.tpk-index', $desa_id) }}"
+                                            class="btn btn-outline-secondary mr-2">
+                                            <i class="fas fa-arrow-left"></i> Kembali
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                         </form>
 
-                        <div class="table-responsive">
+                        <div class="table-responsive mt-3">
                             <table class="table table-hover table-borderless shadow rounded overflow-hidden">
                                 <thead style="background-color: #404040; color: white;">
                                     <tr>
                                         <th class="px-3 py-2">No</th>
-                                        <th class="px-3 py-2">Tahun</th>
                                         <th class="px-3 py-2">Nama</th>
+                                        <th class="px-3 py-2">Jabatan</th>
                                         <th class="px-3 py-2 text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if ($tim->count() > 0)
-                                        @foreach ($tim as $index => $list)
+                                    @if ($data->count() > 0)
+                                        @foreach ($data as $index => $list)
                                             <tr style="transition: background-color 0.2s;"
                                                 onmouseover="this.style.background='#f0f9ff'"
                                                 onmouseout="this.style.background='white'">
                                                 <td class="px-3 py-2 align-middle">{{ $index + 1 }}</td>
-                                                <td class="px-3 py-2 align-middle">{{ $list->tahun }}</td>
-                                                <td class="px-3 py-2 align-middle">{{ $list->nama ?? '-' }}
+                                                <td class="px-3 py-2 align-middle">{{ $list->aparatur->nama }}</td>
+                                                <td class="px-3 py-2 align-middle">{{ $list->jenis->code_nm ?? '-' }}
                                                 </td>
                                                 <td class="px-3 py-2 text-center align-middle text-nowrap">
-                                                    <a href="{{ route('desa.tpk-create', $list->id) }}"
-                                                        class="btn btn-sm btn-info mb-1">
-                                                        <i class="fas fa-users"></i> List Aparatur
-                                                    </a>
                                                     <button wire:click="edit({{ $list->id }})"
                                                         class="btn btn-sm btn-warning mb-1">
                                                         <i class="fas fa-edit"></i> Edit
@@ -150,7 +122,7 @@
                             </table>
                         </div>
 
-                        {{ $tim->links() }}
+                        {{ $data->links() }}
 
 
                     </div>

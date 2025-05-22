@@ -38,26 +38,26 @@ class PaketKegiatanForm extends Component
             ->get()
             ->toArray();
 
-            foreach ($this->rincianList as $rinci) {
-                $this->quantities[$rinci['id']] = 0;
-            }
+        foreach ($this->rincianList as $rinci) {
+            $this->quantities[$rinci['id']] = 0;
+        }
 
-            $this->tpks = Tpk::with(['aparatur', 'jenis'])
-            ->where('tahun', $this->paketPekerjaan->tahun)
+        $this->tpks = Tpk::with(['aparatur', 'jenis'])
+            // ->where('tahun', $this->paketPekerjaan->tahun)
             ->where('desa_id', $this->paketPekerjaan->desa_id) // pastikan ada desa_id di relasi
             ->get();
     }
 
-   public function updatedSelectedRincian()
-        {
-            $this->jumlah_anggaran = collect($this->rincianList)
-                ->filter(fn($item) => in_array($item['id'], $this->selectedRincian))
-                ->sum(function ($item) {
-                    $qty = $this->quantities[$item['id']] ?? 1;
-                    $hargaInput = $this->hargas[$item['id']] ?? 0;
-                    return (float)$hargaInput * (float)$qty;
-                });
-        }
+    public function updatedSelectedRincian()
+    {
+        $this->jumlah_anggaran = collect($this->rincianList)
+            ->filter(fn($item) => in_array($item['id'], $this->selectedRincian))
+            ->sum(function ($item) {
+                $qty = $this->quantities[$item['id']] ?? 1;
+                $hargaInput = $this->hargas[$item['id']] ?? 0;
+                return (float) $hargaInput * (float) $qty;
+            });
+    }
     public function save()
     {
         $this->validate([
@@ -72,60 +72,60 @@ class PaketKegiatanForm extends Component
         ]);
 
         $jumlah = collect($this->rincianList)
-        ->filter(fn($item) => in_array($item['id'], $this->selectedRincian))
-        ->sum(function ($item) {
-            $qty = $this->quantities[$item['id']] ?? 1;
-            return $item['hrg_satuan_pak'] * $qty;
-        });
+            ->filter(fn($item) => in_array($item['id'], $this->selectedRincian))
+            ->sum(function ($item) {
+                $qty = $this->quantities[$item['id']] ?? 1;
+                return $item['hrg_satuan_pak'] * $qty;
+            });
 
         DB::beginTransaction();
 
-    try {
-        $kegiatan = new PaketKegiatan();
-        $kegiatan->paket_pekerjaan_id = $this->paketPekerjaan->id;
-        $kegiatan->tpk_id = $this->tpk_id;
-        $kegiatan->paket_type = $this->paket_type;
-        $kegiatan->jumlah_anggaran = $jumlah;
+        try {
+            $kegiatan = new PaketKegiatan();
+            $kegiatan->paket_pekerjaan_id = $this->paketPekerjaan->id;
+            $kegiatan->tpk_id = $this->tpk_id;
+            $kegiatan->paket_type = $this->paket_type;
+            $kegiatan->jumlah_anggaran = $jumlah;
 
-        $kegiatan->save();
-        foreach ($this->selectedRincian as $rinciId) {
-            $rinci = collect($this->rincianList)->firstWhere('id', $rinciId);
-            $qty = $this->quantities[$rinciId] ?? 1;
-            $hargaInput = $this->hargas[$rinciId] ?? 0; // Ambil harga dari input user
+            $kegiatan->save();
+            foreach ($this->selectedRincian as $rinciId) {
+                $rinci = collect($this->rincianList)->firstWhere('id', $rinciId);
+                $qty = $this->quantities[$rinciId] ?? 1;
+                $hargaInput = $this->hargas[$rinciId] ?? 0; // Ambil harga dari input user
 
-            $used = $rinci['quantity'] ?? 0;
-            $available = $rinci['jml_satuan_pak'] - $used;
+                $used = $rinci['quantity'] ?? 0;
+                $available = $rinci['jml_satuan_pak'] - $used;
 
-            if ($qty > $available) {
-                $this->addError('quantities.' . $rinciId, 'Jumlah melebihi sisa tersedia.');
-                return;
+                if ($qty > $available) {
+                    $this->addError('quantities.' . $rinciId, 'Jumlah melebihi sisa tersedia.');
+                    return;
+                }
+
+                PaketKegiatanRinci::create([
+                    'paket_kegiatan_id' => $kegiatan->id,
+                    'paket_pekerjaan_rinci_id' => $rinciId,
+                    'quantity' => $qty,
+                    'harga' => $hargaInput, // <-- simpan harga input user ke field harga
+                ]);
+
+                // Hitung ulang total quantity dari tabel anak
+                $total = PaketKegiatanRinci::whereHas('paketKegiatan', function ($q) {
+                    $q->where('paket_pekerjaan_id', $this->paketPekerjaan->id);
+                })
+                    ->where('paket_pekerjaan_rinci_id', $rinciId)
+                    ->sum('quantity');
+
+                PaketPekerjaanRinci::where('id', $rinciId)->update(['quantity' => $total]);
             }
+            DB::commit();
 
-            PaketKegiatanRinci::create([
-                'paket_kegiatan_id' => $kegiatan->id,
-                'paket_pekerjaan_rinci_id' => $rinciId,
-                'quantity' => $qty,
-                'harga' => $hargaInput, // <-- simpan harga input user ke field harga
-            ]);
-
-            // Hitung ulang total quantity dari tabel anak
-            $total = PaketKegiatanRinci::whereHas('paketKegiatan', function ($q) {
-                $q->where('paket_pekerjaan_id', $this->paketPekerjaan->id);
-            })
-            ->where('paket_pekerjaan_rinci_id', $rinciId)
-            ->sum('quantity');
-
-            PaketPekerjaanRinci::where('id', $rinciId)->update(['quantity' => $total]);
-        }
-        DB::commit();
-
-    } catch (\Throwable $e) {
-        DB::rollBack();
-        report($e);
-        dd($e);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            report($e);
+            dd($e);
 
 
-        session()->flash('error', 'Gagal menyimpan negosiasi.');
+            session()->flash('error', 'Gagal menyimpan negosiasi.');
         }
 
 
