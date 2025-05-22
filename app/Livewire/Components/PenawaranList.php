@@ -60,16 +60,15 @@ class PenawaranList extends Component
             // 1. Validasi upload dokumen BA
             $this->validate([
                 'baEvaluasi' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
-                'penetapanPemenang' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+
             ]);
             $paket = PaketKegiatan::findOrFail($paketId);
 
             $baEvaluasiPath = $this->baEvaluasi->store('dokumen/ba_evaluasi_penawaran');
-            $baPemenangPath = $this->penetapanPemenang->store('dokumen/ba_pemenang');
 
             $paket->update([
                 'ba_evaluasi_penawaran' => $baEvaluasiPath,
-                'ba_pemenang'           => $baPemenangPath
+
             ]);
 
             // 2. Set status penawaran terpilih ke "Disetujui"

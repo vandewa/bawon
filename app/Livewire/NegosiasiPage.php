@@ -36,6 +36,8 @@ class NegosiasiPage extends Component
     public $lastSenderId;
     public $logIdDisetujui;
     public $logSudahDisetujui = false;
+    public $penetapanPemenang;
+    public $jumlahPenawaran = 0;
 
     public $logItems = [];
 
@@ -73,7 +75,8 @@ class NegosiasiPage extends Component
 
     public function loadNegosiasiData()
     {
-        $paketKegiatan = PaketKegiatan::find($this->paket_kegiatan_id);
+        $paketKegiatan = PaketKegiatan::with('penawarans')->find($this->paket_kegiatan_id);
+        $this->jumlahPenawaran  = $paketKegiatan->penawarans->count();
 
         if ($paketKegiatan) {
             $this->paketKegiatan = $paketKegiatan; // Menyimpan detail kegiatan
@@ -229,6 +232,10 @@ class NegosiasiPage extends Component
 
 
     $path = $this->ba_negoisasi->store('negoisasi/ba');
+    $baPemenangPath = null;
+    if ($this->penetapanPemenang) {
+        $baPemenangPath = $this->penetapanPemenang->store('dokumen/ba_pemenang');
+    }
     DB::beginTransaction();
 
     try {
@@ -239,9 +246,12 @@ class NegosiasiPage extends Component
         'nilai' => $this->nilaiDisepakati,
     ]);
 
+
+
     // Update juga ke paket_kegiatans
     PaketKegiatan::where('id', $this->paket_kegiatan_id)->update([
         'nilai_kesepakatan' => $this->nilaiDisepakati,
+        'ba_pemenang' => $baPemenangPath
     ]);
     DB::commit();
     } catch (\Throwable $e) {
