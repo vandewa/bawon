@@ -71,7 +71,7 @@
 
                                         <!-- Tombol Kembali -->
                                         <a href="{{ route('desa.tpk-index', $desa_id) }}"
-                                            class="btn btn-outline-secondary mr-2">
+                                            class="btn btn-outline-dark mr-2">
                                             <i class="fas fa-arrow-left"></i> Kembali
                                         </a>
                                     </div>
@@ -84,7 +84,7 @@
                                 <thead style="background-color: #404040; color: white;">
                                     <tr>
                                         <th class="px-3 py-2">No</th>
-                                        <th class="px-3 py-2">Nama</th>
+                                        <th class="px-3 py-2">Aparatur</th>
                                         <th class="px-3 py-2">Jabatan</th>
                                         <th class="px-3 py-2 text-center">Aksi</th>
                                     </tr>
