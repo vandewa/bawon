@@ -87,7 +87,7 @@ class TpkCreate extends Component
             'tpk_type' => $this->tpk_type,
         ]);
 
-        session()->flash('message', 'Data Tim berhasil diperbarui.');
+        session()->flash('message', 'Data TPK berhasil diperbarui.');
         $this->resetForm();
     }
 
