@@ -470,11 +470,26 @@
                                                 @error('ba_negoisasi')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
+                                                <div wire:loading wire:target="ba_negoisasi" class="mt-1 text-info">
+                                                    <i class="fas fa-spinner fa-spin"></i> Mengunggah file...
+                                                </div>
                                             </div>
+                                            @if ($jumlahPenawaran > 1)
+                                                <div class="form-group">
+                                                    <label for="baEvaluasi">Penetapan Pemenang</label>
+                                                    <input type="file" wire:model="penetapanPemenang"
+                                                        class="form-control">
+                                                    <div wire:loading wire:target="penetapanPemenang"
+                                                        class="mt-2 text-info">
+                                                        <i class="fas fa-spinner fa-spin"></i> Mengunggah...
+                                                    </div>
+                                                    @error('penetapanPemenang')
+                                                        <small class="text-danger">{{ $message }}</small>
+                                                    @enderror
+                                                </div>
+                                            @endif
 
-                                            <div wire:loading wire:target="ba_negoisasi" class="mt-1 text-info">
-                                                <i class="fas fa-spinner fa-spin"></i> Mengunggah file...
-                                            </div>
+
 
                                             <div class="gap-3 mt-3 form-group d-flex justify-content-start">
                                                 <!-- Unggah BA Button -->
@@ -496,6 +511,13 @@
                                                     class="ml-auto btn btn-outline-success d-flex align-items-center">
                                                     <i class="mr-1 fas fa-file-download"></i> Generate Berita Acara
                                                 </a>
+                                                @if ($jumlahPenawaran > 1)
+                                                    <a href="{{ route('generator.penyedia.penetapan-pemenang') }}"
+                                                        target="_blank"
+                                                        class="btn btn-outline-success d-flex align-items-center">
+                                                        <i class="mr-1 fas fa-file-download"></i> Generate Pemenang
+                                                    </a>
+                                                @endif
                                             </div>
 
                                         </form>

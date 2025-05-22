@@ -17,4 +17,10 @@ class Desa extends Model
     public function user() {
         return $this->hasOne(User::class, 'desa_id');
     }
+
+    // Accessor untuk nama desa selalu format ucwords
+    public function getNameAttribute($value)
+    {
+        return ucwords(strtolower($value));
+    }
 }
