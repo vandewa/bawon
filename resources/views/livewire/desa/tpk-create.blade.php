@@ -59,7 +59,7 @@
                                     <!-- Tombol Aksi -->
                                     <div class="d-flex align-items-center">
                                         <!-- Tombol Simpan / Update -->
-                                        <button class="btn btn-success mr-2" type="submit">
+                                        <button class="btn btn-info mr-2" type="submit">
                                             <i class="fas fa-save"></i>
                                             {{ $isEdit ? ' Update' : ' Simpan' }}
                                         </button>
