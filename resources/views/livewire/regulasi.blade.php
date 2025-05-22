@@ -51,10 +51,13 @@
                             </div>
                             <!-- Card footer with buttons -->
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-success">Simpan</button>
+                                <button type="submit" class="btn btn-info">
+                                    <i class="fas fa-save"></i> Simpan
+                                </button>
                                 @if ($edit)
-                                    <button type="button" class="btn btn-default float-right"
-                                        wire:click="batal">Batal</button>
+                                    <button type="button" class="btn btn-default float-right" wire:click="batal">
+                                        <i class="fas fa-times"></i> Batal
+                                    </button>
                                 @endif
                             </div>
                         </form>

@@ -62,7 +62,9 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button type="submit" class="btn btn-success">Simpan</button>
+                                <button type="submit" class="btn btn-info">
+                                    <i class="fas fa-save"></i> Simpan
+                                </button>
                                 <a href="{{ route('master.berita-index') }}"
                                     class="btn btn-default float-right">Batal</a>
                             </div>
