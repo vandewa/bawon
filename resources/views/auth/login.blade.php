@@ -295,8 +295,8 @@
                     <div class="loading-spinner" id="loadingSpinner"></div>
                 </button> --}}
 
-                <button class="g-recaptcha" data-sitekey="{{ config('app.SITE_KEY') }}" data-callback='onSubmit'
-                    data-action='submit'>
+                <button id="loginButton" class="g-recaptcha btn btn-primary" data-sitekey="{{ config('app.SITE_KEY') }}"
+                    data-callback="onSubmit" data-action="submit" type="submit">
                     <span class="btn-text">Login</span>
                     <div class="loading-spinner" id="loadingSpinner"></div>
                 </button>
@@ -332,15 +332,38 @@
         }
 
         // Loading Spinner saat klik tombol login
+        // const loginForm = document.getElementById('loginForm');
+        // const loginButton = document.getElementById('loginButton');
+        // const loadingSpinner = document.getElementById('loadingSpinner');
+
+        // loginForm.addEventListener('submit', function() {
+        //     loginButton.disabled = true;
+        //     loginButton.querySelector('.btn-text').style.display = 'none';
+        //     loadingSpinner.style.display = 'block';
+        // });
+    </script>
+
+    <script>
         const loginForm = document.getElementById('loginForm');
         const loginButton = document.getElementById('loginButton');
         const loadingSpinner = document.getElementById('loadingSpinner');
 
-        loginForm.addEventListener('submit', function() {
+        function onSubmit(token) {
+            // Tampilkan spinner & disable tombol
             loginButton.disabled = true;
             loginButton.querySelector('.btn-text').style.display = 'none';
-            loadingSpinner.style.display = 'block';
-        });
+            loadingSpinner.style.display = 'inline-block';
+
+            // Tambahkan token ke input hidden
+            const tokenInput = document.createElement("input");
+            tokenInput.setAttribute("type", "hidden");
+            tokenInput.setAttribute("name", "g-recaptcha-response");
+            tokenInput.setAttribute("value", token);
+            loginForm.appendChild(tokenInput);
+
+            // Submit form secara manual
+            loginForm.submit();
+        }
     </script>
 
 </body>
