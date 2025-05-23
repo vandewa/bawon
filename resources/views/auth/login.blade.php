@@ -253,6 +253,9 @@
             border: 1px solid var(--accent);
         }
     </style>
+
+    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ config('app.SITE_KEY') }}"></script>
+
 </head>
 
 <body>
@@ -273,6 +276,7 @@
             </div>
 
             <form id="loginForm" action="{{ route('login') }}" method="POST">
+                <input type="hidden" name="g-recaptcha-response" id="recaptcha_token">
                 @csrf
                 <x-validation-errors class="mb-4" />
 
@@ -286,7 +290,13 @@
                     <label>Password</label>
                 </div>
 
-                <button type="submit" id="loginButton">
+                {{-- <button type="submit" id="loginButton">
+                    <span class="btn-text">Login</span>
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                </button> --}}
+
+                <button class="g-recaptcha" data-sitekey="{{ config('app.SITE_KEY') }}" data-callback='onSubmit'
+                    data-action='submit'>
                     <span class="btn-text">Login</span>
                     <div class="loading-spinner" id="loadingSpinner"></div>
                 </button>

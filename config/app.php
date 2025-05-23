@@ -58,6 +58,8 @@ return [
 
     'wa_url' => env('WA_URL', 'https://jogja.wablas.com/api'),
 
+    'SITE_KEY' => env('SITE_KEY'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
