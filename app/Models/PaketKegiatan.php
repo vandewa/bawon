@@ -49,9 +49,13 @@ class PaketKegiatan extends Model
         return $this->hasMany(PaketKegiatanRinci::class);
 
     }
-    public function tpk()
+    // public function tpk()
+    // {
+    //     return $this->belongsTo(Tpk::class);
+    // }
+        public function tim()
     {
-        return $this->belongsTo(Tpk::class);
+        return $this->belongsTo(Tim::class, 'tim_id');
     }
 
 

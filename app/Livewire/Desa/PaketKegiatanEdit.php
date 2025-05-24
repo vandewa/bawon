@@ -10,6 +10,7 @@ use Livewire\WithFileUploads;
 use App\Models\PaketPekerjaan;
 use App\Models\PaketKegiatanRinci;
 use App\Models\PaketPekerjaanRinci;
+use App\Models\Tim;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 
@@ -30,7 +31,7 @@ class PaketKegiatanEdit extends Component
 
     public $paketTypes = [];
 
-    public $tpk_id;
+    public $tim_id;
     public $tpks = [];
 
     public function mount($id)
@@ -45,7 +46,7 @@ class PaketKegiatanEdit extends Component
         $this->jumlah_anggaran = $this->paketKegiatan->jumlah_anggaran;
         $this->paket_type = $this->paketKegiatan->paket_type;
         $this->paketTypes = ComCode::paketTypes();
-        $this->tpk_id = $this->paketKegiatan->tpk_id;
+        $this->tim_id = $this->paketKegiatan->tim_id;
         $this->selectedRincian = $this->paketKegiatan->rincian()->pluck('paket_pekerjaan_rinci_id')->toArray();
         $this->quantities = $this->paketKegiatan->rincian->pluck('quantity', 'paket_pekerjaan_rinci_id')->toArray();
 
@@ -57,8 +58,8 @@ class PaketKegiatanEdit extends Component
             $this->hargas[$rinci->pivot->paket_pekerjaan_rinci_id] = $rinci->pivot->harga ?? $rinci->hrg_satuan_pak;
         }
 
-        $this->tpks = Tpk::with(['aparatur', 'jenis'])
-            ->where('tahun', $this->paketPekerjaan->tahun)
+        $this->tpks = Tim::
+            where('tahun', $this->paketPekerjaan->tahun)
             ->where('desa_id', $this->paketPekerjaan->desa_id)
             ->get();
     }
@@ -91,7 +92,7 @@ class PaketKegiatanEdit extends Component
         public function update()
         {
             $this->validate([
-                'tpk_id' => 'required|exists:tpks,id',
+                'tim_id' => 'required|exists:tpks,id',
                 'jumlah_anggaran' => 'required|numeric|max:' . $this->paketPekerjaan->pagu_pak,
                 'paket_type' => 'required',
                 'spek_teknis' => 'nullable|file|mimes:pdf,doc,docx',
@@ -123,7 +124,7 @@ class PaketKegiatanEdit extends Component
             try {
                 // Update data utama
                 $this->paketKegiatan->jumlah_anggaran = $this->jumlah_anggaran;
-                $this->paketKegiatan->tpk_id = $this->tpk_id;
+                $this->paketKegiatan->tim_id = $this->tim_id;
                 $this->paketKegiatan->paket_type = $this->paket_type;
 
                 if ($this->spek_teknis) {

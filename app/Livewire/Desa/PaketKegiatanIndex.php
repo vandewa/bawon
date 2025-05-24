@@ -26,7 +26,7 @@ class PaketKegiatanIndex extends Component
                 abort(403, 'Unauthorized access.');
             }
         if ($user->desa_id) {
-            $paket = \App\Models\PaketPekerjaan::findOrFail($paketPekerjaanId);
+            $paket = \App\Models\PaketPekerjaan::with(['tim'])->findOrFail($paketPekerjaanId);
 
         if ($user->desa_id != $paket->desa_id) {
             abort(403, 'Anda tidak berhak mengakses data desa lain.');
@@ -147,7 +147,7 @@ public function changeStatusToSt02()
     public function render()
     {
         $this->paketPekerjaan = PaketPekerjaan::with(['desa', 'paketKegiatans' => function($a){
-            $a->with(['paketKegiatan', 'paketType', 'tpk.jenis']);
+            $a->with(['paketKegiatan', 'paketType', 'tim']);
         }])->findOrFail($this->paketPekerjaanId);
         $this->paketKegiatans = $this->paketPekerjaan->paketKegiatans;
 

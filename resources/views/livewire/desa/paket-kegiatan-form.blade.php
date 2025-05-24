@@ -39,14 +39,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label><strong>TPK (Tahun {{ $paketPekerjaan->tahun }})</strong></label>
-                                    <select class="form-control" wire:model="tpk_id">
+                                    <select class="form-control" wire:model="tim_id">
                                         <option value="">-- Pilih TPK --</option>
                                         @foreach ($tpks as $tpk)
-                                            <option value="{{ $tpk->id }}"> {{ $tpk->aparatur->nama ?? '-' }} -
-                                                {{ $tpk->jenis->code_nm }}</option>
+                                            <option value="{{ $tpk->id }}"> {{ $tpk->nama ?? '-' }}
+                                            </option>
                                         @endforeach
                                     </select>
-                                    @error('tpk_id')
+                                    @error('tim_id')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                 </div>

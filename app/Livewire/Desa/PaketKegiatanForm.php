@@ -11,6 +11,7 @@ use App\Models\PaketPekerjaan;
 use App\Models\PaketKegiatanRinci;
 use Illuminate\Support\Facades\DB;
 use App\Models\PaketPekerjaanRinci;
+use App\Models\Tim;
 
 class PaketKegiatanForm extends Component
 {
@@ -26,7 +27,7 @@ class PaketKegiatanForm extends Component
 
     public $rincianList = [];
     public $selectedRincian = [];
-    public $tpk_id;
+    public $tim_id;
     public $tpks = [];
 
     public function mount($paketPekerjaanId)
@@ -42,9 +43,9 @@ class PaketKegiatanForm extends Component
             $this->quantities[$rinci['id']] = 0;
         }
 
-        $this->tpks = Tpk::with(['aparatur', 'jenis'])
+        $this->tpks = Tim::
             // ->where('tahun', $this->paketPekerjaan->tahun)
-            ->where('desa_id', $this->paketPekerjaan->desa_id) // pastikan ada desa_id di relasi
+            where('desa_id', $this->paketPekerjaan->desa_id) // pastikan ada desa_id di relasi
             ->get();
     }
 
@@ -61,7 +62,7 @@ class PaketKegiatanForm extends Component
     public function save()
     {
         $this->validate([
-            'tpk_id' => 'required|exists:tpks,id',
+            'tim_id' => 'required|exists:tims,id',
             'paket_type' => 'required',
             'selectedRincian' => 'required|array|min:1',
             'spek_teknis' => 'nullable|file|mimes:pdf,doc,docx',
@@ -83,7 +84,7 @@ class PaketKegiatanForm extends Component
         try {
             $kegiatan = new PaketKegiatan();
             $kegiatan->paket_pekerjaan_id = $this->paketPekerjaan->id;
-            $kegiatan->tpk_id = $this->tpk_id;
+            $kegiatan->tim_id = $this->tim_id;
             $kegiatan->paket_type = $this->paket_type;
             $kegiatan->jumlah_anggaran = $jumlah;
 
