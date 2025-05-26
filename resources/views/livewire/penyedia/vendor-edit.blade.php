@@ -103,8 +103,7 @@
                                     <div class="form-group col-md-6">
                                         <label for="pkp_file">Dokumen PKP <span class="text-danger">*</span></label>
                                         <input type="file" wire:model="pkp_file"
-                                            class="form-control @error('pkp_file') is-invalid @enderror"
-                                            accept=".pdf,.jpg,.jpeg,.png">
+                                            class="form-control @error('pkp_file') is-invalid @enderror" accept=".pdf">
                                         @if ($vendor['pkp_file'])
                                             <small class="text-muted mt-1">File saat ini: <a
                                                     href="{{ route('helper.show-picture', ['path' => $vendor['pkp_file']]) }}"
@@ -375,7 +374,7 @@
                                         @endif
                                         <input type="file"
                                             class="form-control @error($field) is-invalid @enderror"
-                                            wire:model="{{ $field }}" accept=".pdf,.jpg,.jpeg,.png">
+                                            wire:model="{{ $field }}" accept=".pdf">
                                         @error($field)
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror

@@ -12,6 +12,7 @@ use Livewire\WithFileUploads;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class VendorEdit extends Component
 {
@@ -64,6 +65,8 @@ class VendorEdit extends Component
 
     public $klasifikasiUsaha = [];
 
+    public $existing_pkp_file;
+
     protected $rules = [
         'vendor.nama_perusahaan' => 'required|string|max:255',
         'vendor.nib' => 'required|string|max:100',
@@ -88,15 +91,15 @@ class VendorEdit extends Component
         'vendor.atas_nama_rekening' => 'nullable|string|max:255',
         'vendor.pkp' => 'required|in:0,1',
         'foto_vendor.*' => 'image|max:2048',
-        'akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'nib_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'npwp_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'siup' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'izin_usaha_lain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'ktp_direktur' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'dok_kebenaran_usaha_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'bukti_setor_pajak_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'pkp_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048|required_if:vendor.pkp,1',
+        'akta_pendirian' => 'nullable|file|mimes:pdf|max:2048',
+        'nib_file' => 'nullable|file|mimes:pdf|max:2048',
+        'npwp_file' => 'nullable|file|mimes:pdf|max:2048',
+        'siup' => 'nullable|file|mimes:pdf|max:2048',
+        'izin_usaha_lain' => 'nullable|file|mimes:pdf|max:2048',
+        'ktp_direktur' => 'nullable|file|mimes:pdf|max:2048',
+        'dok_kebenaran_usaha_file' => 'nullable|file|mimes:pdf|max:2048',
+        'bukti_setor_pajak_file' => 'nullable|file|mimes:pdf|max:2048',
+        'pkp_file' => 'nullable|file|mimes:pdf|max:2048',
         'user.name' => 'required|string|max:255',
         'user.email' => 'required|email|max:255',
         'user.password' => 'nullable|string|min:6|same:user.password_confirmation',
@@ -109,7 +112,7 @@ class VendorEdit extends Component
             'vendor.pkp.required' => 'Status PKP wajib dipilih.',
             'vendor.pkp.in' => 'Status PKP harus Ya atau Tidak.',
             'pkp_file.required_if' => 'Dokumen PKP wajib diunggah jika status PKP adalah Ya.',
-            'pkp_file.mimes' => 'Dokumen PKP harus berupa PDF, JPG, JPEG, atau PNG.',
+            'pkp_file.mimes' => 'Dokumen PKP harus berupa PDF',
             'pkp_file.max' => 'Dokumen PKP tidak boleh lebih dari 2MB.',
         ];
     }
@@ -119,6 +122,7 @@ class VendorEdit extends Component
         $this->vendorId = $vendorId;
         $vendor = Vendor::findOrFail($vendorId);
         $this->vendor = $vendor->toArray();
+        $this->existing_pkp_file = $vendor->pkp_file;
 
         // Load user data if exists
         $user = User::where('vendor_id', $vendorId)->first();
@@ -171,6 +175,15 @@ class VendorEdit extends Component
         }
 
         $this->validate($rules);
+
+        // Validasi tambahan untuk pkp_file jika vendor.pkp == 1
+        if ($this->vendor['pkp'] == 1) {
+            if (!$this->pkp_file && !$this->existing_pkp_file) {
+                throw ValidationException::withMessages([
+                    'pkp_file' => 'File PKP wajib diunggah jika status PKP adalah Ya.',
+                ]);
+            }
+        }
 
         // Update vendor record
         $vendor = Vendor::findOrFail($this->vendorId);
