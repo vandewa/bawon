@@ -86,15 +86,15 @@ class Pendaftaran extends Component
         'vendor.atas_nama_rekening' => 'nullable|string|max:255',
         'vendor.pkp' => 'required|in:0,1', // PKP is required and must be 0 or 1
         'foto_vendor.*' => 'image|max:2048',
-        'akta_pendirian' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'nib_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'npwp_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'siup' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'izin_usaha_lain' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'ktp_direktur' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'dok_kebenaran_usaha_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'bukti_setor_pajak_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-        'pkp_file' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048|required_if:vendor.pkp,1', // Required if vendor.pkp is 1
+        'akta_pendirian' => 'nullable|file|mimes:pdf|max:2048',
+        'nib_file' => 'nullable|file|mimes:pdf|max:2048',
+        'npwp_file' => 'nullable|file|mimes:pdf|max:2048',
+        'siup' => 'nullable|file|mimes:pdf|max:2048',
+        'izin_usaha_lain' => 'nullable|file|mimes:pdf|max:2048',
+        'ktp_direktur' => 'nullable|file|mimes:pdf|max:2048',
+        'dok_kebenaran_usaha_file' => 'nullable|file|mimes:pdf|max:2048',
+        'bukti_setor_pajak_file' => 'nullable|file|mimes:pdf|max:2048',
+        'pkp_file' => 'nullable|file|mimes:pdf|max:2048|required_if:vendor.pkp,1', // Required if vendor.pkp is 1
         'user.name' => 'required|string|max:255',
         'user.email' => 'required|email|max:255',
         'user.password' => 'required|string|min:6|same:user.password_confirmation',
@@ -130,32 +130,32 @@ class Pendaftaran extends Component
             'foto_vendor.*.max' => 'Ukuran foto vendor tidak boleh melebihi 2MB.',
 
             'akta_pendirian.file' => 'Dokumen Akta Pendirian harus berupa file.',
-            'akta_pendirian.mimes' => 'Akta pendirian harus berupa file PDF, JPG, JPEG, atau PNG.',
+            'akta_pendirian.mimes' => 'Akta pendirian harus berupa file PDF.',
             'akta_pendirian.max' => 'Ukuran akta pendirian tidak boleh melebihi 2MB.',
 
-            'nib_file.mimes' => 'File NIB harus berupa file PDF, JPG, JPEG, atau PNG.',
+            'nib_file.mimes' => 'File NIB harus berupa file PDF.',
             'nib_file.max' => 'Ukuran file NIB tidak boleh melebihi 2MB.',
 
-            'npwp_file.mimes' => 'File NPWP harus berupa file PDF, JPG, JPEG, atau PNG.',
+            'npwp_file.mimes' => 'File NPWP harus berupa file PDF.',
             'npwp_file.max' => 'Ukuran file NPWP tidak boleh melebihi 2MB.',
 
-            'siup.mimes' => 'SIUP harus berupa file PDF, JPG, JPEG, atau PNG.',
+            'siup.mimes' => 'SIUP harus berupa file PDF.',
             'siup.max' => 'Ukuran SIUP tidak boleh melebihi 2MB.',
 
-            'izin_usaha_lain.mimes' => 'Izin usaha lain harus berupa file PDF, JPG, JPEG, atau PNG.',
+            'izin_usaha_lain.mimes' => 'Izin usaha lain harus berupa file PDF.',
             'izin_usaha_lain.max' => 'Ukuran izin usaha lain tidak boleh melebihi 2MB.',
 
-            'ktp_direktur.mimes' => 'File KTP direktur harus berupa file PDF, JPG, JPEG, atau PNG.',
+            'ktp_direktur.mimes' => 'File KTP direktur harus berupa file PDF.',
             'ktp_direktur.max' => 'Ukuran file KTP direktur tidak boleh melebihi 2MB.',
 
-            'dok_kebenaran_usaha_file.mimes' => 'Dokumen kebenaran usaha harus berupa file PDF, JPG, JPEG, atau PNG.',
+            'dok_kebenaran_usaha_file.mimes' => 'Dokumen kebenaran usaha harus berupa file PDF.',
             'dok_kebenaran_usaha_file.max' => 'Ukuran dokumen kebenaran usaha tidak boleh melebihi 2MB.',
 
-            'bukti_setor_pajak_file.mimes' => 'Bukti setor pajak harus berupa file PDF, JPG, JPEG, atau PNG.',
+            'bukti_setor_pajak_file.mimes' => 'Bukti setor pajak harus berupa file PDF.',
             'bukti_setor_pajak_file.max' => 'Ukuran bukti setor pajak tidak boleh melebihi 2MB.',
 
             'pkp_file.required_if' => 'File PKP wajib diunggah jika status PKP adalah Ya.',
-            'pkp_file.mimes' => 'File PKP harus berupa file PDF, JPG, JPEG, atau PNG.',
+            'pkp_file.mimes' => 'File PKP harus berupa file PDF.',
             'pkp_file.max' => 'Ukuran file PKP tidak boleh melebihi 2MB.',
 
             // User

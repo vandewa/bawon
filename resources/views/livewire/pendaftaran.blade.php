@@ -102,8 +102,7 @@
                                     <div class="form-group col-md-6">
                                         <label for="pkp">PKP File<span class="text-danger">*</span></label>
                                         <input type="file" wire:model="pkp_file"
-                                            class="form-control @error('pkp_file') is-invalid @enderror"
-                                            accept="image/*">
+                                            class="form-control @error('pkp_file') is-invalid @enderror" accept=".pdf">
                                         @error('pkp_file')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -249,7 +248,7 @@
                                             <label>Foto Usaha</label>
                                             <input type="file" wire:model="foto"
                                                 class="form-control @error('foto') is-invalid @enderror"
-                                                accept="image/*">
+                                                accept=".pdf">
                                             @error('foto')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
@@ -363,7 +362,7 @@
                                         <label>{{ $label }}</label>
                                         <input type="file"
                                             class="form-control @error($field) is-invalid @enderror"
-                                            wire:model="{{ $field }}" accept=".pdf,.jpg,.jpeg,.png">
+                                            wire:model="{{ $field }}" accept=".pdf">
                                         @error($field)
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
