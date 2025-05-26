@@ -274,33 +274,31 @@
                 <img src="logo.png" alt="Logo Ruang Desa" width="80"><br>
                 Selamat Datang<br>di Ruang Desa
             </div>
-
             <form id="loginForm" action="{{ route('login') }}" method="POST">
                 <input type="hidden" name="g-recaptcha-response" id="recaptcha_token">
                 @csrf
                 <x-validation-errors class="mb-4" />
-
                 <div class="form-group">
                     <input type="email" name="email" required placeholder=" ">
                     <label>Email</label>
                 </div>
-
                 <div class="form-group">
                     <input type="password" name="password" required placeholder=" ">
                     <label>Password</label>
                 </div>
-
-                {{-- <button type="submit" id="loginButton">
-                    <span class="btn-text">Login</span>
-                    <div class="loading-spinner" id="loadingSpinner"></div>
-                </button> --}}
-
                 <button id="loginButton" class="g-recaptcha btn btn-primary" data-sitekey="{{ config('app.SITE_KEY') }}"
                     data-callback="onSubmit" data-action="submit" type="submit">
                     <span class="btn-text">Login</span>
                     <div class="loading-spinner" id="loadingSpinner"></div>
                 </button>
             </form>
+
+            <!-- Tombol Pendaftaran -->
+            <div class="mt-4 text-center">
+                <p>Belum punya akun? <a href="{{ route('pendaftaran') }}"
+                        style="color: var(--primary-dark); font-weight: 600; text-decoration: none;">Daftar di sini</a>
+                </p>
+            </div>
         </div>
     </div>
 
@@ -330,17 +328,6 @@
         if (hour >= 18 || hour <= 6) {
             document.body.classList.add('dark');
         }
-
-        // Loading Spinner saat klik tombol login
-        // const loginForm = document.getElementById('loginForm');
-        // const loginButton = document.getElementById('loginButton');
-        // const loadingSpinner = document.getElementById('loadingSpinner');
-
-        // loginForm.addEventListener('submit', function() {
-        //     loginButton.disabled = true;
-        //     loginButton.querySelector('.btn-text').style.display = 'none';
-        //     loadingSpinner.style.display = 'block';
-        // });
     </script>
 
     <script>

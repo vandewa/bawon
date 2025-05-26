@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Desa\TpkCreate;
+use App\Livewire\Pendaftaran;
 use App\Livewire\Penyedia\DaftarHitam;
 use App\Livewire\Regulasi;
 use App\Livewire\Dashboard;
@@ -84,6 +85,8 @@ use App\Livewire\Generator\Swakelola\HasilPembahasanKegiatanPersiapanPengadaan a
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
+
+Route::get('/pendaftaran', Pendaftaran::class)->name('pendaftaran');
 
 
 Route::get('/', [FrontController::class, 'beranda'])->name('home');
