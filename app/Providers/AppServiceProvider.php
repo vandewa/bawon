@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,5 +23,8 @@ class AppServiceProvider extends ServiceProvider
             if (env('APP_ENV') != 'local') {
             $this->app['request']->server->set('HTTPS', true);
         }
+
+         Schema::defaultStringLength(191);
+         Schema::defaultMorphKeyType('string');
     }
 }
