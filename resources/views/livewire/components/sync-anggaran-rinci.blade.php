@@ -66,3 +66,12 @@
         }
     </style>
 </div>
+
+@push('js')
+    <script>
+        window.addEventListener('sync-progress', event => {
+            let info = document.getElementById('progress-info');
+            if (info) info.textContent = event.detail.msg;
+        });
+    </script>
+@endpush
