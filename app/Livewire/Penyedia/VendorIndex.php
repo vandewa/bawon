@@ -102,7 +102,7 @@ class VendorIndex extends Component
 
         $vendor->save();
         $this->resetForm();
-        session()->flash('message', 'Data vendor berhasil disimpan.');
+        session()->flash('message', 'Data penyedia berhasil disimpan.');
     }
 
     public function delete($id)
@@ -136,7 +136,7 @@ class VendorIndex extends Component
                 icon: 'success'
             })
         JS);
-        session()->flash('message', 'Data vendor berhasil dihapus.');
+        session()->flash('message', 'Data penyedia berhasil dihapus.');
     }
 
     public function daftarHitam($id)
@@ -173,7 +173,7 @@ class VendorIndex extends Component
                 icon: 'success'
             })
         JS);
-        session()->flash('message', 'Data vendor berhasil diupdate.');
+        session()->flash('message', 'Data penyedia berhasil diupdate.');
     }
 
     public function resetForm()

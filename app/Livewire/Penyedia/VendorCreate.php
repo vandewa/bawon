@@ -169,7 +169,7 @@ class VendorCreate extends Component
             $user->syncRoles(['vendor']);
         }
 
-        session()->flash('message', 'Vendor berhasil ditambahkan.');
+        session()->flash('message', 'Penyedia berhasil ditambahkan.');
         return redirect()->route('penyedia.vendor-index');
     }
 

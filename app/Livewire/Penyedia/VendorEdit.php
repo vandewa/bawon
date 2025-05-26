@@ -235,7 +235,7 @@ class VendorEdit extends Component
             $user->syncRoles(['vendor']);
         }
 
-        session()->flash('message', 'Vendor berhasil diperbarui.');
+        session()->flash('message', 'Penyedia berhasil diperbarui.');
         if (auth()->user()->vendor_id) {
             return redirect()->route('penyedia.vendor-profile', auth()->user()->vendor_id);
         }
