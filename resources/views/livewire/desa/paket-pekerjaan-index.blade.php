@@ -3,7 +3,7 @@
         <div class="mb-1 row">
             <div class="col-sm-6 d-flex align-items-center">
                 <h3 class="m-0">
-                    <i class="fa fa-tasks mr-2"></i> Paket Pekerjaan
+                    <i class="mr-2 fa fa-tasks"></i> Paket Pekerjaan
                 </h3>
             </div>
             <div class="col-sm-6">
@@ -32,9 +32,10 @@
 
                                         <div class="mb-3">
                                             <button class="btn btn-info" wire:click="create">
-                                                <i class="fa fa-plus-square mr-1"></i> Tambah Data
+                                                <i class="mr-1 fa fa-plus-square"></i> Tambah Data
                                             </button>
                                         </div>
+                                        @livewire('components.sync-anggaran-rinci', ['kodeDesa' => '', 'isProcessing' => false, 'message' => '', 'desaList' => [], 'limit' => 300])
 
                                         <div class="card card-info card-outline card-tabs">
                                             <div class="tab-content">
@@ -84,7 +85,7 @@
 
                                                         <div class="table-responsive">
                                                             <table
-                                                                class="table table-hover table-borderless shadow rounded overflow-hidden">
+                                                                class="table overflow-hidden rounded shadow table-hover table-borderless">
                                                                 <thead style="background-color: #404040; color: white;">
                                                                     <tr>
                                                                         <th class="px-3 py-2">Desa</th>
@@ -113,28 +114,28 @@
                                                                                 {{ $item->nama_kegiatan }}</td>
                                                                             <td class="px-3 py-2 align-middle">
                                                                                 {{ $item->sumberdana }}</td>
-                                                                            <td class="px-3 py-2 text-end align-middle">
+                                                                            <td class="px-3 py-2 align-middle text-end">
                                                                                 Rp{{ number_format($item->pagu_pak, 0, ',', '.') }}
                                                                             </td>
-                                                                            <td class="px-3 py-2 text-end align-middle">
+                                                                            <td class="px-3 py-2 align-middle text-end">
                                                                                 Rp{{ number_format($item->paket_kegiatans_sum_nilai_kesepakatan, 0, ',', '.') }}
                                                                             </td>
-                                                                            <td class="px-3 py-2 text-end align-middle">
+                                                                            <td class="px-3 py-2 align-middle text-end">
                                                                                 Rp{{ number_format($item->pagu_pak - $item->paket_kegiatans_sum_nilai_kesepakatan, 0, ',', '.') }}
                                                                             </td>
                                                                             <td class="text-nowrap">
                                                                                 <button
-                                                                                    class="btn btn-sm btn-warning mb-1"
+                                                                                    class="mb-1 btn btn-sm btn-warning"
                                                                                     wire:click="edit({{ $item->id }})">
                                                                                     <i class="fa fa-edit"></i> Edit
                                                                                 </button>
                                                                                 <button
-                                                                                    class="btn btn-sm btn-danger mb-1"
+                                                                                    class="mb-1 btn btn-sm btn-danger"
                                                                                     wire:click="delete({{ $item->id }})">
                                                                                     <i class="fa fa-trash"></i> Hapus
                                                                                 </button>
                                                                                 <a href="{{ route('desa.paket-kegiatan', $item->id) }}"
-                                                                                    class="btn btn-sm btn-primary mb-1">
+                                                                                    class="mb-1 btn btn-sm btn-primary">
                                                                                     <i class="fa fa-briefcase"></i> Buat
                                                                                     Paket
                                                                                 </a>
@@ -143,7 +144,7 @@
                                                                     @empty
                                                                         <tr>
                                                                             <td colspan="6"
-                                                                                class="text-center text-muted py-4">
+                                                                                class="py-4 text-center text-muted">
                                                                                 <i class="fa fa-folder-open"></i> Tidak
                                                                                 ada data.
                                                                             </td>
@@ -178,13 +179,13 @@
     @if ($showModal)
         <div class="modal fade show d-block" tabindex="-1" role="dialog" style="background: rgba(0,0,0,0.5);">
             <div class="modal-dialog" role="document">
-                <form wire:submit.prevent="save" class="modal-content shadow-lg">
-                    <div class="modal-header bg-primary text-white">
+                <form wire:submit.prevent="save" class="shadow-lg modal-content">
+                    <div class="text-white modal-header bg-primary">
                         <h5 class="modal-title">
-                            <i class="fa fa-clipboard-list mr-1"></i> {{ $isEdit ? 'Edit' : 'Tambah' }} Paket
+                            <i class="mr-1 fa fa-clipboard-list"></i> {{ $isEdit ? 'Edit' : 'Tambah' }} Paket
                             Pekerjaan
                         </h5>
-                        <button type="button" class="close text-white" wire:click="resetForm">
+                        <button type="button" class="text-white close" wire:click="resetForm">
                             <span>&times;</span>
                         </button>
                     </div>
