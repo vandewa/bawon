@@ -109,6 +109,9 @@
                                                     href="{{ route('helper.show-picture', ['path' => $vendor['pkp_file']]) }}"
                                                     target="_blank">Lihat</a></small>
                                         @endif
+                                        <div wire:loading wire:target="pkp_file" class="mt-1 text-info">
+                                            <i class="fas fa-spinner fa-spin"></i> Mengunggah file...
+                                        </div>
                                         @if ($this->pkp_file)
                                             <small class="text-success mt-1">
                                                 <i class="fas fa-check"></i> File baru telah dipilih
@@ -263,6 +266,9 @@
                                             @error('foto')
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
+                                            <div wire:loading wire:target="foto" class="mt-1 text-info">
+                                                <i class="fas fa-spinner fa-spin"></i> Mengunggah file...
+                                            </div>
                                             @if ($foto)
                                                 <div class="mt-2">
                                                     <img src="{{ $foto->temporaryUrl() }}" class="img-thumbnail"
@@ -378,6 +384,9 @@
                                         @error($field)
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
+                                        <div wire:loading wire:target="{{ $field }}" class="mt-1 text-info">
+                                            <i class="fas fa-spinner fa-spin"></i> Mengunggah file...
+                                        </div>
                                         @if ($this->$field)
                                             <small class="text-success"><i class="fas fa-check"></i> File baru telah
                                                 dipilih</small>
