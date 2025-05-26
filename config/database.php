@@ -107,7 +107,7 @@ return [
             'prefix_indexes'       => true,
 
             // disable TLS encryption
-            'encrypt'              => env('DB_ENCRYPT_SQLSRV', false),
+            'encrypt'              => env('DB_ENCRYPT_SQLSRV', 'no'),
             // trust self‑signed certificate
             'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE_SQLSRV', true),
 
