@@ -25,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
         }
 
          Schema::defaultStringLength(191);
-         Schema::defaultMorphKeyType('string');
+            Schema::defaultMorphKeyType('int');
     }
 }
