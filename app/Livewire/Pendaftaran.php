@@ -243,8 +243,19 @@ class Pendaftaran extends Component
             $user->syncRoles(['vendor']);
         }
 
-        session()->flash('message', 'Vendor berhasil ditambahkan.');
-        return redirect()->route('login');
+        $loginUrl = route('login');
+
+        $this->js(<<<JS
+            Swal.fire({
+                title: 'Berhasil Mendaftar!',
+                text: 'Silahkan login untuk melanjutkan.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = '$loginUrl';
+            });
+        JS);
+
     }
 
     private function processDocumentUploads($vendor)
