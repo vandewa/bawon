@@ -13,15 +13,15 @@
 
                 <!-- Tombol Aksi -->
                 <div class="mt-3 mb-3">
-                    <button class="btn btn-primary" wire:click="simpan">
+                    {{-- <button class="btn btn-primary" wire:click="simpan">
                         <i class="fas fa-save"></i> Simpan Dokumen
-                    </button>
+                    </button> --}}
 
-                    @if ($sudahDisimpan)
-                        <button class="btn btn-success" onclick="downloadWord()">
-                            <i class="fas fa-file-word"></i> Download Word
-                        </button>
-                    @endif
+                    {{-- @if ($sudahDisimpan) --}}
+                    <button class="btn btn-success" onclick="downloadWord()">
+                        <i class="fas fa-file-word"></i> Download Word
+                    </button>
+                    {{-- @endif --}}
                 </div>
 
             </div>

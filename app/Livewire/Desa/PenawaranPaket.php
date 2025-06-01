@@ -179,17 +179,17 @@ class PenawaranPaket extends Component
             return;
         }
 
-        // Jika anggaran < 10jt → maksimal 1 penawaran
-        if ($anggaran < 10000000 && $jumlahPenawaran > 1) {
-            $this->js(<<<'JS'
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Gagal',
-                    text: 'Untuk anggaran di bawah 10 juta, maksimal hanya 1 undangan yang diperbolehkan.',
-                });
-            JS);
-            return;
-        }
+        // // Jika anggaran < 10jt → maksimal 1 penawaran
+        // if ($anggaran < 10000000 && $jumlahPenawaran > 1) {
+        //     $this->js(<<<'JS'
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'Gagal',
+        //             text: 'Untuk anggaran di bawah 10 juta, maksimal hanya 1 undangan yang diperbolehkan.',
+        //         });
+        //     JS);
+        //     return;
+        // }
 
         // Jika jumlah memenuhi, lanjutkan konfirmasi kirim
         $this->js(<<<'JS'

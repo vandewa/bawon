@@ -14,7 +14,7 @@ class PelaporanDetail extends Component
     use WithFileUploads;
 
     public PaketKegiatan $paketKegiatan;
-    public $laporan_hasil_pemeriksaan;
+    // public $laporan_hasil_pemeriksaan; // REMOVED
     public $bast_penyedia;
     public $bast_kades;
     public $bukti_bayar;
@@ -44,10 +44,13 @@ class PelaporanDetail extends Component
             $this->paketKegiatan->bukti_bayar = $path;
         }
 
+        // REMOVED block for laporan_hasil_pemeriksaan
+        /*
         if ($this->laporan_hasil_pemeriksaan) {
             $path = $this->laporan_hasil_pemeriksaan->store('dokumen/pelaporan');
             $this->paketKegiatan->laporan_hasil_pemeriksaan = $path;
         }
+        */
 
         if ($this->bast_penyedia) {
             $path = $this->bast_penyedia->store('dokumen/pelaporan');
@@ -61,6 +64,15 @@ class PelaporanDetail extends Component
 
         $this->paketKegiatan->save();
         session()->flash('message', 'Dokumen berhasil disimpan.');
+        $this->js("
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Dokumen berhasil disimpan.',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    ");
     }
 
     public function konfirmasiTutupKegiatan()
@@ -104,24 +116,24 @@ class PelaporanDetail extends Component
     }
 
     public function konfirmasiBatalPenutupan()
-{
-    $this->js(<<<'JS'
-        Swal.fire({
-            title: 'Batalkan penutupan?',
-            text: "Kegiatan akan dibuka kembali untuk pengeditan.",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#f0ad4e',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Batalkan',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $wire.batalkanPenutupan()
-            }
-        })
-    JS);
-}
+    {
+        $this->js(<<<'JS'
+            Swal.fire({
+                title: 'Batalkan penutupan?',
+                text: "Kegiatan akan dibuka kembali untuk pengeditan.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#f0ad4e',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Batalkan',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $wire.batalkanPenutupan()
+                }
+            })
+        JS);
+    }
 
     public function batalkanPenutupan()
     {

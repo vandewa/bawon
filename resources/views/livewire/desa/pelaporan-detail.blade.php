@@ -14,9 +14,7 @@
             @endif
 
             <div class="row">
-                <!-- Left Side -->
                 <div class="col-md-8">
-                    <!-- Statistik -->
                     <div class="mb-4 row">
                         @foreach ([['label' => 'HPS', 'value' => $paketKegiatan->jumlah_anggaran], ['label' => 'Nilai Pengadaan', 'value' => $paketKegiatan->nilai_kesepakatan], ['label' => 'Sisa', 'value' => $paketKegiatan->jumlah_anggaran - $paketKegiatan->nilai_kesepakatan ?? '-']] as $stat)
                             <div class="col-md-4">
@@ -33,7 +31,6 @@
                     </div>
 
 
-                    <!-- Profil Vendor -->
                     @foreach ($paketKegiatan->penawarans as $item)
                         <div class="mb-4 shadow-md card">
                             <div
@@ -46,12 +43,10 @@
                             <div class="card-body">
 
                                 <div class="mb-3 d-flex align-items-start">
-                                    <!-- Vendor Image -->
                                     <img class="mr-3 rounded-circle" width="80" height="80"
                                         src="https://ui-avatars.com/api/?name={{ urlencode($item?->vendor?->nama_perusahaan ?? 'V') }}"
                                         alt="vendor">
 
-                                    <!-- Vendor Details -->
                                     <div class="media-body">
                                         <table class="no-border"
                                             style="width: 100%; font-family: Arial, sans-serif; font-size: 10pt; border: none; border-collapse: collapse;">
@@ -103,7 +98,6 @@
                     @endforeach
 
 
-                    <!-- Upload Dokumen dan Tutup/Batal Kegiatan -->
                     <div class="mb-4 shadow-md card border-top border-primary">
                         <div class="text-white card-header bg-secondary">
                             <i class="fas fa-upload"></i> Upload Dokumen Pelaporan Akhir
@@ -129,6 +123,7 @@
                                             @enderror
                                         </div>
 
+                                        {{-- Removed Laporan Hasil Pemeriksaan
                                         <div class="mb-3 col-md-4">
                                             <label for="laporan-hasil-pemeriksaan" class="form-label">Laporan Hasil
                                                 Pemeriksaan</label>
@@ -149,6 +144,7 @@
                                                 <small class="text-danger">{{ $message }}</small>
                                             @enderror
                                         </div>
+                                        --}}
 
                                         <div class="mb-3 col-md-4">
                                             <label for="bast-dari-penyedia-kepada-kasi" class="form-label">BAST
@@ -160,7 +156,7 @@
                                                     <span class="spinner-border spinner-border-sm text-primary"
                                                         role="status" aria-hidden="true"></span>
                                                 </div>
-                                                <a href="{{ route('generator.penyedia.bast-dari-penyedia-kepada-kasi') }}"
+                                                <a href="{{ route('generator.penyedia.bast-dari-penyedia-kepada-kasi', $paketKegiatan->id) }}"
                                                     target="_blank" class="btn btn-outline-info">
                                                     <i class="fas fa-magic"></i>
                                                 </a>
@@ -180,7 +176,7 @@
                                                     <span class="spinner-border spinner-border-sm text-primary"
                                                         role="status" aria-hidden="true"></span>
                                                 </div>
-                                                <a href="{{ route('generator.penyedia.bast-dari-kasi-kepada-kades') }}"
+                                                <a href="{{ route('generator.penyedia.bast-dari-kasi-kepada-kades', $paketKegiatan->id) }}"
                                                     target="_blank" class="btn btn-outline-info">
                                                     <i class="fas fa-magic"></i>
                                                 </a>
@@ -201,7 +197,8 @@
                                         <i class="fas fa-save"></i> Simpan Dokumen
                                     </button>
 
-                                    @if ($paketKegiatan->bast_penyedia && $paketKegiatan->bast_kades && $paketKegiatan->laporan_hasil_pemeriksaan)
+                                    {{-- Adjusted condition for showing close/cancel buttons --}}
+                                    @if ($paketKegiatan->bast_penyedia && $paketKegiatan->bast_kades && $paketKegiatan->bukti_bayar)
                                         @if ($paketKegiatan->paket_kegiatan !== 'PAKET_KEGIATAN_ST_02')
                                             <button type="button" class="btn btn-warning"
                                                 wire:click="konfirmasiBatalPenutupan">
@@ -220,7 +217,6 @@
                     </div>
                 </div>
 
-                <!-- Right Side -->
                 <div class="col-md-4">
                     <div class="mb-4 shadow-sm card">
                         <div class="bg-secondary card-header">
@@ -257,6 +253,7 @@
                                     'Surat Perjanjian' => $paketKegiatan->surat_perjanjian,
                                     'SPK' => $paketKegiatan->spk,
                                     'Bukti Pembayaran' => $paketKegiatan->bukti_bayar,
+                                    // Removed Laporan Pemeriksaan
                                     'Laporan Pemeriksaan' => $paketKegiatan->laporan_hasil_pemeriksaan,
                                     'BAST Penyedia' => $paketKegiatan->bast_penyedia,
                                     'BAST Kades' => $paketKegiatan->bast_kades,

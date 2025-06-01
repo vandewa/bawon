@@ -128,7 +128,7 @@ Route::middleware([
             Route::get('/penetapan-pemenang/{id?}', PenyediaPenetapanPemenang::class)->name('penetapan-pemenang');
             Route::get('/laporan-hasil-pemeriksaan/{id?}', PenyediaLaporanHasilPemeriksaanOlehKasiKaur::class)->name('laporan-hasil-pemeriksaan');
             Route::get('/bast-dari-penyedia-kepada-kasi/{id?}', PenyediaBastDariPenyediaKepadaKasi::class)->name('bast-dari-penyedia-kepada-kasi');
-            Route::get('/bast-dari-kasi-kepada-kades/{id?}', PenyediaBastDariKasiKepadaKepalaDesa::class)->name('bast-dari-kasi-kepada-kades');
+            Route::get('/bast-dari-kasi-kepada-kades/{paketkegiatanid?}', PenyediaBastDariKasiKepadaKepalaDesa::class)->name('bast-dari-kasi-kepada-kades');
         });
 
         Route::group(['prefix' => 'swakelola', 'as' => 'swakelola.'], function () {

@@ -53,7 +53,7 @@ class PengajuanPenawaranCreate extends Component
 {
     $this->validate([
         'nilai' => ['required', 'numeric', 'lte:' . $this->penawaran->paketKegiatan->jumlah_anggaran],
-        'dok_penawaran' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'dok_penawaran' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
     ]);
 
     // Ambil vendor terkait

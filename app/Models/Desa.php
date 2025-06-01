@@ -23,4 +23,9 @@ class Desa extends Model
     {
         return ucwords(strtolower($value));
     }
+
+      public function kepalaDesa()
+    {
+        return $this->hasOne(Aparatur::class, 'desa_id')->where('jabatan', 'Kepala Desa');
+    }
 }

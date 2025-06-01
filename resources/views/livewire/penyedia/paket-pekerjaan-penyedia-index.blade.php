@@ -261,14 +261,12 @@
                                                 </td>
                                                 <td class="px-3 py-2 text-center align-middle">
                                                     <div class="gap-3 d-flex justify-content-center">
-                                                        <!-- Tombol Upload/Edit -->
                                                         @if ($item->statusPenawaran?->com_cd == 'PENAWARAN_ST_01')
                                                             <a href="{{ route('penyedia.penawaran.create', $item->id) }}"
                                                                 class="mr-1 btn btn-outline-secondary btn-sm d-flex align-items-center">
                                                                 <i class="mr-1 fas fa-upload"></i> Upload/Edit
                                                             </a>
                                                         @endif
-                                                        <!-- Tombol Negosiasi (conditional) -->
                                                         @if (
                                                             $item->paketKegiatan->negosiasi &&
                                                                 $item->paketKegiatan->paket_type != 'PAKET_TYPE_02' &&
@@ -279,9 +277,19 @@
                                                                 <i class="mr-1 fas fa-handshake"></i> Negosiasi
                                                             </a>
                                                         @endif
+
+                                                        @if (
+                                                            $item->paketKegiatan->negosiasi?->negosiasi_st == 'NEGOSIASI_ST_02' &&
+                                                                $item->statusPenawaran?->com_cd == 'PENAWARAN_ST_02')
+                                                            <button type="button"
+                                                                wire:click="openUploadBuktiPemeriksaanModal({{ $item->id }})"
+                                                                class="mr-1 btn btn-outline-success btn-sm d-flex align-items-center">
+                                                                <i class="mr-1 fas fa-file-upload"></i> Upload Bukti
+                                                                Pemeriksaan
+                                                            </button>
+                                                        @endif
                                                     </div>
                                                 </td>
-
                                             </tr>
                                         @empty
                                             <tr>
@@ -298,10 +306,70 @@
                                 {{ $posts->links() }}
                             </div>
 
-                        </div> <!-- /.card-body -->
-                    </div> <!-- /.card -->
+                        </div>
+                    </div>
                 </div>
-            </div> <!-- /.row -->
+            </div>
         </div>
     </section>
+
+    {{-- Modal untuk Upload Bukti Pemeriksaan (Inline) --}}
+    @if ($showUploadBuktiPemeriksaanModal)
+        <div class="modal fade show" style="display: block;" tabindex="-1" role="dialog"
+            aria-labelledby="uploadBuktiPemeriksaanModalLabel" aria-modal="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="text-white modal-header bg-info">
+                        <h5 class="modal-title" id="uploadBuktiPemeriksaanModalLabel">Upload Bukti Pemeriksaan</h5>
+                        <button type="button" class="text-white close" wire:click="closeUploadBuktiPemeriksaanModal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form wire:submit.prevent="saveBuktiPemeriksaan">
+                        <div class="modal-body">
+                            @if (session()->has('error'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+                            @if (session()->has('success'))
+                                <div class="alert alert-success" role="alert">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+
+                            <div class="form-group">
+                                <label for="buktiPemeriksaanFile">Pilih File Bukti Pemeriksaan (PDF, JPG, JPEG, PNG -
+                                    Max 5MB)</label>
+                                <input type="file" class="form-control-file" id="buktiPemeriksaanFile"
+                                    wire:model="buktiPemeriksaanFile">
+                                @error('buktiPemeriksaanFile')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            {{-- Loading indicator --}}
+                            <div wire:loading wire:target="buktiPemeriksaanFile">Mengunggah file...</div>
+                            <div wire:loading wire:target="saveBuktiPemeriksaan">Menyimpan...</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                wire:click="closeUploadBuktiPemeriksaanModal">Batal</button>
+                            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled"
+                                wire:target="saveBuktiPemeriksaan, buktiPemeriksaanFile">
+                                <span wire:loading.remove
+                                    wire:target="saveBuktiPemeriksaan, buktiPemeriksaanFile">Upload</span>
+                                <span wire:loading
+                                    wire:target="saveBuktiPemeriksaan, buktiPemeriksaanFile">Uploading...</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- Backdrop for the modal --}}
+        <div class="modal-backdrop fade show"></div>
+    @endif
 </div>

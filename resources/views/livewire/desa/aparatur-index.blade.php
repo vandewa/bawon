@@ -15,8 +15,8 @@
 
             <!-- Form Input -->
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="card-title m-0">Form Aparatur</h5>
+                <div class="text-white card-header bg-primary">
+                    <h5 class="m-0 card-title">Form Aparatur</h5>
                 </div>
                 <div class="card-body">
                     <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}">
@@ -39,8 +39,23 @@
                             </div>
 
                             <div class="form-group col-md-4">
-                                <label>Jabatan</label>
-                                <input wire:model="jabatan" type="text" class="form-control">
+                                <label for="jabatan">Jabatan</label>
+                                <select wire:model="jabatan" id="jabatan" class="form-control">
+                                    <option value="">-- Pilih Jabatan --</option>
+                                    <option value="Kepala Desa">Kepala Desa</option>
+                                    <option value="Sekretaris Desa">Sekretaris Desa</option>
+                                    <option value="Kepala Urusan Keuangan">Kepala Urusan Keuangan</option>
+                                    <option value="Kepala Urusan Perencanaan">Kepala Urusan Perencanaan</option>
+                                    <option value="Kepala Urusan Tata Usaha dan Umum">Kepala Urusan Tata Usaha dan Umum
+                                    </option>
+                                    <option value="Kepala Seksi Pemerintahan">Kepala Seksi Pemerintahan</option>
+                                    <option value="Kepala Seksi Kesejahteraan">Kepala Seksi Kesejahteraan</option>
+                                    <option value="Kepala Seksi Pelayanan">Kepala Seksi Pelayanan</option>
+                                    <option value="Kepala Dusun">Kepala Dusun</option>
+                                    <option value="Staf">Staf</option>
+                                    <option value="Anggota BPD">Anggota BPD</option>
+                                    <option value="Ketua BPD">Ketua BPD</option>
+                                </select>
                                 @error('jabatan')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -117,7 +132,7 @@
 
             {{-- TABLE --}}
             <div class="mt-4 table-responsive">
-                <table class="table table-hover table-borderless shadow rounded overflow-hidden">
+                <table class="table overflow-hidden rounded shadow table-hover table-borderless">
                     <thead style="background-color: #404040; color: white;">
                         <tr>
                             <th class="px-3 py-2">#</th>
@@ -140,11 +155,12 @@
                                 <td class="px-3 py-2 align-middle">{{ $row->tmt_awal ?? '-' }}</td>
                                 <td class="px-3 py-2 align-middle">{{ $row->tmt_akhir ?? '-' }}</td>
                                 <td class="px-3 py-2 text-center align-middle text-nowrap">
-                                    <button wire:click="edit({{ $row->id }})" class="btn btn-sm btn-warning mb-1">
+                                    <button wire:click="edit({{ $row->id }})"
+                                        class="mb-1 btn btn-sm btn-warning">
                                         <i class="fas fa-edit"></i> Edit
                                     </button>
                                     <button wire:click="destroy({{ $row->id }})"
-                                        class="btn btn-sm btn-danger mb-1"
+                                        class="mb-1 btn btn-sm btn-danger"
                                         onclick="return confirm('Yakin ingin menghapus?')">
                                         <i class="fas fa-trash"></i> Hapus
                                     </button>
@@ -152,7 +168,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center text-muted py-4">
+                                <td colspan="6" class="py-4 text-center text-muted">
                                     <i class="fas fa-folder-open"></i> Belum ada data.
                                 </td>
                             </tr>
