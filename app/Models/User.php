@@ -72,13 +72,10 @@ class User extends Authenticatable implements LaratrustUser
         }
     }
 
-    public function jadwal()
-    {
-        return $this->hasMany(JadwalTeraPetugas::class, 'user_id');
-    }
 
-    public function pemohon()
+
+    public function vendor()
     {
-        return $this->hasOne(Pemohon::class, 'user_id');
+        return $this->belongsTo(Vendor::class, 'vendor_id');
     }
 }

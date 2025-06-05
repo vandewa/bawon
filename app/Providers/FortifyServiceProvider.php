@@ -47,12 +47,20 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->email)
+                ->with('vendor') // Eager load vendor relationship
                 ->first();
 
             if (
                 $user &&
                 Hash::check($request->password, $user->password)
             ) {
+                // Check if user is a vendor and if vendor is inactive
+                if ($user->hasRole('vendor') && $user->vendor && !$user->vendor->is_active) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        Fortify::username() => 'Akun vendor ini tidak aktif. Silakan hubungi administrator.',
+                    ]);
+                }
+
                 return $user;
             }
         });

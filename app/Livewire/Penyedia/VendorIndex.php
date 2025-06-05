@@ -176,6 +176,16 @@ class VendorIndex extends Component
         session()->flash('message', 'Data penyedia berhasil diupdate.');
     }
 
+    public function toggleActiveStatus($vendorId)
+    {
+        $vendor = Vendor::findOrFail($vendorId);
+        $vendor->is_active = !$vendor->is_active;
+        $vendor->save();
+
+        $status = $vendor->is_active ? 'diaktifkan' : 'dinonaktifkan';
+        session()->flash('message', "Status vendor berhasil {$status}.");
+    }
+
     public function resetForm()
     {
         $this->reset([

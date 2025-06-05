@@ -10,6 +10,10 @@ class Vendor extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class, 'tag_vendor');
@@ -25,7 +29,6 @@ class Vendor extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(User::class);
     }
-
 }

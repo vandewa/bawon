@@ -3,7 +3,7 @@
         <div class="mb-1 row">
             <div class="col-sm-6 d-flex align-items-center">
                 <h3 class="m-0">
-                    <i class="fas fa-industry mr-2"></i> Data Penyedia
+                    <i class="mr-2 fas fa-industry"></i> Data Penyedia
                 </h3>
             </div>
             <div class="col-sm-6">
@@ -39,13 +39,14 @@
                 </div>
 
                 <div class="p-3 card-body table-responsive">
-                    <table class="table table-hover table-borderless shadow rounded overflow-hidden">
+                    <table class="table overflow-hidden rounded shadow table-hover table-borderless">
                         <thead style="background-color: #404040; color: white;">
                             <tr>
                                 <th class="px-3 py-2">Nama Perusahaan</th>
                                 <th class="px-3 py-2">NIB</th>
                                 <th class="px-3 py-2">Direktur</th>
                                 <th class="px-3 py-2">Jenis Usaha</th>
+                                <th class="px-3 py-2 text-center">Status</th>
                                 <th class="px-3 py-2 text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -58,28 +59,39 @@
                                     <td class="px-3 py-2 align-middle">{{ $vendor->nib }}</td>
                                     <td class="px-3 py-2 align-middle">{{ $vendor->nama_direktur }}</td>
                                     <td class="px-3 py-2 align-middle">{{ $vendor->jenisUsaha->code_nm ?? '' }}</td>
+                                    <td class="px-3 py-2 text-center align-middle">
+                                       @if ($vendor->is_active)
+                                           <span class="badge badge-success">Aktif</span>
+                                       @else
+                                           <span class="badge badge-danger">Nonaktif</span>
+                                       @endif
+                                   </td>
                                     <td class="px-3 py-2 text-center align-middle text-nowrap">
+                                       <button wire:click="toggleActiveStatus({{ $vendor->id }})"
+                                           class="btn btn-sm {{ $vendor->is_active ? 'btn-outline-danger' : 'btn-outline-success' }} mb-1">
+                                           <i class="fas fa-toggle-{{ $vendor->is_active ? 'on' : 'off' }}"></i> {{ $vendor->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
+                                       </button>
                                         <a href="{{ route('penyedia.vendor-profile', $vendor->id) }}') }}"
-                                            class="btn btn-sm btn-info mb-1">
+                                            class="mb-1 btn btn-sm btn-info">
                                             <i class="fas fa-eye"></i> Detail
                                         </a>
                                         <a href="{{ route('penyedia.vendor-edit', $vendor->id) }}"
-                                            class="btn btn-sm btn-warning mb-1">
+                                            class="mb-1 btn btn-sm btn-warning">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
                                         <button wire:click="delete({{ $vendor->id }})"
-                                            class="btn btn-sm btn-danger mb-1">
+                                            class="mb-1 btn btn-sm btn-danger">
                                             <i class="fas fa-trash"></i> Hapus
                                         </button>
                                         <button wire:click="daftarHitam({{ $vendor->id }})"
-                                            class="btn btn-sm btn-secondary mb-1">
-                                            <i class="fas fa-user-lock mr-1"></i>Daftar Hitam
+                                            class="mb-1 btn btn-sm btn-secondary">
+                                            <i class="mr-1 fas fa-user-lock"></i>Daftar Hitam
                                         </button>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted py-4">
+                                    <td colspan="6" class="py-4 text-center text-muted">
                                         <i class="fas fa-folder-open"></i> Tidak ada data Vendor.
                                     </td>
                                 </tr>
@@ -97,11 +109,11 @@
             @if ($showModal)
                 <div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
                     <div class="modal-dialog modal-xl">
-                        <form wire:submit.prevent="save" class="modal-content shadow rounded"
+                        <form wire:submit.prevent="save" class="rounded shadow modal-content"
                             style="max-height: 90vh; overflow-y: auto;">
-                            <div class="modal-header bg-info text-white">
+                            <div class="text-white modal-header bg-info">
                                 <h4 class="modal-title">
-                                    <i class="fas fa-building mr-2"></i>
+                                    <i class="mr-2 fas fa-building"></i>
                                     {{ $isEdit ? 'Edit Vendor' : 'Tambah Vendor' }}
                                 </h4>
                                 <button type="button" class="text-white btn-close" wire:click="resetForm">
