@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('penyedia', function (Blueprint $table) {
+        Schema::table('vendors', function (Blueprint $table) {
             $table->dropColumn('is_active');
         });
     }
