@@ -57,7 +57,7 @@ class FortifyServiceProvider extends ServiceProvider
                 // Check if user is a vendor and if vendor is inactive
                 if ($user->hasRole('vendor') && $user->vendor && !$user->vendor->is_active) {
                     throw \Illuminate\Validation\ValidationException::withMessages([
-                        Fortify::username() => 'Akun vendor ini tidak aktif. Silakan hubungi administrator.',
+                        Fortify::username() => 'Akun penyedia ini tidak aktif. Silakan hubungi administrator.',
                     ]);
                 }
 

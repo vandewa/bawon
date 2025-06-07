@@ -293,7 +293,7 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="9" class="py-4 text-center text-muted">
+                                                <td colspan="10" class="py-4 text-center text-muted">
                                                     <i class="fas fa-folder-open"></i> Tidak ada data.
                                                 </td>
                                             </tr>

@@ -20,16 +20,16 @@ class PaketKegiatanIndex extends Component
 
     public function mount($paketPekerjaanId)
     {
-         $user = auth()->user();
+        $user = auth()->user();
 
-         if (!$user->hasRole(['superadministrator', 'desa', 'dinsos'])) {
-                abort(403, 'Unauthorized access.');
-            }
+        if (!$user->hasRole(['superadministrator', 'desa', 'dinsos'])) {
+            abort(403, 'Unauthorized access.');
+        }
         if ($user->desa_id) {
             $paket = \App\Models\PaketPekerjaan::findOrFail($paketPekerjaanId);
 
-        if ($user->desa_id != $paket->desa_id) {
-            abort(403, 'Anda tidak berhak mengakses data desa lain.');
+            if ($user->desa_id != $paket->desa_id) {
+                abort(403, 'Anda tidak berhak mengakses data desa lain.');
             }
             $this->paketPekerjaanId = $paketPekerjaanId;
         }
@@ -65,7 +65,8 @@ class PaketKegiatanIndex extends Component
     {
         $kegiatan = PaketKegiatan::find($this->idHapus);
 
-        if (!$kegiatan) return;
+        if (!$kegiatan)
+            return;
 
         // Ambil rincian yang terkait sebelum menghapus
         $rincianList = $kegiatan->rincian()->get();
@@ -103,10 +104,10 @@ class PaketKegiatanIndex extends Component
 
 
     public function confirmChangeStatus($id)
-{
-    $this->idUbahStatus = $id;
+    {
+        $this->idUbahStatus = $id;
 
-    $this->js(<<<'JS'
+        $this->js(<<<'JS'
         Swal.fire({
             title: 'Selanjutnya?',
             text: "Anda yakin akan beralih ke tahap pengadaan?",
@@ -122,36 +123,40 @@ class PaketKegiatanIndex extends Component
             }
         });
     JS);
-}
+    }
 
-public function changeStatusToSt02()
-{
-    $item = \App\Models\PaketKegiatan::find($this->idUbahStatus);
+    public function changeStatusToSt02()
+    {
+        $item = \App\Models\PaketKegiatan::find($this->idUbahStatus);
 
-    if (!$item) return;
+        if (!$item)
+            return;
 
-    $item->paket_kegiatan = 'PAKET_KEGIATAN_ST_02';
-    $item->save();
+        $item->paket_kegiatan = 'PAKET_KEGIATAN_ST_02';
+        $item->save();
 
-    $this->reset('idUbahStatus');
+        $this->reset('idUbahStatus');
 
-    $this->js(<<<'JS'
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil!',
-            text: 'Kegaitan berada di proses pelaksanaan.'
-        });
-    JS);
-}
+        $this->js(<<<'JS'
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Kegiatan berada di proses pelaksanaan.'
+            });
+        JS);
+    }
 
     public function render()
     {
-        $this->paketPekerjaan = PaketPekerjaan::with(['desa', 'paketKegiatans' => function($a){
-            $a->with(['paketKegiatan', 'paketType', 'tim']);
-        }])->findOrFail($this->paketPekerjaanId);
+        $this->paketPekerjaan = PaketPekerjaan::with([
+            'desa',
+            'paketKegiatans' => function ($a) {
+                $a->with(['paketKegiatan', 'paketType', 'tim']);
+            }
+        ])->findOrFail($this->paketPekerjaanId);
         $this->paketKegiatans = $this->paketPekerjaan->paketKegiatans;
 
-        $this->totalNilaiKesepakatan = $this->paketKegiatans->sum(function($item) {
+        $this->totalNilaiKesepakatan = $this->paketKegiatans->sum(function ($item) {
             return $item->nilai_kesepakatan ?? 0;
         });
         return view('livewire.desa.paket-kegiatan-index');

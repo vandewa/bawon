@@ -55,6 +55,7 @@ class Pendaftaran extends Component
         'no_rekening' => '',
         'atas_nama_rekening' => '',
         'pkp' => '',
+        'is_active' => '0',
     ];
 
     // Properties for document uploads
@@ -247,10 +248,12 @@ class Pendaftaran extends Component
 
         $this->js(<<<JS
             Swal.fire({
-                title: 'Berhasil Mendaftar!',
-                text: 'Silahkan login untuk melanjutkan.',
-                icon: 'success',
-                confirmButtonText: 'OK'
+            title: 'Berhasil Mendaftar!',
+            html: 'Akun Anda sedang menunggu persetujuan dari admin.<br>Silakan tunggu pemberitahuan lebih lanjut.<br><br><strong>Jika disetujui</strong>, Anda dapat login melalui halaman berikut:',
+            icon: 'success',
+            confirmButtonText: 'Lanjut ke Halaman Login',
+            allowOutsideClick: false,
+            allowEscapeKey: false
             }).then(() => {
                 window.location.href = '$loginUrl';
             });
